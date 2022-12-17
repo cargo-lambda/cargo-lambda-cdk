@@ -1,0 +1,198 @@
+/* eslint-disable no-console */
+import * as os from 'os';
+import * as path from 'path';
+import { Architecture, AssetCode, Code } from 'aws-cdk-lib/aws-lambda';
+import * as cdk from 'aws-cdk-lib/core';
+import { BundlingOptions } from './types';
+import { exec } from './util';
+
+/**
+ * Options for bundling
+ */
+export interface BundlingProps extends BundlingOptions {
+  /**
+   * Name of the Cargo package that you're trying to build.
+   *
+   * This option is used to locate the bootstrap file if you don't provide a binaryName option.
+   */
+  readonly packageName: string;
+
+  /**
+   * Path to a directory containing your Cargo.toml file, or to your Cargo.toml directly.
+   *
+   * This will accept either a directory path containing a `Cargo.toml` file
+   * or a filepath to your `Cargo.toml` file (i.e. `path/to/Cargo.toml`).
+   *
+   * This will be used as the source of the volume mounted in the Docker
+   * container and will be the directory where it will run `cargo lambda build` from.
+   *
+   */
+  readonly manifestPath: string;
+
+  /**
+   * The system architecture of the lambda function
+   */
+  readonly architecture?: Architecture;
+
+  /**
+   * The name of the binary to build, in case that's different than the package's name.
+   */
+  readonly binaryName?: string;
+}
+
+interface CommandOptions {
+  readonly inputDir: string;
+  readonly outputDir: string;
+  readonly packageName?: string;
+  readonly binaryName?: string;
+  readonly osPlatform: NodeJS.Platform;
+  readonly architecture?: Architecture;
+}
+
+/**
+ * Bundling
+ */
+export class Bundling implements cdk.BundlingOptions {
+
+  public static bundle(options: BundlingProps): AssetCode {
+    const projectRoot = path.dirname(options.manifestPath);
+    const bundling = new Bundling(projectRoot, options);
+
+    return Code.fromAsset(projectRoot, {
+      assetHashType: options.assetHashType ?? cdk.AssetHashType.OUTPUT,
+      assetHash: options.assetHash,
+      bundling: {
+        image: bundling.image,
+        command: bundling.command,
+        environment: bundling.environment,
+        local: bundling.local,
+      },
+    });
+  }
+
+  public static clearRunsLocallyCache(): void { // for tests
+    this.runsLocally = undefined;
+  }
+
+  private static runsLocally?: boolean;
+
+  // Core bundling options
+  public readonly image: cdk.DockerImage;
+  public readonly command: string[];
+  public readonly environment?: { [key: string]: string };
+  public readonly local?: cdk.ILocalBundling;
+
+  constructor(readonly projectRoot: string, private readonly props: BundlingProps) {
+    Bundling.runsLocally = Bundling.runsLocally
+      ?? cargoLambdaVersion()
+      ?? false;
+
+    // Docker bundling
+    const shouldBuildImage = props.forcedDockerBundling || !Bundling.runsLocally;
+
+    this.image = shouldBuildImage
+      ? props.dockerImage ?? cdk.DockerImage.fromRegistry('calavera/cargo-lambda:latest')
+      : cdk.DockerImage.fromRegistry('dummy'); // Do not build if we don't need to
+
+    const osPlatform = os.platform();
+    const bundlingCommand = this.createBundlingCommand({
+      osPlatform,
+      outputDir: cdk.AssetStaging.BUNDLING_OUTPUT_DIR,
+      inputDir: cdk.AssetStaging.BUNDLING_INPUT_DIR,
+      packageName: props.packageName,
+      binaryName: props.binaryName,
+      architecture: props.architecture,
+    });
+
+    this.command = ['bash', '-c', bundlingCommand];
+    this.environment = props.environment;
+
+    //Local bundling
+    if (!props.forcedDockerBundling) { // only if Docker is not forced
+      const createLocalCommand = (outputDir: string) => {
+        return this.createBundlingCommand({
+          osPlatform,
+          outputDir: outputDir,
+          inputDir: projectRoot,
+          packageName: props.packageName,
+          binaryName: props.binaryName,
+          architecture: props.architecture,
+        });
+      };
+
+      this.local = {
+        tryBundle(outputDir: string) {
+          if (Bundling.runsLocally == false) {
+            process.stderr.write('Rust build cannot run locally. Switching to Docker bundling.\n');
+            return false;
+          }
+
+          const localCommand = createLocalCommand(outputDir);
+          exec(
+            osPlatform === 'win32' ? 'cmd' : 'bash',
+            [
+              osPlatform === 'win32' ? '/c' : '-c',
+              localCommand,
+            ],
+            {
+              env: { ...process.env, ...props.environment ?? {} },
+              stdio: [ // show output
+                'ignore', // ignore stdio
+                process.stderr, // redirect stdout to stderr
+                'inherit', // inherit stderr
+              ],
+              cwd: props.manifestPath,
+              windowsVerbatimArguments: osPlatform === 'win32',
+            },
+          );
+          return true;
+        },
+      };
+    }
+  }
+
+  public createBundlingCommand(props: CommandOptions): string {
+    const buildBinary: string[] = [
+      'cargo',
+      'lambda',
+      'build',
+      '--release',
+      '--lambda-dir',
+      props.outputDir,
+    ];
+
+    if (props.architecture) {
+      const targetFlag = props.architecture.name == Architecture.ARM_64.name ? '--arm64' : '--x86-64';
+      buildBinary.push(targetFlag);
+    }
+
+    if (props.binaryName) {
+      buildBinary.push('--flatten');
+      buildBinary.push(props.binaryName); // argument for the --flatten flag
+      buildBinary.push('--bin');
+      buildBinary.push(props.binaryName); // argument for the --bin flag
+    } else if (props.packageName) {
+      buildBinary.push('--flatten');
+      buildBinary.push(props.packageName); // argument for the --flatten flag
+    }
+
+    return chain([
+      ...this.props.commandHooks?.beforeBundling(props.inputDir, props.outputDir) ?? [],
+      buildBinary.join(' '),
+      ...this.props.commandHooks?.afterBundling(props.inputDir, props.outputDir) ?? [],
+    ]);
+  }
+}
+
+function chain(commands: string[]): string {
+  return commands.filter(c => !!c).join(' && ');
+}
+
+export function cargoLambdaVersion(): boolean | undefined {
+  try {
+    const cargo = exec('cargo', ['lambda', '--version']);
+    return cargo.status !== 0 || cargo.error ? undefined : true;
+  } catch (err) {
+    return undefined;
+  }
+}

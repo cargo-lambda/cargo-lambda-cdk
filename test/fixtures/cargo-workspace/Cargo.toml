@@ -1,0 +1,5 @@
+workspace.members = [
+  "binary1",
+  "binary2"
+]
+
