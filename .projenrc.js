@@ -10,6 +10,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
   githubOptions: {
     workflows: false,
   },
+  license: 'MIT',
 });
 
 project.addGitIgnore('target');
