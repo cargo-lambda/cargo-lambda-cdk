@@ -35,6 +35,9 @@ jobs:
           tag: v0.14.0
           platform: linux
           arch: x86-64
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
       - name: Install NPM dependencies
         run: yarn install --check-files --frozen-lockfile
       - name: release
@@ -52,8 +55,6 @@ jobs:
         with:
           name: build-artifact
           path: dist
-    container:
-      image: jsii/superchain:1-buster-slim-node14
   release_github:
     name: Publish to GitHub Releases
     needs: release

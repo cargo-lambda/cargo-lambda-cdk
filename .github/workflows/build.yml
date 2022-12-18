@@ -32,6 +32,9 @@ jobs:
           tag: v0.14.0
           platform: linux
           arch: x86-64
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
       - name: Install NPM dependencies
         run: yarn install --check-files
       - name: build
@@ -61,8 +64,6 @@ jobs:
         with:
           name: build-artifact
           path: dist
-    container:
-      image: jsii/superchain:1-buster-slim-node14
   self-mutation:
     needs: build
     runs-on: ubuntu-latest
