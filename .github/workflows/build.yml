@@ -31,7 +31,7 @@ jobs:
           repo: cargo-lambda/cargo-lambda
           tag: v0.14.0
           platform: linux
-          arch: x86-64
+          arch: x86_64
       - uses: actions/setup-node@v3
         with:
           node-version: '18.x'
