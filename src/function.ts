@@ -5,6 +5,8 @@ import { Construct } from 'constructs';
 import { Bundling } from './bundling';
 import { BundlingOptions } from './types';
 
+export { cargoLambdaVersion } from './bundling';
+
 /**
  * Properties for a RustFunction
  */

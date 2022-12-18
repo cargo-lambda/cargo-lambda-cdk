@@ -1,19 +1,21 @@
 import * as path from 'path';
+import { env } from 'process';
 import * as cdk from 'aws-cdk-lib/core';
-import * as cargoLambda from '../lib/index';
+import { RustFunction, cargoLambdaVersion } from '../lib/index';
 
 describe('CargoLambda.RustFunction', () => {
 
   const app = new cdk.App();
   const stack = new cdk.Stack(app);
+  const forcedDockerBundling = !!env.FORCE_DOCKER_RUN || !cargoLambdaVersion();
 
   describe('With single package Cargo project', () => {
     const testSource = path.join(__dirname, 'fixtures/single-package');
 
-    new cargoLambda.RustFunction(stack, 'single-package', {
+    new RustFunction(stack, 'single-package', {
       manifestPath: testSource,
       bundling: {
-        forcedDockerBundling: true,
+        forcedDockerBundling,
       },
     });
 
@@ -25,20 +27,20 @@ describe('CargoLambda.RustFunction', () => {
   describe('With a Cargo workspace', () => {
     const testSource = path.join(__dirname, 'fixtures/cargo-workspace');
 
-    new cargoLambda.RustFunction(stack, 'binary1', {
+    new RustFunction(stack, 'binary1', {
       manifestPath: path.join(testSource, 'binary1'),
       binaryName: 'binary1',
       bundling: {
-        forcedDockerBundling: true,
+        forcedDockerBundling,
       },
     });
 
 
-    new cargoLambda.RustFunction(stack, 'binary2', {
+    new RustFunction(stack, 'binary2', {
       manifestPath: path.join(testSource, 'binary2'),
       binaryName: 'binary2',
       bundling: {
-        forcedDockerBundling: true,
+        forcedDockerBundling,
       },
     });
 

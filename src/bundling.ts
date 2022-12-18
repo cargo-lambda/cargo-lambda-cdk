@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+import { spawnSync } from 'child_process';
 import * as os from 'os';
 import * as path from 'path';
 import { Architecture, AssetCode, Code } from 'aws-cdk-lib/aws-lambda';
@@ -141,7 +142,7 @@ export class Bundling implements cdk.BundlingOptions {
                 process.stderr, // redirect stdout to stderr
                 'inherit', // inherit stderr
               ],
-              cwd: props.manifestPath,
+              cwd: projectRoot,
               windowsVerbatimArguments: osPlatform === 'win32',
             },
           );
@@ -168,12 +169,12 @@ export class Bundling implements cdk.BundlingOptions {
 
     if (props.binaryName) {
       buildBinary.push('--flatten');
-      buildBinary.push(props.binaryName); // argument for the --flatten flag
+      buildBinary.push(props.binaryName);
       buildBinary.push('--bin');
-      buildBinary.push(props.binaryName); // argument for the --bin flag
+      buildBinary.push(props.binaryName);
     } else if (props.packageName) {
       buildBinary.push('--flatten');
-      buildBinary.push(props.packageName); // argument for the --flatten flag
+      buildBinary.push(props.packageName);
     }
 
     return chain([
@@ -190,7 +191,7 @@ function chain(commands: string[]): string {
 
 export function cargoLambdaVersion(): boolean | undefined {
   try {
-    const cargo = exec('cargo', ['lambda', '--version']);
+    const cargo = spawnSync('cargo', ['lambda', '--version']);
     return cargo.status !== 0 || cargo.error ? undefined : true;
   } catch (err) {
     return undefined;

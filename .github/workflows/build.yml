@@ -19,7 +19,20 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
-      - name: Install dependencies
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+      - name: Install Zig toolchain
+        uses: korandoru/setup-zig@v1
+        with:
+          zig-version: 0.10.0
+      - name: Install Cargo Lambda
+        uses: jaxxstorm/action-install-gh-release@v1.5.0
+        with:
+          repo: cargo-lambda/cargo-lambda
+          tag: v0.14.0
+          platform: linux
+          arch: x86-64
+      - name: Install NPM dependencies
         run: yarn install --check-files
       - name: build
         run: npx projen build
