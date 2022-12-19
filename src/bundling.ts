@@ -39,6 +39,11 @@ export interface BundlingProps extends BundlingOptions {
    * The name of the binary to build, in case that's different than the package's name.
    */
   readonly binaryName?: string;
+
+  /**
+   * Whether the code to compile is a Lambda Extension or not.
+   */
+  readonly lambdaExtension?: boolean;
 }
 
 interface CommandOptions {
@@ -48,6 +53,7 @@ interface CommandOptions {
   readonly binaryName?: string;
   readonly osPlatform: NodeJS.Platform;
   readonly architecture?: Architecture;
+  readonly lambdaExtension?: boolean;
 }
 
 /**
@@ -103,6 +109,7 @@ export class Bundling implements cdk.BundlingOptions {
       packageName: props.packageName,
       binaryName: props.binaryName,
       architecture: props.architecture,
+      lambdaExtension: props.lambdaExtension,
     });
 
     this.command = ['bash', '-c', bundlingCommand];
@@ -118,6 +125,7 @@ export class Bundling implements cdk.BundlingOptions {
           packageName: props.packageName,
           binaryName: props.binaryName,
           architecture: props.architecture,
+          lambdaExtension: props.lambdaExtension,
         });
       };
 
@@ -162,19 +170,26 @@ export class Bundling implements cdk.BundlingOptions {
       props.outputDir,
     ];
 
+    if (props.lambdaExtension) {
+      buildBinary.push('--extension');
+    }
+
     if (props.architecture) {
       const targetFlag = props.architecture.name == Architecture.ARM_64.name ? '--arm64' : '--x86-64';
       buildBinary.push(targetFlag);
     }
 
+    let flattenPackage = props.packageName;
+
     if (props.binaryName) {
-      buildBinary.push('--flatten');
-      buildBinary.push(props.binaryName);
       buildBinary.push('--bin');
       buildBinary.push(props.binaryName);
-    } else if (props.packageName) {
+      flattenPackage = props.binaryName;
+    }
+
+    if (!props.lambdaExtension && flattenPackage) {
       buildBinary.push('--flatten');
-      buildBinary.push(props.packageName);
+      buildBinary.push(flattenPackage);
     }
 
     return chain([
