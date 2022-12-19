@@ -2,6 +2,300 @@
 
 ## Constructs <a name="Constructs" id="Constructs"></a>
 
+### RustExtension <a name="RustExtension" id="cargo-lambda-cdk.RustExtension"></a>
+
+A Lambda extension written in Rust.
+
+#### Initializers <a name="Initializers" id="cargo-lambda-cdk.RustExtension.Initializer"></a>
+
+```typescript
+import { RustExtension } from 'cargo-lambda-cdk'
+
+new RustExtension(scope: Construct, packageName: string, props?: RustExtensionProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cargo-lambda-cdk.RustExtension.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#cargo-lambda-cdk.RustExtension.Initializer.parameter.packageName">packageName</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#cargo-lambda-cdk.RustExtension.Initializer.parameter.props">props</a></code> | <code><a href="#cargo-lambda-cdk.RustExtensionProps">RustExtensionProps</a></code> | *No description.* |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="scope" id="cargo-lambda-cdk.RustExtension.Initializer.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+##### `packageName`<sup>Required</sup> <a name="packageName" id="cargo-lambda-cdk.RustExtension.Initializer.parameter.packageName"></a>
+
+- *Type:* string
+
+---
+
+##### `props`<sup>Optional</sup> <a name="props" id="cargo-lambda-cdk.RustExtension.Initializer.parameter.props"></a>
+
+- *Type:* <a href="#cargo-lambda-cdk.RustExtensionProps">RustExtensionProps</a>
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#cargo-lambda-cdk.RustExtension.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#cargo-lambda-cdk.RustExtension.applyRemovalPolicy">applyRemovalPolicy</a></code> | Apply the given removal policy to this resource. |
+| <code><a href="#cargo-lambda-cdk.RustExtension.addPermission">addPermission</a></code> | Add permission for this layer version to specific entities. |
+
+---
+
+##### `toString` <a name="toString" id="cargo-lambda-cdk.RustExtension.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+##### `applyRemovalPolicy` <a name="applyRemovalPolicy" id="cargo-lambda-cdk.RustExtension.applyRemovalPolicy"></a>
+
+```typescript
+public applyRemovalPolicy(policy: RemovalPolicy): void
+```
+
+Apply the given removal policy to this resource.
+
+The Removal Policy controls what happens to this resource when it stops
+being managed by CloudFormation, either because you've removed it from the
+CDK application or because you've made a change that requires the resource
+to be replaced.
+
+The resource can be deleted (`RemovalPolicy.DESTROY`), or left in your AWS
+account for data recovery and cleanup later (`RemovalPolicy.RETAIN`).
+
+###### `policy`<sup>Required</sup> <a name="policy" id="cargo-lambda-cdk.RustExtension.applyRemovalPolicy.parameter.policy"></a>
+
+- *Type:* aws-cdk-lib.RemovalPolicy
+
+---
+
+##### `addPermission` <a name="addPermission" id="cargo-lambda-cdk.RustExtension.addPermission"></a>
+
+```typescript
+public addPermission(id: string, permission: LayerVersionPermission): void
+```
+
+Add permission for this layer version to specific entities.
+
+Usage within
+the same account where the layer is defined is always allowed and does not
+require calling this method. Note that the principal that creates the
+Lambda function using the layer (for example, a CloudFormation changeset
+execution role) also needs to have the ``lambda:GetLayerVersion``
+permission on the layer version.
+
+###### `id`<sup>Required</sup> <a name="id" id="cargo-lambda-cdk.RustExtension.addPermission.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+###### `permission`<sup>Required</sup> <a name="permission" id="cargo-lambda-cdk.RustExtension.addPermission.parameter.permission"></a>
+
+- *Type:* aws-cdk-lib.aws_lambda.LayerVersionPermission
+
+---
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#cargo-lambda-cdk.RustExtension.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#cargo-lambda-cdk.RustExtension.isResource">isResource</a></code> | Check whether the given construct is a Resource. |
+| <code><a href="#cargo-lambda-cdk.RustExtension.fromLayerVersionArn">fromLayerVersionArn</a></code> | Imports a layer version by ARN. |
+| <code><a href="#cargo-lambda-cdk.RustExtension.fromLayerVersionAttributes">fromLayerVersionAttributes</a></code> | Imports a Layer that has been defined externally. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="cargo-lambda-cdk.RustExtension.isConstruct"></a>
+
+```typescript
+import { RustExtension } from 'cargo-lambda-cdk'
+
+RustExtension.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="cargo-lambda-cdk.RustExtension.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+##### `isResource` <a name="isResource" id="cargo-lambda-cdk.RustExtension.isResource"></a>
+
+```typescript
+import { RustExtension } from 'cargo-lambda-cdk'
+
+RustExtension.isResource(construct: IConstruct)
+```
+
+Check whether the given construct is a Resource.
+
+###### `construct`<sup>Required</sup> <a name="construct" id="cargo-lambda-cdk.RustExtension.isResource.parameter.construct"></a>
+
+- *Type:* constructs.IConstruct
+
+---
+
+##### `fromLayerVersionArn` <a name="fromLayerVersionArn" id="cargo-lambda-cdk.RustExtension.fromLayerVersionArn"></a>
+
+```typescript
+import { RustExtension } from 'cargo-lambda-cdk'
+
+RustExtension.fromLayerVersionArn(scope: Construct, id: string, layerVersionArn: string)
+```
+
+Imports a layer version by ARN.
+
+Assumes it is compatible with all Lambda runtimes.
+
+###### `scope`<sup>Required</sup> <a name="scope" id="cargo-lambda-cdk.RustExtension.fromLayerVersionArn.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+###### `id`<sup>Required</sup> <a name="id" id="cargo-lambda-cdk.RustExtension.fromLayerVersionArn.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+###### `layerVersionArn`<sup>Required</sup> <a name="layerVersionArn" id="cargo-lambda-cdk.RustExtension.fromLayerVersionArn.parameter.layerVersionArn"></a>
+
+- *Type:* string
+
+---
+
+##### `fromLayerVersionAttributes` <a name="fromLayerVersionAttributes" id="cargo-lambda-cdk.RustExtension.fromLayerVersionAttributes"></a>
+
+```typescript
+import { RustExtension } from 'cargo-lambda-cdk'
+
+RustExtension.fromLayerVersionAttributes(scope: Construct, id: string, attrs: LayerVersionAttributes)
+```
+
+Imports a Layer that has been defined externally.
+
+###### `scope`<sup>Required</sup> <a name="scope" id="cargo-lambda-cdk.RustExtension.fromLayerVersionAttributes.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+the parent Construct that will use the imported layer.
+
+---
+
+###### `id`<sup>Required</sup> <a name="id" id="cargo-lambda-cdk.RustExtension.fromLayerVersionAttributes.parameter.id"></a>
+
+- *Type:* string
+
+the id of the imported layer in the construct tree.
+
+---
+
+###### `attrs`<sup>Required</sup> <a name="attrs" id="cargo-lambda-cdk.RustExtension.fromLayerVersionAttributes.parameter.attrs"></a>
+
+- *Type:* aws-cdk-lib.aws_lambda.LayerVersionAttributes
+
+the properties of the imported layer.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cargo-lambda-cdk.RustExtension.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#cargo-lambda-cdk.RustExtension.property.env">env</a></code> | <code>aws-cdk-lib.ResourceEnvironment</code> | The environment this resource belongs to. |
+| <code><a href="#cargo-lambda-cdk.RustExtension.property.stack">stack</a></code> | <code>aws-cdk-lib.Stack</code> | The stack in which this resource is defined. |
+| <code><a href="#cargo-lambda-cdk.RustExtension.property.compatibleRuntimes">compatibleRuntimes</a></code> | <code>aws-cdk-lib.aws_lambda.Runtime[]</code> | The runtimes compatible with this Layer. |
+| <code><a href="#cargo-lambda-cdk.RustExtension.property.layerVersionArn">layerVersionArn</a></code> | <code>string</code> | The ARN of the Lambda Layer version that this Layer defines. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="cargo-lambda-cdk.RustExtension.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `env`<sup>Required</sup> <a name="env" id="cargo-lambda-cdk.RustExtension.property.env"></a>
+
+```typescript
+public readonly env: ResourceEnvironment;
+```
+
+- *Type:* aws-cdk-lib.ResourceEnvironment
+
+The environment this resource belongs to.
+
+For resources that are created and managed by the CDK
+(generally, those created by creating new class instances like Role, Bucket, etc.),
+this is always the same as the environment of the stack they belong to;
+however, for imported resources
+(those obtained from static methods like fromRoleArn, fromBucketName, etc.),
+that might be different than the stack they were imported into.
+
+---
+
+##### `stack`<sup>Required</sup> <a name="stack" id="cargo-lambda-cdk.RustExtension.property.stack"></a>
+
+```typescript
+public readonly stack: Stack;
+```
+
+- *Type:* aws-cdk-lib.Stack
+
+The stack in which this resource is defined.
+
+---
+
+##### `compatibleRuntimes`<sup>Optional</sup> <a name="compatibleRuntimes" id="cargo-lambda-cdk.RustExtension.property.compatibleRuntimes"></a>
+
+```typescript
+public readonly compatibleRuntimes: Runtime[];
+```
+
+- *Type:* aws-cdk-lib.aws_lambda.Runtime[]
+
+The runtimes compatible with this Layer.
+
+---
+
+##### `layerVersionArn`<sup>Required</sup> <a name="layerVersionArn" id="cargo-lambda-cdk.RustExtension.property.layerVersionArn"></a>
+
+```typescript
+public readonly layerVersionArn: string;
+```
+
+- *Type:* string
+
+The ARN of the Lambda Layer version that this Layer defines.
+
+---
+
+
 ### RustFunction <a name="RustFunction" id="cargo-lambda-cdk.RustFunction"></a>
 
 A Rust Lambda function.
@@ -984,6 +1278,123 @@ public readonly forcedDockerBundling: boolean;
 - *Default:* false
 
 Force bundling in a Docker container even if local bundling is possible.
+
+---
+
+### RustExtensionProps <a name="RustExtensionProps" id="cargo-lambda-cdk.RustExtensionProps"></a>
+
+#### Initializer <a name="Initializer" id="cargo-lambda-cdk.RustExtensionProps.Initializer"></a>
+
+```typescript
+import { RustExtensionProps } from 'cargo-lambda-cdk'
+
+const rustExtensionProps: RustExtensionProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cargo-lambda-cdk.RustExtensionProps.property.description">description</a></code> | <code>string</code> | The description the this Lambda Layer. |
+| <code><a href="#cargo-lambda-cdk.RustExtensionProps.property.layerVersionName">layerVersionName</a></code> | <code>string</code> | The name of the layer. |
+| <code><a href="#cargo-lambda-cdk.RustExtensionProps.property.license">license</a></code> | <code>string</code> | The SPDX licence identifier or URL to the license file for this layer. |
+| <code><a href="#cargo-lambda-cdk.RustExtensionProps.property.removalPolicy">removalPolicy</a></code> | <code>aws-cdk-lib.RemovalPolicy</code> | Whether to retain this version of the layer when a new version is added or when the stack is deleted. |
+| <code><a href="#cargo-lambda-cdk.RustExtensionProps.property.binaryName">binaryName</a></code> | <code>string</code> | The name of the binary to build, in case that's different than the package's name. |
+| <code><a href="#cargo-lambda-cdk.RustExtensionProps.property.bundling">bundling</a></code> | <code><a href="#cargo-lambda-cdk.BundlingOptions">BundlingOptions</a></code> | Bundling options. |
+| <code><a href="#cargo-lambda-cdk.RustExtensionProps.property.manifestPath">manifestPath</a></code> | <code>string</code> | Path to a directory containing your Cargo.toml file, or to your Cargo.toml directly. |
+
+---
+
+##### `description`<sup>Optional</sup> <a name="description" id="cargo-lambda-cdk.RustExtensionProps.property.description"></a>
+
+```typescript
+public readonly description: string;
+```
+
+- *Type:* string
+- *Default:* No description.
+
+The description the this Lambda Layer.
+
+---
+
+##### `layerVersionName`<sup>Optional</sup> <a name="layerVersionName" id="cargo-lambda-cdk.RustExtensionProps.property.layerVersionName"></a>
+
+```typescript
+public readonly layerVersionName: string;
+```
+
+- *Type:* string
+- *Default:* A name will be generated.
+
+The name of the layer.
+
+---
+
+##### `license`<sup>Optional</sup> <a name="license" id="cargo-lambda-cdk.RustExtensionProps.property.license"></a>
+
+```typescript
+public readonly license: string;
+```
+
+- *Type:* string
+- *Default:* No license information will be recorded.
+
+The SPDX licence identifier or URL to the license file for this layer.
+
+---
+
+##### `removalPolicy`<sup>Optional</sup> <a name="removalPolicy" id="cargo-lambda-cdk.RustExtensionProps.property.removalPolicy"></a>
+
+```typescript
+public readonly removalPolicy: RemovalPolicy;
+```
+
+- *Type:* aws-cdk-lib.RemovalPolicy
+- *Default:* RemovalPolicy.DESTROY
+
+Whether to retain this version of the layer when a new version is added or when the stack is deleted.
+
+---
+
+##### `binaryName`<sup>Optional</sup> <a name="binaryName" id="cargo-lambda-cdk.RustExtensionProps.property.binaryName"></a>
+
+```typescript
+public readonly binaryName: string;
+```
+
+- *Type:* string
+
+The name of the binary to build, in case that's different than the package's name.
+
+---
+
+##### `bundling`<sup>Optional</sup> <a name="bundling" id="cargo-lambda-cdk.RustExtensionProps.property.bundling"></a>
+
+```typescript
+public readonly bundling: BundlingOptions;
+```
+
+- *Type:* <a href="#cargo-lambda-cdk.BundlingOptions">BundlingOptions</a>
+- *Default:* use default bundling options
+
+Bundling options.
+
+---
+
+##### `manifestPath`<sup>Optional</sup> <a name="manifestPath" id="cargo-lambda-cdk.RustExtensionProps.property.manifestPath"></a>
+
+```typescript
+public readonly manifestPath: string;
+```
+
+- *Type:* string
+- *Default:* check the current directory for a `Cargo.toml` file, and throws an error if the file doesn't exist.
+
+Path to a directory containing your Cargo.toml file, or to your Cargo.toml directly.
+
+This will accept either a directory path containing a `Cargo.toml` file
+or a filepath to your `Cargo.toml` file (i.e. `path/to/Cargo.toml`).
 
 ---
 

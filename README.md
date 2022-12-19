@@ -5,7 +5,6 @@ This library provides constructs for Rust Lambda functions built with Cargo Lamb
 To use this module you will either need to have [Cargo Lambda installed](https://www.cargo-lambda.info/guide/installation.html) (`0.12.0` or later), or `Docker` installed.
 See [Local Bundling](#local-bundling)/[Docker Bundling](#docker-bundling) for more information.
 
-
 ## Rust Function
 
 Define a `RustFunction`:
@@ -27,9 +26,28 @@ lamda-app
     └── main.rs
 ```
 
-## Runtime
+### Runtime
 
 The `RustFunction` uses the `PROVIDED_AL2` runtime.
+
+## Rust Extension
+
+Define a `RustExtension` that get's deployed as a layer to use it with any other function later.
+
+```ts
+import { RustExtension, RustFunction } from 'cargo-lambda-cdk';
+
+const extensionLayer = new RustExtension(this, 'extension-package-name', {
+  packageDir: 'path/to/package/directory/with/Cargo.toml',
+});
+
+new RustFunction(this, 'function-package-name', {
+  packageDir: 'path/to/package/directory/with/Cargo.toml',
+  layers: [
+    extensionLayer
+  ],
+});
+```
 
 ## Environment
 
@@ -61,7 +79,7 @@ Use the `bundling.dockerImage` prop to use a custom bundling image:
 ```ts
 import { RustFunction } from 'cargo-lambda-cdk';
 
-new lambda.RustFunction(this, 'package-name', {
+new RustFunction(this, 'package-name', {
   packageDir: 'path/to/package/directory/with/Cargo.toml',
   bundling: {
     dockerImage: DockerImage.fromBuild('/path/to/Dockerfile'),

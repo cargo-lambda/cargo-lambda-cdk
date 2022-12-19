@@ -1,8 +1,7 @@
-import * as fs from 'fs';
-import * as path from 'path';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { Construct } from 'constructs';
 import { Bundling } from './bundling';
+import { getCargoManifestPath } from './cargo';
 import { BundlingOptions } from './types';
 
 export { cargoLambdaVersion } from './bundling';
@@ -40,27 +39,10 @@ export interface RustFunctionProps extends lambda.FunctionOptions {
  */
 export class RustFunction extends lambda.Function {
   constructor(scope: Construct, packageName: string, props?: RustFunctionProps) {
-    // Find the package root
-    props = props ?? {};
-    const manifestPathProp = props.manifestPath ?? 'Cargo.toml';
-    const parsedManifestPath = path.parse(manifestPathProp);
-    let manifestPath: string;
-
-    if (parsedManifestPath.base && parsedManifestPath.ext && parsedManifestPath.base === 'Cargo.toml') {
-      if (!fs.existsSync(manifestPathProp)) {
-        throw new Error('Cargo.toml doesn\'t exist');
-      }
-      manifestPath = manifestPathProp;
-    } else if (parsedManifestPath.base && parsedManifestPath.ext && parsedManifestPath.base != 'Cargo.toml') {
-      throw new Error('manifestPath is specifying a file that is not Cargo.toml');
-    } else if (!fs.existsSync(path.join(manifestPathProp, 'Cargo.toml'))) {
-      throw new Error(`Cargo.toml file at ${manifestPathProp} doesn't exist`);
-    } else {
-      manifestPath = path.join(manifestPathProp, 'Cargo.toml');
-    }
+    const manifestPath = getCargoManifestPath(props?.manifestPath ?? 'Cargo.toml');
 
     const runtime = lambda.Runtime.PROVIDED_AL2;
-    const bundling = props.bundling ?? {};
+    const bundling = props?.bundling ?? {};
 
     super(scope, packageName, {
       ...props,
@@ -69,7 +51,7 @@ export class RustFunction extends lambda.Function {
         ...bundling,
         packageName,
         manifestPath,
-        binaryName: props.binaryName,
+        binaryName: props?.binaryName,
       }),
       handler: 'bootstrap',
     });
