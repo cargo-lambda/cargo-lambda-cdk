@@ -20,7 +20,7 @@ new RustFunction(stack, 'package-name', {
 The layout for this Rust project could look like this:
 
 ```bash
-lamda-app
+lambda-project
 ├── Cargo.toml
 └── src
     └── main.rs
