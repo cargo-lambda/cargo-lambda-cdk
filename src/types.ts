@@ -1,5 +1,5 @@
+import { AssetHashType, DockerImage } from 'aws-cdk-lib';
 import { Architecture } from 'aws-cdk-lib/aws-lambda';
-import { AssetHashType, DockerImage } from 'aws-cdk-lib/core';
 
 /**
  * Bundling options

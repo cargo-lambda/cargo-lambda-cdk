@@ -2,8 +2,8 @@
 import { spawnSync } from 'child_process';
 import * as os from 'os';
 import * as path from 'path';
+import * as cdk from 'aws-cdk-lib';
 import { Architecture, AssetCode, Code } from 'aws-cdk-lib/aws-lambda';
-import * as cdk from 'aws-cdk-lib/core';
 import { BundlingOptions } from './types';
 import { exec } from './util';
 
