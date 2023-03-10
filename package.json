@@ -128,8 +128,8 @@
         "module": "cargo_lambda_cdk"
       },
       "dotnet": {
-        "namespace": "CargoLambda.Cdk",
-        "packageId": "CargoLambda.CargoLambdaCdk"
+        "namespace": "CargoLambda.CDK",
+        "packageId": "CargoLambda.CargoLambdaCDK"
       },
       "go": {
         "moduleName": "github.com/cargo-lambda/cargo-lambda-cdk"

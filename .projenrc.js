@@ -20,8 +20,8 @@ const project = new awscdk.AwsCdkConstructLibrary({
     mavenGroupId: 'com.cargolambda',
   },
   publishToNuget: {
-    dotNetNamespace: 'CargoLambda.Cdk',
-    packageId: 'CargoLambda.CargoLambdaCdk',
+    dotNetNamespace: 'CargoLambda.CDK',
+    packageId: 'CargoLambda.CargoLambdaCDK',
   },
   publishToPypi: {
     distName: 'cargo-lambda-cdk',
