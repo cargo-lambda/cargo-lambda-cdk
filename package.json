@@ -17,7 +17,10 @@
     "eslint": "npx projen eslint",
     "package": "npx projen package",
     "package-all": "npx projen package-all",
+    "package:dotnet": "npx projen package:dotnet",
+    "package:go": "npx projen package:go",
     "package:js": "npx projen package:js",
+    "package:python": "npx projen package:python",
     "post-compile": "npx projen post-compile",
     "post-upgrade": "npx projen post-upgrade",
     "pre-compile": "npx projen pre-compile",
@@ -111,7 +114,19 @@
   "stability": "stable",
   "jsii": {
     "outdir": "dist",
-    "targets": {},
+    "targets": {
+      "python": {
+        "distName": "cargo-lambda-cdk",
+        "module": "cargo_lambda_cdk"
+      },
+      "dotnet": {
+        "namespace": "CargoLambda.CDK",
+        "packageId": "CargoLambda.CargoLambdaCDK"
+      },
+      "go": {
+        "moduleName": "github.com/cargo-lambda/cargo-lambda-cdk"
+      }
+    },
     "tsc": {
       "outDir": "lib",
       "rootDir": "src"

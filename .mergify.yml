@@ -7,6 +7,9 @@ queue_rules:
       - -label~=(do-not-merge)
       - status-success=build
       - status-success=package-js
+      - status-success=package-python
+      - status-success=package-dotnet
+      - status-success=package-go
 pull_request_rules:
   - name: Automatic merge on approval and successful build
     actions:
@@ -23,3 +26,6 @@ pull_request_rules:
       - -label~=(do-not-merge)
       - status-success=build
       - status-success=package-js
+      - status-success=package-python
+      - status-success=package-dotnet
+      - status-success=package-go
