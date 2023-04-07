@@ -7,7 +7,7 @@
     },
     {
       "name": "@types/node",
-      "version": "^16",
+      "version": "^14",
       "type": "build"
     },
     {
@@ -49,12 +49,16 @@
     },
     {
       "name": "jest-junit",
-      "version": "^15",
+      "version": "^13",
       "type": "build"
     },
     {
       "name": "jest",
       "version": "^27",
+      "type": "build"
+    },
+    {
+      "name": "jsii",
       "type": "build"
     },
     {
@@ -70,8 +74,7 @@
       "type": "build"
     },
     {
-      "name": "jsii",
-      "version": "1.x",
+      "name": "json-schema",
       "type": "build"
     },
     {
