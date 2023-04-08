@@ -34,6 +34,15 @@ export interface RustFunctionProps extends lambda.FunctionOptions {
   readonly bundling?: BundlingOptions;
 }
 
+function bundlingOptionsFromRustFunctionProps(
+  props?: RustFunctionProps,
+): BundlingOptions {
+  const bundling = props?.bundling ?? {};
+  return {
+    ...bundling,
+  };
+}
+
 /**
  * A Rust Lambda function
  */
@@ -42,7 +51,7 @@ export class RustFunction extends lambda.Function {
     const manifestPath = getCargoManifestPath(props?.manifestPath ?? 'Cargo.toml');
 
     const runtime = lambda.Runtime.PROVIDED_AL2;
-    const bundling = props?.bundling ?? {};
+    const bundling = bundlingOptionsFromRustFunctionProps(props);
 
     super(scope, packageName, {
       ...props,
