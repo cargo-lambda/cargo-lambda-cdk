@@ -48,6 +48,7 @@ export class RustFunction extends lambda.Function {
     super(scope, packageName, {
       ...props,
       runtime,
+      architecture: bundling.architecture,
       code: Bundling.bundle({
         ...bundling,
         packageName,
