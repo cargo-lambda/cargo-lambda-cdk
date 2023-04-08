@@ -3,6 +3,7 @@ import { Construct } from 'constructs';
 import { Bundling } from './bundling';
 import { getCargoManifestPath } from './cargo';
 import { BundlingOptions } from './types';
+import { bundlingOptionsFromRustFunctionProps } from './util';
 
 export { cargoLambdaVersion } from './bundling';
 
@@ -34,15 +35,6 @@ export interface RustFunctionProps extends lambda.FunctionOptions {
   readonly bundling?: BundlingOptions;
 }
 
-function bundlingOptionsFromRustFunctionProps(
-  props?: RustFunctionProps,
-): BundlingOptions {
-  const bundling = props?.bundling ?? {};
-  return {
-    ...bundling,
-  };
-}
-
 /**
  * A Rust Lambda function
  */
@@ -66,4 +58,3 @@ export class RustFunction extends lambda.Function {
     });
   }
 }
-
