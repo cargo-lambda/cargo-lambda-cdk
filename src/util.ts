@@ -24,6 +24,11 @@ export function exec(cmd: string, args: string[], options?: SpawnSyncOptions) {
 }
 
 export function bundlingOptionsFromRustFunctionProps(props?: RustFunctionProps): BundlingOptions {
+  if (props?.bundling?.architecture && props?.architecture && props?.bundling?.architecture !== props?.architecture) {
+    throw new Error(
+      `Architecture mismatch: the architecture for bundling (${props.bundling.architecture.name} ) didn't match the architecture of the underlying lambda (${props.architecture.name}).`,
+    );
+  }
   const architecture = props?.bundling?.architecture
     ? props?.bundling?.architecture
     : props?.architecture
