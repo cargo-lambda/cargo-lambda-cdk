@@ -163,6 +163,7 @@ jobs:
         run: mv .repo/dist dist
       - name: Release
         env:
+          MAVEN_SERVER_ID: 'github'
           MAVEN_REPOSITORY_URL: 'https://maven.pkg.github.com/cargo-lambda/cargo-lambda-cdk'
           MAVEN_ENDPOINT: 'https://maven.pkg.github.com'
           MAVEN_USERNAME: ${{ github.actor }}
