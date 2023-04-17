@@ -14,11 +14,12 @@ const project = new awscdk.AwsCdkConstructLibrary({
   publishToGo: {
     moduleName: 'github.com/cargo-lambda/cargo-lambda-cdk',
   },
-  // publishToMaven: {
-  //   javaPackage: 'com.cargolambda.cargo_lambda_cdk',
-  //   mavenArtifactId: 'cargo_lambda_cdk',
-  //   mavenGroupId: 'com.cargolambda',
-  // },
+  publishToMaven: {
+    mavenRepositoryUrl: 'https://maven.pkg.github.com/cargo-lambda/cargo-lambda-cdk',
+    javaPackage: 'com.cargolambda.cargo_lambda_cdk',
+    mavenArtifactId: 'cargo_lambda_cdk',
+    mavenGroupId: 'com.cargolambda',
+  },
   publishToNuget: {
     dotNetNamespace: 'CargoLambda.CDK',
     packageId: 'CargoLambda.CargoLambdaCDK',
