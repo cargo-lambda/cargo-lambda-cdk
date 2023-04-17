@@ -163,6 +163,7 @@ jobs:
         run: mv .repo/dist dist
       - name: Release
         env:
+          MAVEN_USERNAME: ${{ github.actor }}
           MAVEN_PASSWORD: ${{ secrets.CDK_PACKAGES_REGISTRY_GITHUB_TOKEN }}
         run: npx -p publib@latest publib-maven
   release_pypi:
