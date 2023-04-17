@@ -15,6 +15,7 @@ const project = new awscdk.AwsCdkConstructLibrary({
     moduleName: 'github.com/cargo-lambda/cargo-lambda-cdk',
   },
   publishToMaven: {
+    mavenServerId: 'github',
     mavenRepositoryUrl: 'https://maven.pkg.github.com/cargo-lambda/cargo-lambda-cdk',
     mavenEndpoint: 'https://maven.pkg.github.com',
     javaPackage: 'com.cargolambda.cargo_lambda_cdk',
