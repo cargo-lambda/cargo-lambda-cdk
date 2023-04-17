@@ -3,6 +3,7 @@ import { Construct } from 'constructs';
 import { Bundling } from './bundling';
 import { getCargoManifestPath } from './cargo';
 import { BundlingOptions } from './types';
+import { bundlingOptionsFromRustFunctionProps } from './util';
 
 export { cargoLambdaVersion } from './bundling';
 
@@ -42,11 +43,12 @@ export class RustFunction extends lambda.Function {
     const manifestPath = getCargoManifestPath(props?.manifestPath ?? 'Cargo.toml');
 
     const runtime = lambda.Runtime.PROVIDED_AL2;
-    const bundling = props?.bundling ?? {};
+    const bundling = bundlingOptionsFromRustFunctionProps(props);
 
     super(scope, packageName, {
       ...props,
       runtime,
+      architecture: bundling.architecture,
       code: Bundling.bundle({
         ...bundling,
         packageName,
@@ -57,4 +59,3 @@ export class RustFunction extends lambda.Function {
     });
   }
 }
-

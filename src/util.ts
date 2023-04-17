@@ -1,4 +1,7 @@
 import { spawnSync, SpawnSyncOptions } from 'child_process';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import { RustFunctionProps } from './function';
+import { BundlingOptions } from './types';
 
 /**
  * Spawn sync with error handling
@@ -18,4 +21,21 @@ export function exec(cmd: string, args: string[], options?: SpawnSyncOptions) {
   }
 
   return proc;
+}
+
+export function bundlingOptionsFromRustFunctionProps(props?: RustFunctionProps): BundlingOptions {
+  if (props?.bundling?.architecture && props?.architecture && props?.bundling?.architecture !== props?.architecture) {
+    throw new Error(
+      `Architecture mismatch: the architecture for bundling (${props.bundling.architecture.name} ) didn't match the architecture of the underlying lambda (${props.architecture.name}).`,
+    );
+  }
+  const architecture = props?.bundling?.architecture
+    ? props?.bundling?.architecture
+    : props?.architecture
+      ? props?.architecture
+      : lambda.Architecture.X86_64;
+  return {
+    ...props?.bundling,
+    architecture,
+  };
 }

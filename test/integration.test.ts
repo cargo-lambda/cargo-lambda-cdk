@@ -1,7 +1,7 @@
 import * as path from 'path';
 import { env } from 'process';
 import * as cdk from 'aws-cdk-lib/core';
-import { RustExtension, RustFunction, cargoLambdaVersion } from '../lib/index';
+import { RustExtension, RustFunction, cargoLambdaVersion } from '../src/index';
 
 const forcedDockerBundling = !!env.FORCE_DOCKER_RUN || !cargoLambdaVersion();
 
