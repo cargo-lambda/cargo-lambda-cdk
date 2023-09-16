@@ -1,10 +1,10 @@
 /* eslint-disable no-console */
 import { spawnSync } from 'child_process';
-import * as os from 'os';
-import * as path from 'path';
+import { platform } from 'node:os';
+import { dirname } from 'node:path';
 import * as cdk from 'aws-cdk-lib';
 import { Architecture, AssetCode, Code } from 'aws-cdk-lib/aws-lambda';
-import { getManifest } from './cargo';
+import { Manifest, getManifest } from './cargo';
 import { BundlingOptions } from './types';
 import { exec } from './util';
 
@@ -41,13 +41,13 @@ export interface BundlingProps extends BundlingOptions {
 }
 
 interface CommandOptions {
-  readonly manifestPath: string;
   readonly inputDir: string;
   readonly outputDir: string;
   readonly binaryName?: string;
   readonly osPlatform: NodeJS.Platform;
   readonly architecture?: Architecture;
   readonly lambdaExtension?: boolean;
+  readonly manifest: Manifest;
 }
 
 /**
@@ -56,7 +56,7 @@ interface CommandOptions {
 export class Bundling implements cdk.BundlingOptions {
 
   public static bundle(options: BundlingProps): AssetCode {
-    const projectRoot = path.dirname(options.manifestPath);
+    const projectRoot = dirname(options.manifestPath);
     const bundling = new Bundling(projectRoot, options);
 
     return Code.fromAsset(projectRoot, {
@@ -95,12 +95,14 @@ export class Bundling implements cdk.BundlingOptions {
       ? props.dockerImage ?? cdk.DockerImage.fromRegistry('ghcr.io/cargo-lambda/cargo-lambda')
       : cdk.DockerImage.fromRegistry('dummy'); // Do not build if we don't need to
 
-    const osPlatform = os.platform();
+    const manifest = getManifest(props.manifestPath);
+
+    const osPlatform = platform();
     const bundlingCommand = this.createBundlingCommand({
       osPlatform,
+      manifest,
       outputDir: cdk.AssetStaging.BUNDLING_OUTPUT_DIR,
       inputDir: cdk.AssetStaging.BUNDLING_INPUT_DIR,
-      manifestPath: props.manifestPath,
       binaryName: props.binaryName,
       architecture: props.architecture,
       lambdaExtension: props.lambdaExtension,
@@ -114,9 +116,9 @@ export class Bundling implements cdk.BundlingOptions {
       const createLocalCommand = (outputDir: string) => {
         return this.createBundlingCommand({
           osPlatform,
+          manifest,
           outputDir,
           inputDir: projectRoot,
-          manifestPath: props.manifestPath,
           binaryName: props.binaryName,
           architecture: props.architecture,
           lambdaExtension: props.lambdaExtension,
@@ -179,15 +181,14 @@ export class Bundling implements cdk.BundlingOptions {
       buildBinary.push(props.binaryName);
       packageName = props.binaryName;
     } else {
-      const manifest = getManifest(props.manifestPath);
-      if (manifest.workspace) {
+      if (props.manifest.workspace) {
         throw new Error('the Cargo manifest is a workspace, use the option `binaryName` to specify the binary to build');
       }
 
-      packageName = manifest.package?.name;
-      if (manifest.bin) {
-        if (manifest.bin.length == 1) {
-          packageName = manifest.bin[0].name;
+      packageName = props.manifest.package?.name;
+      if (props.manifest.bin) {
+        if (props.manifest.bin.length == 1) {
+          packageName = props.manifest.bin[0].name;
 
           buildBinary.push('--bin');
           buildBinary.push(packageName);
@@ -206,9 +207,11 @@ export class Bundling implements cdk.BundlingOptions {
       buildBinary.push(packageName);
     }
 
+    const command = buildBinary.join(' ');
+
     return chain([
       ...this.props.commandHooks?.beforeBundling(props.inputDir, props.outputDir) ?? [],
-      buildBinary.join(' '),
+      command,
       ...this.props.commandHooks?.afterBundling(props.inputDir, props.outputDir) ?? [],
     ]);
   }

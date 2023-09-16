@@ -2,15 +2,15 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join, parse } from 'node:path';
 import { load } from 'js-toml';
 
-interface Workspace {
+export interface Workspace {
   members: string[];
 }
 
-interface Package {
+export interface Package {
   name: string;
 }
 
-interface Manifest {
+export interface Manifest {
   package?: Package;
   bin?: Package[];
   workspace?: Workspace;
@@ -30,7 +30,7 @@ export function getManifestPath(manifestPath: string): string {
   }
 
   if (!existsSync(manifestPathResult)) {
-    throw new Error('Cargo.toml doesn\'t exist, use the option `manifestPath` to specify the location of the Cargo.toml file');
+    throw new Error(`'${manifestPathResult}' is not a path to a Cargo.toml file, use the option \`manifestPath\` to specify the location of the Cargo.toml file`);
   }
 
   return manifestPathResult;

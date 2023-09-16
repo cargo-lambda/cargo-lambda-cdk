@@ -19,7 +19,7 @@ describe('getManifestPath', () => {
 
   it('fails with a directory that doesn\'t include a Cargo.toml file', () => {
     const fixture = join(__dirname, 'fixtures/single-package/src');
-    expect(() => getManifestPath(fixture)).toThrow('Cargo.toml doesn\'t exist, use the option `manifestPath` to specify the location of the Cargo.toml file');
+    expect(() => getManifestPath(fixture)).toThrow(`'${fixture}/Cargo.toml' is not a path to a Cargo.toml file, use the option \`manifestPath\` to specify the location of the Cargo.toml file`);
   });
 });
 
