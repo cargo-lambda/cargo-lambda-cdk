@@ -1,0 +1,4 @@
+aws-cdk-lib==2.96.2
+constructs>=10.0.0,<11.0.0
+cargo-lambda-cdk>=0.0.16
+ziglang==0.10.1.post1
