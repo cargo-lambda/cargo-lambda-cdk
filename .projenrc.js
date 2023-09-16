@@ -35,4 +35,5 @@ const project = new awscdk.AwsCdkConstructLibrary({
 project.addBundledDeps('js-toml@^0.1.1');
 
 project.addGitIgnore('target');
+project.gitignore.removePatterns('*.tgz');
 project.synth();
