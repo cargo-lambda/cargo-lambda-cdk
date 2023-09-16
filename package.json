@@ -65,6 +65,12 @@
     "aws-cdk-lib": "^2.1.0",
     "constructs": "^10.0.5"
   },
+  "dependencies": {
+    "js-toml": "^0.1.1"
+  },
+  "bundledDependencies": [
+    "js-toml"
+  ],
   "keywords": [
     "cdk"
   ],

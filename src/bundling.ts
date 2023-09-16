@@ -4,6 +4,7 @@ import * as os from 'os';
 import * as path from 'path';
 import * as cdk from 'aws-cdk-lib';
 import { Architecture, AssetCode, Code } from 'aws-cdk-lib/aws-lambda';
+import { getManifest } from './cargo';
 import { BundlingOptions } from './types';
 import { exec } from './util';
 
@@ -11,13 +12,6 @@ import { exec } from './util';
  * Options for bundling
  */
 export interface BundlingProps extends BundlingOptions {
-  /**
-   * Name of the Cargo package that you're trying to build.
-   *
-   * This option is used to locate the bootstrap file if you don't provide a binaryName option.
-   */
-  readonly packageName: string;
-
   /**
    * Path to a directory containing your Cargo.toml file, or to your Cargo.toml directly.
    *
@@ -47,9 +41,9 @@ export interface BundlingProps extends BundlingOptions {
 }
 
 interface CommandOptions {
+  readonly manifestPath: string;
   readonly inputDir: string;
   readonly outputDir: string;
-  readonly packageName?: string;
   readonly binaryName?: string;
   readonly osPlatform: NodeJS.Platform;
   readonly architecture?: Architecture;
@@ -98,7 +92,7 @@ export class Bundling implements cdk.BundlingOptions {
     const shouldBuildImage = props.forcedDockerBundling || !Bundling.runsLocally;
 
     this.image = shouldBuildImage
-      ? props.dockerImage ?? cdk.DockerImage.fromRegistry('calavera/cargo-lambda:latest')
+      ? props.dockerImage ?? cdk.DockerImage.fromRegistry('ghcr.io/cargo-lambda/cargo-lambda')
       : cdk.DockerImage.fromRegistry('dummy'); // Do not build if we don't need to
 
     const osPlatform = os.platform();
@@ -106,7 +100,7 @@ export class Bundling implements cdk.BundlingOptions {
       osPlatform,
       outputDir: cdk.AssetStaging.BUNDLING_OUTPUT_DIR,
       inputDir: cdk.AssetStaging.BUNDLING_INPUT_DIR,
-      packageName: props.packageName,
+      manifestPath: props.manifestPath,
       binaryName: props.binaryName,
       architecture: props.architecture,
       lambdaExtension: props.lambdaExtension,
@@ -120,9 +114,9 @@ export class Bundling implements cdk.BundlingOptions {
       const createLocalCommand = (outputDir: string) => {
         return this.createBundlingCommand({
           osPlatform,
-          outputDir: outputDir,
+          outputDir,
           inputDir: projectRoot,
-          packageName: props.packageName,
+          manifestPath: props.manifestPath,
           binaryName: props.binaryName,
           architecture: props.architecture,
           lambdaExtension: props.lambdaExtension,
@@ -179,17 +173,37 @@ export class Bundling implements cdk.BundlingOptions {
       buildBinary.push(targetFlag);
     }
 
-    let flattenPackage = props.packageName;
-
+    let packageName;
     if (props.binaryName) {
       buildBinary.push('--bin');
       buildBinary.push(props.binaryName);
-      flattenPackage = props.binaryName;
+      packageName = props.binaryName;
+    } else {
+      const manifest = getManifest(props.manifestPath);
+      if (manifest.workspace) {
+        throw new Error('the Cargo manifest is a workspace, use the option `binaryName` to specify the binary to build');
+      }
+
+      packageName = manifest.package?.name;
+      if (manifest.bin) {
+        if (manifest.bin.length == 1) {
+          packageName = manifest.bin[0].name;
+
+          buildBinary.push('--bin');
+          buildBinary.push(packageName);
+        } else {
+          throw new Error('there are more than one binaries declared in this Cargo package, use the option `binaryName` to specify the binary to build');
+        }
+      }
+
+      if (!packageName) {
+        throw new Error('the Cargo package is missing the package name or a [[bin]] section, use the option `binaryName` to specify the binary to build');
+      }
     }
 
-    if (!props.lambdaExtension && flattenPackage) {
+    if (!props.lambdaExtension && packageName) {
       buildBinary.push('--flatten');
-      buildBinary.push(flattenPackage);
+      buildBinary.push(packageName);
     }
 
     return chain([
