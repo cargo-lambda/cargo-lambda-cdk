@@ -101,6 +101,11 @@
       "type": "build"
     },
     {
+      "name": "js-toml",
+      "version": "^0.1.1",
+      "type": "bundled"
+    },
+    {
       "name": "@types/babel__traverse",
       "version": "7.18.2",
       "type": "override"

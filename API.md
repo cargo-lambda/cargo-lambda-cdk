@@ -11,13 +11,13 @@ A Lambda extension written in Rust.
 ```typescript
 import { RustExtension } from 'cargo-lambda-cdk'
 
-new RustExtension(scope: Construct, packageName: string, props?: RustExtensionProps)
+new RustExtension(scope: Construct, resourceName: string, props?: RustExtensionProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cargo-lambda-cdk.RustExtension.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#cargo-lambda-cdk.RustExtension.Initializer.parameter.packageName">packageName</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#cargo-lambda-cdk.RustExtension.Initializer.parameter.resourceName">resourceName</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#cargo-lambda-cdk.RustExtension.Initializer.parameter.props">props</a></code> | <code><a href="#cargo-lambda-cdk.RustExtensionProps">RustExtensionProps</a></code> | *No description.* |
 
 ---
@@ -28,7 +28,7 @@ new RustExtension(scope: Construct, packageName: string, props?: RustExtensionPr
 
 ---
 
-##### `packageName`<sup>Required</sup> <a name="packageName" id="cargo-lambda-cdk.RustExtension.Initializer.parameter.packageName"></a>
+##### `resourceName`<sup>Required</sup> <a name="resourceName" id="cargo-lambda-cdk.RustExtension.Initializer.parameter.resourceName"></a>
 
 - *Type:* string
 
@@ -305,13 +305,13 @@ A Rust Lambda function.
 ```typescript
 import { RustFunction } from 'cargo-lambda-cdk'
 
-new RustFunction(scope: Construct, packageName: string, props?: RustFunctionProps)
+new RustFunction(scope: Construct, resourceName: string, props?: RustFunctionProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cargo-lambda-cdk.RustFunction.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#cargo-lambda-cdk.RustFunction.Initializer.parameter.packageName">packageName</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#cargo-lambda-cdk.RustFunction.Initializer.parameter.resourceName">resourceName</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#cargo-lambda-cdk.RustFunction.Initializer.parameter.props">props</a></code> | <code><a href="#cargo-lambda-cdk.RustFunctionProps">RustFunctionProps</a></code> | *No description.* |
 
 ---
@@ -322,7 +322,7 @@ new RustFunction(scope: Construct, packageName: string, props?: RustFunctionProp
 
 ---
 
-##### `packageName`<sup>Required</sup> <a name="packageName" id="cargo-lambda-cdk.RustFunction.Initializer.parameter.packageName"></a>
+##### `resourceName`<sup>Required</sup> <a name="resourceName" id="cargo-lambda-cdk.RustFunction.Initializer.parameter.resourceName"></a>
 
 - *Type:* string
 

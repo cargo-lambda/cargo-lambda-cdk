@@ -1,23 +1,42 @@
-import { existsSync } from 'fs';
-import { join, parse } from 'path';
+import { existsSync, readFileSync } from 'node:fs';
+import { join, parse } from 'node:path';
+import { load } from 'js-toml';
 
-export function getCargoManifestPath(manifestPath: string): string {
+export interface Workspace {
+  members: string[];
+}
+
+export interface Package {
+  name: string;
+}
+
+export interface Manifest {
+  package?: Package;
+  bin?: Package[];
+  workspace?: Workspace;
+}
+
+export function getManifestPath(manifestPath: string): string {
   // const manifestPathProp = props.manifestPath ?? 'Cargo.toml';
   const parsedManifestPath = parse(manifestPath);
   let manifestPathResult: string;
 
   if (parsedManifestPath.base && parsedManifestPath.ext && parsedManifestPath.base === 'Cargo.toml') {
-    if (!existsSync(manifestPath)) {
-      throw new Error('Cargo.toml doesn\'t exist');
-    }
     manifestPathResult = manifestPath;
   } else if (parsedManifestPath.base && parsedManifestPath.ext && parsedManifestPath.base != 'Cargo.toml') {
     throw new Error('manifestPath is specifying a file that is not Cargo.toml');
-  } else if (!existsSync(join(manifestPath, 'Cargo.toml'))) {
-    throw new Error(`Cargo.toml file at ${manifestPath} doesn't exist`);
   } else {
     manifestPathResult = join(manifestPath, 'Cargo.toml');
   }
 
+  if (!existsSync(manifestPathResult)) {
+    throw new Error(`'${manifestPathResult}' is not a path to a Cargo.toml file, use the option \`manifestPath\` to specify the location of the Cargo.toml file`);
+  }
+
   return manifestPathResult;
+}
+
+export function getManifest(manifestPath: string): Manifest {
+  const data = readFileSync(manifestPath);
+  return load(data.toString('utf-8')) as Manifest;
 }

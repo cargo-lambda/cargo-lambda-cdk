@@ -1,7 +1,7 @@
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { Construct } from 'constructs';
 import { Bundling } from './bundling';
-import { getCargoManifestPath } from './cargo';
+import { getManifestPath } from './cargo';
 import { BundlingOptions } from './types';
 import { bundlingOptionsFromRustFunctionProps } from './util';
 
@@ -39,19 +39,18 @@ export interface RustFunctionProps extends lambda.FunctionOptions {
  * A Rust Lambda function
  */
 export class RustFunction extends lambda.Function {
-  constructor(scope: Construct, packageName: string, props?: RustFunctionProps) {
-    const manifestPath = getCargoManifestPath(props?.manifestPath ?? 'Cargo.toml');
+  constructor(scope: Construct, resourceName: string, props?: RustFunctionProps) {
+    const manifestPath = getManifestPath(props?.manifestPath ?? 'Cargo.toml');
 
     const runtime = lambda.Runtime.PROVIDED_AL2;
     const bundling = bundlingOptionsFromRustFunctionProps(props);
 
-    super(scope, packageName, {
+    super(scope, resourceName, {
       ...props,
       runtime,
       architecture: bundling.architecture,
       code: Bundling.bundle({
         ...bundling,
-        packageName,
         manifestPath,
         binaryName: props?.binaryName,
       }),
