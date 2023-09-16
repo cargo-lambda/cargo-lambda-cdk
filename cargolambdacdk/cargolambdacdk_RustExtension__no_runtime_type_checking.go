@@ -37,7 +37,7 @@ func validateRustExtension_IsResourceParameters(construct constructs.IConstruct)
 	return nil
 }
 
-func validateNewRustExtensionParameters(scope constructs.Construct, packageName *string, props *RustExtensionProps) error {
+func validateNewRustExtensionParameters(scope constructs.Construct, resourceName *string, props *RustExtensionProps) error {
 	return nil
 }
 

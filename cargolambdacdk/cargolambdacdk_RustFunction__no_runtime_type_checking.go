@@ -113,7 +113,7 @@ func validateRustFunction_MetricAllUnreservedConcurrentExecutionsParameters(prop
 	return nil
 }
 
-func validateNewRustFunctionParameters(scope constructs.Construct, packageName *string, props *RustFunctionProps) error {
+func validateNewRustFunctionParameters(scope constructs.Construct, resourceName *string, props *RustFunctionProps) error {
 	return nil
 }
 

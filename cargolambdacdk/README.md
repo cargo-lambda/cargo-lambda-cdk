@@ -12,7 +12,7 @@ Define a `RustFunction`:
 ```go
 import { RustFunction } from 'cargo-lambda-cdk';
 
-new RustFunction(stack, 'package-name', {
+new RustFunction(stack, 'Rust function', {
   manifestPath: 'path/to/package/directory/with/Cargo.toml',
 });
 ```
@@ -37,11 +37,11 @@ Define a `RustExtension` that get's deployed as a layer to use it with any other
 ```go
 import { RustExtension, RustFunction } from 'cargo-lambda-cdk';
 
-const extensionLayer = new RustExtension(this, 'extension-package-name', {
+const extensionLayer = new RustExtension(this, 'Rust extension', {
   manifestPath: 'path/to/package/directory/with/Cargo.toml',
 });
 
-new RustFunction(this, 'function-package-name', {
+new RustFunction(this, 'Rust function', {
   manifestPath: 'path/to/package/directory/with/Cargo.toml',
   layers: [
     extensionLayer
@@ -56,7 +56,7 @@ Use the `environment` prop to define additional environment variables when Cargo
 ```go
 import { RustFunction } from 'cargo-lambda-cdk';
 
-new RustFunction(this, 'package-name', {
+new RustFunction(this, 'Rust function', {
   manifestPath: 'path/to/package/directory/with/Cargo.toml',
   bundling: {
     environment: {
@@ -79,7 +79,7 @@ Use the `bundling.dockerImage` prop to use a custom bundling image:
 ```go
 import { RustFunction } from 'cargo-lambda-cdk';
 
-new RustFunction(this, 'package-name', {
+new RustFunction(this, 'Rust function', {
   manifestPath: 'path/to/package/directory/with/Cargo.toml',
   bundling: {
     dockerImage: DockerImage.fromBuild('/path/to/Dockerfile'),
@@ -94,7 +94,7 @@ It is  possible to run additional commands by specifying the `commandHooks` prop
 ```go
 import { RustFunction } from 'cargo-lambda-cdk';
 
-new RustFunction(this, 'package-name', {
+new RustFunction(this, 'Rust function', {
   manifestPath: 'path/to/package/directory/with/Cargo.toml',
   bundling: {
     commandHooks: {

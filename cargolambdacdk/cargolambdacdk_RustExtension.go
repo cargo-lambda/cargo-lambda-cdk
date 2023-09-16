@@ -142,29 +142,29 @@ func (j *jsiiProxy_RustExtension) Stack() awscdk.Stack {
 }
 
 
-func NewRustExtension(scope constructs.Construct, packageName *string, props *RustExtensionProps) RustExtension {
+func NewRustExtension(scope constructs.Construct, resourceName *string, props *RustExtensionProps) RustExtension {
 	_init_.Initialize()
 
-	if err := validateNewRustExtensionParameters(scope, packageName, props); err != nil {
+	if err := validateNewRustExtensionParameters(scope, resourceName, props); err != nil {
 		panic(err)
 	}
 	j := jsiiProxy_RustExtension{}
 
 	_jsii_.Create(
 		"cargo-lambda-cdk.RustExtension",
-		[]interface{}{scope, packageName, props},
+		[]interface{}{scope, resourceName, props},
 		&j,
 	)
 
 	return &j
 }
 
-func NewRustExtension_Override(r RustExtension, scope constructs.Construct, packageName *string, props *RustExtensionProps) {
+func NewRustExtension_Override(r RustExtension, scope constructs.Construct, resourceName *string, props *RustExtensionProps) {
 	_init_.Initialize()
 
 	_jsii_.Create(
 		"cargo-lambda-cdk.RustExtension",
-		[]interface{}{scope, packageName, props},
+		[]interface{}{scope, resourceName, props},
 		r,
 	)
 }

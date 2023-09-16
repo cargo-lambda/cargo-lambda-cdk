@@ -364,29 +364,29 @@ func (j *jsiiProxy_RustFunction) Timeout() awscdk.Duration {
 }
 
 
-func NewRustFunction(scope constructs.Construct, packageName *string, props *RustFunctionProps) RustFunction {
+func NewRustFunction(scope constructs.Construct, resourceName *string, props *RustFunctionProps) RustFunction {
 	_init_.Initialize()
 
-	if err := validateNewRustFunctionParameters(scope, packageName, props); err != nil {
+	if err := validateNewRustFunctionParameters(scope, resourceName, props); err != nil {
 		panic(err)
 	}
 	j := jsiiProxy_RustFunction{}
 
 	_jsii_.Create(
 		"cargo-lambda-cdk.RustFunction",
-		[]interface{}{scope, packageName, props},
+		[]interface{}{scope, resourceName, props},
 		&j,
 	)
 
 	return &j
 }
 
-func NewRustFunction_Override(r RustFunction, scope constructs.Construct, packageName *string, props *RustFunctionProps) {
+func NewRustFunction_Override(r RustFunction, scope constructs.Construct, resourceName *string, props *RustFunctionProps) {
 	_init_.Initialize()
 
 	_jsii_.Create(
 		"cargo-lambda-cdk.RustFunction",
-		[]interface{}{scope, packageName, props},
+		[]interface{}{scope, resourceName, props},
 		r,
 	)
 }

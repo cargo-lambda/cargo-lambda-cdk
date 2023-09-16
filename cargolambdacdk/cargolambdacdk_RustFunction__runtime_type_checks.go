@@ -294,13 +294,13 @@ func validateRustFunction_MetricAllUnreservedConcurrentExecutionsParameters(prop
 	return nil
 }
 
-func validateNewRustFunctionParameters(scope constructs.Construct, packageName *string, props *RustFunctionProps) error {
+func validateNewRustFunctionParameters(scope constructs.Construct, resourceName *string, props *RustFunctionProps) error {
 	if scope == nil {
 		return fmt.Errorf("parameter scope is required, but nil was provided")
 	}
 
-	if packageName == nil {
-		return fmt.Errorf("parameter packageName is required, but nil was provided")
+	if resourceName == nil {
+		return fmt.Errorf("parameter resourceName is required, but nil was provided")
 	}
 
 	if err := _jsii_.ValidateStruct(props, func() string { return "parameter props" }); err != nil {

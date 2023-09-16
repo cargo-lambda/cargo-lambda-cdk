@@ -110,13 +110,13 @@ func validateRustExtension_IsResourceParameters(construct constructs.IConstruct)
 	return nil
 }
 
-func validateNewRustExtensionParameters(scope constructs.Construct, packageName *string, props *RustExtensionProps) error {
+func validateNewRustExtensionParameters(scope constructs.Construct, resourceName *string, props *RustExtensionProps) error {
 	if scope == nil {
 		return fmt.Errorf("parameter scope is required, but nil was provided")
 	}
 
-	if packageName == nil {
-		return fmt.Errorf("parameter packageName is required, but nil was provided")
+	if resourceName == nil {
+		return fmt.Errorf("parameter resourceName is required, but nil was provided")
 	}
 
 	if err := _jsii_.ValidateStruct(props, func() string { return "parameter props" }); err != nil {
