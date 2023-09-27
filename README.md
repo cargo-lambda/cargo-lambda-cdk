@@ -72,9 +72,9 @@ If `Cargo Lambda` is installed locally then it will be used to bundle your code 
 
 ## Docker
 
-To force bundling in a docker container even if `Cargo Lambda` is available in your environment, set the `forceDockerBundling` prop to `true`. This is useful if you want to make sure that your function is built in a consistent Lambda compatible environment.
+To force bundling in a docker container even if `Cargo Lambda` is available in your environment, set the `forcedDockerBundling` prop to `true`. This is useful if you want to make sure that your function is built in a consistent Lambda compatible environment.
 
-Use the `bundling.dockerImage` prop to use a custom bundling image:
+By default, these constructs use `ghcr.io/cargo-lambda/cargo-lambda` as the image to build with. Use the `bundling.dockerImage` prop to use a custom bundling image:
 
 ```ts
 import { RustFunction } from 'cargo-lambda-cdk';
