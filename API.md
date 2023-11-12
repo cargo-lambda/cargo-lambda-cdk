@@ -1450,6 +1450,7 @@ const rustFunctionProps: RustFunctionProps = { ... }
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.binaryName">binaryName</a></code> | <code>string</code> | The name of the binary to build, in case that's different than the package's name. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.bundling">bundling</a></code> | <code><a href="#cargo-lambda-cdk.BundlingOptions">BundlingOptions</a></code> | Bundling options. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.manifestPath">manifestPath</a></code> | <code>string</code> | Path to a directory containing your Cargo.toml file, or to your Cargo.toml directly. |
+| <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.runtime">runtime</a></code> | <code>string</code> | The Lambda runtime to deploy this function with. `provided.al2023` is the default. |
 
 ---
 
@@ -1986,6 +1987,20 @@ Path to a directory containing your Cargo.toml file, or to your Cargo.toml direc
 
 This will accept either a directory path containing a `Cargo.toml` file
 or a filepath to your `Cargo.toml` file (i.e. `path/to/Cargo.toml`).
+
+---
+
+##### `runtime`<sup>Optional</sup> <a name="runtime" id="cargo-lambda-cdk.RustFunctionProps.property.runtime"></a>
+
+```typescript
+public readonly runtime: string;
+```
+
+- *Type:* string
+
+The Lambda runtime to deploy this function with. `provided.al2023` is the default.
+
+The only valid values are `provided.al2023` and `provided.al2`.
 
 ---
 
