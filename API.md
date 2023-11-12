@@ -2151,11 +2151,11 @@ Commands are chained with `&&`.
 
 ```text
 {
-   // Run tests prior to bundling
-   beforeBundling(inputDir: string, outputDir: string): string[] {
-     return [`cargo test`];
-   }
-   // ...
+  // Run tests prior to bundling
+  beforeBundling(inputDir: string, outputDir: string): string[] {
+    return [`cargo test`];
+  }
+  // ...
 }
 ```
 

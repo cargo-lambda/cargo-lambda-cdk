@@ -46,8 +46,8 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: '3.x'
-      - name: Install NPM dependencies
-        run: yarn install --check-files
+      - name: Install dependencies
+        run: npx projen install:ci
       - name: build
         run: npx projen build
       - name: Find mutations
@@ -124,7 +124,7 @@ jobs:
       - name: Prepare Repository
         run: mv dist .repo
       - name: Install Dependencies
-        run: cd .repo && yarn install --check-files --frozen-lockfile
+        run: cd .repo && npx projen install:ci
       - name: Create js artifact
         run: cd .repo && npx projen package:js
       - name: Collect js Artifact
@@ -153,7 +153,7 @@ jobs:
       - name: Prepare Repository
         run: mv dist .repo
       - name: Install Dependencies
-        run: cd .repo && yarn install --check-files --frozen-lockfile
+        run: cd .repo && npx projen install:ci
       - name: Create java artifact
         run: cd .repo && npx projen package:java
       - name: Collect java Artifact
@@ -181,7 +181,7 @@ jobs:
       - name: Prepare Repository
         run: mv dist .repo
       - name: Install Dependencies
-        run: cd .repo && yarn install --check-files --frozen-lockfile
+        run: cd .repo && npx projen install:ci
       - name: Create python artifact
         run: cd .repo && npx projen package:python
       - name: Collect python Artifact
@@ -209,7 +209,7 @@ jobs:
       - name: Prepare Repository
         run: mv dist .repo
       - name: Install Dependencies
-        run: cd .repo && yarn install --check-files --frozen-lockfile
+        run: cd .repo && npx projen install:ci
       - name: Create dotnet artifact
         run: cd .repo && npx projen package:dotnet
       - name: Collect dotnet Artifact
@@ -237,7 +237,7 @@ jobs:
       - name: Prepare Repository
         run: mv dist .repo
       - name: Install Dependencies
-        run: cd .repo && yarn install --check-files --frozen-lockfile
+        run: cd .repo && npx projen install:ci
       - name: Create go artifact
         run: cd .repo && npx projen package:go
       - name: Collect go Artifact

@@ -1,14 +1,14 @@
 import { join } from 'path';
 import { env } from 'process';
-import * as cdk from 'aws-cdk-lib/core';
+import { App, Stack } from 'aws-cdk-lib';
 import { RustFunction, cargoLambdaVersion } from '../src/index';
 
 const forcedDockerBundling = !!env.FORCE_DOCKER_RUN || !cargoLambdaVersion();
 
 describe('CargoLambda.RustFunction', () => {
   describe('With single package Cargo project', () => {
-    const app = new cdk.App();
-    const stack = new cdk.Stack(app);
+    const app = new App();
+    const stack = new Stack(app);
     const testSource = join(__dirname, 'fixtures/single-package');
 
     new RustFunction(stack, 'rust function', {
@@ -24,8 +24,8 @@ describe('CargoLambda.RustFunction', () => {
   });
 
   describe('With a Cargo workspace', () => {
-    const app = new cdk.App();
-    const stack = new cdk.Stack(app);
+    const app = new App();
+    const stack = new Stack(app);
     const testSource = join(__dirname, 'fixtures/cargo-workspace');
 
     new RustFunction(stack, 'rust function 1', {
@@ -39,6 +39,24 @@ describe('CargoLambda.RustFunction', () => {
     new RustFunction(stack, 'rust function 2', {
       manifestPath: join(testSource, 'binary2'),
       binaryName: 'binary2',
+      bundling: {
+        forcedDockerBundling,
+      },
+    });
+
+    test('bundle function', () => {
+      app.synth();
+    });
+  });
+
+  describe('With the legacy provided.al2 runtime', () => {
+    const app = new App();
+    const stack = new Stack(app);
+    const testSource = join(__dirname, 'fixtures/single-package');
+
+    new RustFunction(stack, 'rust function', {
+      manifestPath: testSource,
+      runtime: 'provided.al2',
       bundling: {
         forcedDockerBundling,
       },
