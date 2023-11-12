@@ -1,11 +1,11 @@
-import * as lambda from 'aws-cdk-lib/aws-lambda';
+import { LayerVersion, LayerVersionOptions } from 'aws-cdk-lib/aws-lambda';
 import { Construct } from 'constructs';
 import { Bundling } from './bundling';
 import { getManifestPath } from './cargo';
 import { BundlingOptions } from './types';
 
 
-export interface RustExtensionProps extends lambda.LayerVersionOptions {
+export interface RustExtensionProps extends LayerVersionOptions {
   /**
       * The name of the binary to build, in case that's different than the package's name.
       */
@@ -33,7 +33,7 @@ export interface RustExtensionProps extends lambda.LayerVersionOptions {
 /**
  * A Lambda extension written in Rust
  */
-export class RustExtension extends lambda.LayerVersion {
+export class RustExtension extends LayerVersion {
   constructor(scope: Construct, resourceName: string, props?: RustExtensionProps) {
     const manifestPath = getManifestPath(props?.manifestPath ?? 'Cargo.toml');
     const bundling = props?.bundling ?? {};

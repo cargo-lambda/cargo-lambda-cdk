@@ -1,4 +1,4 @@
-import * as lambda from 'aws-cdk-lib/aws-lambda';
+import { Function, FunctionOptions, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { Construct } from 'constructs';
 import { Bundling } from './bundling';
 import { getManifestPath } from './cargo';
@@ -10,11 +10,18 @@ export { cargoLambdaVersion } from './bundling';
 /**
  * Properties for a RustFunction
  */
-export interface RustFunctionProps extends lambda.FunctionOptions {
+export interface RustFunctionProps extends FunctionOptions {
   /**
    * The name of the binary to build, in case that's different than the package's name.
    */
   readonly binaryName?: string;
+
+  /**
+   * The Lambda runtime to deploy this function with. `provided.al2023` is the default.
+   *
+   * The only valid values are `provided.al2023` and `provided.al2`.
+   */
+  readonly runtime?: string;
 
   /**
    * Path to a directory containing your Cargo.toml file, or to your Cargo.toml directly.
@@ -38,11 +45,11 @@ export interface RustFunctionProps extends lambda.FunctionOptions {
 /**
  * A Rust Lambda function
  */
-export class RustFunction extends lambda.Function {
+export class RustFunction extends Function {
   constructor(scope: Construct, resourceName: string, props?: RustFunctionProps) {
     const manifestPath = getManifestPath(props?.manifestPath ?? 'Cargo.toml');
 
-    const runtime = lambda.Runtime.PROVIDED_AL2;
+    const runtime = new Runtime(props?.runtime || 'provided.al2023');
     const bundling = bundlingOptionsFromRustFunctionProps(props);
 
     super(scope, resourceName, {

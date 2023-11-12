@@ -1,3 +1,134 @@
+# Cargo Lambda CDK construct
+
+This library provides constructs for Rust Lambda functions built with Cargo Lambda
+
+To use this module you will either need to have [Cargo Lambda installed](https://www.cargo-lambda.info/guide/installation.html) (`0.12.0` or later), or `Docker` installed.
+See [Local Bundling](#local-bundling)/[Docker Bundling](#docker-bundling) for more information.
+
+## Rust Function
+
+Define a `RustFunction`:
+
+```ts
+import { RustFunction } from 'cargo-lambda-cdk';
+
+new RustFunction(stack, 'Rust function', {
+  manifestPath: 'path/to/package/directory/with/Cargo.toml',
+});
+```
+
+The layout for this Rust project could look like this:
+
+```bash
+lambda-project
+├── Cargo.toml
+└── src
+    └── main.rs
+```
+
+### Runtime
+
+The `RustFunction` uses the `PROVIDED_AL2` runtime.
+
+## Rust Extension
+
+Define a `RustExtension` that get's deployed as a layer to use it with any other function later.
+
+```ts
+import { RustExtension, RustFunction } from 'cargo-lambda-cdk';
+
+const extensionLayer = new RustExtension(this, 'Rust extension', {
+  manifestPath: 'path/to/package/directory/with/Cargo.toml',
+});
+
+new RustFunction(this, 'Rust function', {
+  manifestPath: 'path/to/package/directory/with/Cargo.toml',
+  layers: [
+    extensionLayer
+  ],
+});
+```
+
+## Environment
+
+Use the `environment` prop to define additional environment variables when Cargo Lambda runs:
+
+```ts
+import { RustFunction } from 'cargo-lambda-cdk';
+
+new RustFunction(this, 'Rust function', {
+  manifestPath: 'path/to/package/directory/with/Cargo.toml',
+  bundling: {
+    environment: {
+      HELLO: 'WORLD',
+    },
+  },
+});
+```
+
+## Local Bundling
+
+If `Cargo Lambda` is installed locally then it will be used to bundle your code in your environment. Otherwise, bundling will happen in a Lambda compatible Docker container with the Docker platform based on the target architecture of the Lambda function.
+
+## Docker
+
+To force bundling in a docker container even if `Cargo Lambda` is available in your environment, set the `forcedDockerBundling` prop to `true`. This is useful if you want to make sure that your function is built in a consistent Lambda compatible environment.
+
+By default, these constructs use `ghcr.io/cargo-lambda/cargo-lambda` as the image to build with. Use the `bundling.dockerImage` prop to use a custom bundling image:
+
+```ts
+import { RustFunction } from 'cargo-lambda-cdk';
+
+new RustFunction(this, 'Rust function', {
+  manifestPath: 'path/to/package/directory/with/Cargo.toml',
+  bundling: {
+    dockerImage: DockerImage.fromBuild('/path/to/Dockerfile'),
+  },
+});
+```
+
+## Command hooks
+
+It is  possible to run additional commands by specifying the `commandHooks` prop:
+
+```ts
+import { RustFunction } from 'cargo-lambda-cdk';
+
+new RustFunction(this, 'Rust function', {
+  manifestPath: 'path/to/package/directory/with/Cargo.toml',
+  bundling: {
+    commandHooks: {
+      // run tests
+      beforeBundling(inputDir: string, _outputDir: string): string[] {
+        return ['cargo test'];
+      },
+    },
+  },
+});
+```
+
+The following hooks are available:
+
+* `beforeBundling`: runs before all bundling commands
+* `afterBundling`: runs after all bundling commands
+
+They all receive the directory containing the `Cargo.toml` file (`inputDir`) and the
+directory where the bundled asset will be output (`outputDir`). They must return
+an array of commands to run. Commands are chained with `&&`.
+
+The commands will run in the environment in which bundling occurs: inside the
+container for Docker bundling or on the host OS for local bundling.
+
+## Additional considerations
+
+Depending on how you structure your Rust application, you may want to change the `assetHashType` parameter.
+By default this parameter is set to `AssetHashType.OUTPUT` which means that the CDK will calculate the asset hash
+(and determine whether or not your code has changed) based on the Rust executable that is created.
+
+If you specify `AssetHashType.SOURCE`, the CDK will calculate the asset hash by looking at the folder
+that contains your `Cargo.toml` file. If you are deploying a single Lambda function, or you want to redeploy
+all of your functions if anything changes, then `AssetHashType.SOURCE` will probaby work.
+
 # API Reference <a name="API Reference" id="api-reference"></a>
 
 ## Constructs <a name="Constructs" id="Constructs"></a>
@@ -1450,6 +1581,7 @@ const rustFunctionProps: RustFunctionProps = { ... }
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.binaryName">binaryName</a></code> | <code>string</code> | The name of the binary to build, in case that's different than the package's name. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.bundling">bundling</a></code> | <code><a href="#cargo-lambda-cdk.BundlingOptions">BundlingOptions</a></code> | Bundling options. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.manifestPath">manifestPath</a></code> | <code>string</code> | Path to a directory containing your Cargo.toml file, or to your Cargo.toml directly. |
+| <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.runtime">runtime</a></code> | <code>string</code> | The Lambda runtime to deploy this function with. `provided.al2023` is the default. |
 
 ---
 
@@ -1986,6 +2118,20 @@ Path to a directory containing your Cargo.toml file, or to your Cargo.toml direc
 
 This will accept either a directory path containing a `Cargo.toml` file
 or a filepath to your `Cargo.toml` file (i.e. `path/to/Cargo.toml`).
+
+---
+
+##### `runtime`<sup>Optional</sup> <a name="runtime" id="cargo-lambda-cdk.RustFunctionProps.property.runtime"></a>
+
+```typescript
+public readonly runtime: string;
+```
+
+- *Type:* string
+
+The Lambda runtime to deploy this function with. `provided.al2023` is the default.
+
+The only valid values are `provided.al2023` and `provided.al2`.
 
 ---
 

@@ -30,6 +30,10 @@ const project = new awscdk.AwsCdkConstructLibrary({
     distName: 'cargo-lambda-cdk',
     module: 'cargo_lambda_cdk',
   },
+  depsUpgrade: true,
+  depsUpgradeOptions: {
+    workflow: false,
+  },
 });
 
 project.addBundledDeps('js-toml@^0.1.1');
