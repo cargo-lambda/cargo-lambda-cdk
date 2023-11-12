@@ -1,8 +1,8 @@
 import * as path from 'path';
 import { env } from 'process';
+import { App, Stack } from 'aws-cdk-lib';
 import { Template } from 'aws-cdk-lib/assertions';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
-import * as cdk from 'aws-cdk-lib/core';
 import { getManifestPath } from '../src/cargo';
 import { RustFunction, RustFunctionProps, cargoLambdaVersion } from '../src/index';
 import { bundlingOptionsFromRustFunctionProps } from '../src/util';
@@ -52,8 +52,8 @@ describe('bundlingOptionsFromRustFunctionProps', () => {
 const forcedDockerBundling = !!env.FORCE_DOCKER_RUN || !cargoLambdaVersion();
 
 const templateWithProps = (props?: RustFunctionProps) => {
-  const app = new cdk.App();
-  const stack = new cdk.Stack(app);
+  const app = new App();
+  const stack = new Stack(app);
   const testSource = getManifestPath(path.join(__dirname, 'fixtures/single-package/Cargo.toml'));
 
   new RustFunction(stack, 'arm-64-set-via-lambda-architecture', { manifestPath: testSource, ...props });

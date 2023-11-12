@@ -21,6 +21,11 @@
       "type": "build"
     },
     {
+      "name": "aws-cdk-lib",
+      "version": "^2",
+      "type": "build"
+    },
+    {
       "name": "eslint-import-resolver-typescript",
       "type": "build"
     },
@@ -40,7 +45,7 @@
     },
     {
       "name": "jest",
-      "version": "^27",
+      "version": "^29",
       "type": "build"
     },
     {
@@ -57,12 +62,12 @@
     },
     {
       "name": "jsii-rosetta",
-      "version": "1.x",
+      "version": "5.x",
       "type": "build"
     },
     {
       "name": "jsii",
-      "version": "1.x",
+      "version": "5.x",
       "type": "build"
     },
     {
@@ -81,11 +86,12 @@
     },
     {
       "name": "ts-jest",
-      "version": "^27",
+      "version": "^29",
       "type": "build"
     },
     {
       "name": "typescript",
+      "version": "5.x",
       "type": "build"
     },
     {

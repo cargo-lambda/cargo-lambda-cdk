@@ -36,7 +36,13 @@ const project = new awscdk.AwsCdkConstructLibrary({
   },
 });
 
+project.addDevDeps('aws-cdk-lib@^2');
+project.addDevDeps('jsii@5.x');
+project.addDevDeps('jsii-rosetta@5.x');
+project.addDevDeps('typescript@5.x');
 project.addDevDeps('@types/node@^18');
+project.addDevDeps('jest@^29');
+project.addDevDeps('ts-jest@^29');
 project.addBundledDeps('js-toml@^0.1.1');
 
 project.addGitIgnore('target');

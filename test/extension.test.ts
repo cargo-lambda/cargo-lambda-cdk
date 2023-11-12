@@ -1,14 +1,14 @@
 import { join } from 'path';
 import { env } from 'process';
-import * as cdk from 'aws-cdk-lib/core';
+import { App, Stack } from 'aws-cdk-lib';
 import { RustExtension, cargoLambdaVersion } from '../src/index';
 
 const forcedDockerBundling = !!env.FORCE_DOCKER_RUN || !cargoLambdaVersion();
 
 describe('CargoLambda.RustExtension', () => {
   describe('With single package Cargo project', () => {
-    const app = new cdk.App();
-    const stack = new cdk.Stack(app);
+    const app = new App();
+    const stack = new Stack(app);
     const testSource = join(__dirname, 'fixtures/single-package');
 
     new RustExtension(stack, 'rust extension', {
@@ -24,8 +24,8 @@ describe('CargoLambda.RustExtension', () => {
   });
 
   describe('With a Cargo workspace', () => {
-    const app = new cdk.App();
-    const stack = new cdk.Stack(app);
+    const app = new App();
+    const stack = new Stack(app);
     const testSource = join(__dirname, 'fixtures/cargo-workspace');
 
     new RustExtension(stack, 'rust extension 1', {
