@@ -28,7 +28,7 @@ lambda-project
 
 ### Runtime
 
-The `RustFunction` uses the `PROVIDED_AL2` runtime.
+The `RustFunction` uses the `PROVIDED_AL2023` runtime as default. Alternatively `PROVIDED_AL2` can be configured explicitly.
 
 ## Rust Extension
 
