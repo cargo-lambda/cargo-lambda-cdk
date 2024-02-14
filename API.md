@@ -139,6 +139,10 @@ If you specify `AssetHashType.SOURCE`, the CDK will calculate the asset hash by 
 that contains your `Cargo.toml` file. If you are deploying a single Lambda function, or you want to redeploy
 all of your functions if anything changes, then `AssetHashType.SOURCE` will probaby work.
 
+## LICENSE
+
+This software is released under MIT license.
+
 # API Reference <a name="API Reference" id="api-reference"></a>
 
 ## Constructs <a name="Constructs" id="Constructs"></a>
