@@ -1,4 +1,3 @@
-// CDK Construct to build Rust functions with Cargo Lambda
 package cargolambdacdk
 
 import (
@@ -506,6 +505,8 @@ func RustFunction_MetricAll(metricName *string, props *awscloudwatch.MetricOptio
 }
 
 // Metric for the number of concurrent executions across all Lambdas.
+// Default: max over 5 minutes.
+//
 func RustFunction_MetricAllConcurrentExecutions(props *awscloudwatch.MetricOptions) awscloudwatch.Metric {
 	_init_.Initialize()
 
@@ -525,6 +526,8 @@ func RustFunction_MetricAllConcurrentExecutions(props *awscloudwatch.MetricOptio
 }
 
 // Metric for the Duration executing all Lambdas.
+// Default: average over 5 minutes.
+//
 func RustFunction_MetricAllDuration(props *awscloudwatch.MetricOptions) awscloudwatch.Metric {
 	_init_.Initialize()
 
@@ -544,6 +547,8 @@ func RustFunction_MetricAllDuration(props *awscloudwatch.MetricOptions) awscloud
 }
 
 // Metric for the number of Errors executing all Lambdas.
+// Default: sum over 5 minutes.
+//
 func RustFunction_MetricAllErrors(props *awscloudwatch.MetricOptions) awscloudwatch.Metric {
 	_init_.Initialize()
 
@@ -563,6 +568,8 @@ func RustFunction_MetricAllErrors(props *awscloudwatch.MetricOptions) awscloudwa
 }
 
 // Metric for the number of invocations of all Lambdas.
+// Default: sum over 5 minutes.
+//
 func RustFunction_MetricAllInvocations(props *awscloudwatch.MetricOptions) awscloudwatch.Metric {
 	_init_.Initialize()
 
@@ -582,6 +589,8 @@ func RustFunction_MetricAllInvocations(props *awscloudwatch.MetricOptions) awscl
 }
 
 // Metric for the number of throttled invocations of all Lambdas.
+// Default: sum over 5 minutes.
+//
 func RustFunction_MetricAllThrottles(props *awscloudwatch.MetricOptions) awscloudwatch.Metric {
 	_init_.Initialize()
 
@@ -601,6 +610,8 @@ func RustFunction_MetricAllThrottles(props *awscloudwatch.MetricOptions) awsclou
 }
 
 // Metric for the number of unreserved concurrent executions across all Lambdas.
+// Default: max over 5 minutes.
+//
 func RustFunction_MetricAllUnreservedConcurrentExecutions(props *awscloudwatch.MetricOptions) awscloudwatch.Metric {
 	_init_.Initialize()
 

@@ -28,7 +28,17 @@ lambda-project
 
 ### Runtime
 
-The `RustFunction` uses the `PROVIDED_AL2` runtime.
+The `RustFunction` uses the `provided.al2023` runtime. If you want to change it, you can use the property `runtime`. The only other valid option is `provided.al2`:
+
+```
+```ts
+import { RustFunction } from 'cargo-lambda-cdk';
+
+new RustFunction(stack, 'Rust function', {
+  manifestPath: 'path/to/package/directory/with/Cargo.toml',
+  runtime: 'provided.al2',
+});
+```
 
 ## Rust Extension
 
@@ -72,9 +82,9 @@ If `Cargo Lambda` is installed locally then it will be used to bundle your code 
 
 ## Docker
 
-To force bundling in a docker container even if `Cargo Lambda` is available in your environment, set the `forceDockerBundling` prop to `true`. This is useful if you want to make sure that your function is built in a consistent Lambda compatible environment.
+To force bundling in a docker container even if `Cargo Lambda` is available in your environment, set the `forcedDockerBundling` prop to `true`. This is useful if you want to make sure that your function is built in a consistent Lambda compatible environment.
 
-Use the `bundling.dockerImage` prop to use a custom bundling image:
+By default, these constructs use `ghcr.io/cargo-lambda/cargo-lambda` as the image to build with. Use the `bundling.dockerImage` prop to use a custom bundling image:
 
 ```go
 import { RustFunction } from 'cargo-lambda-cdk';
@@ -128,3 +138,7 @@ By default this parameter is set to `AssetHashType.OUTPUT` which means that the 
 If you specify `AssetHashType.SOURCE`, the CDK will calculate the asset hash by looking at the folder
 that contains your `Cargo.toml` file. If you are deploying a single Lambda function, or you want to redeploy
 all of your functions if anything changes, then `AssetHashType.SOURCE` will probaby work.
+
+## LICENSE
+
+This software is released under MIT license.

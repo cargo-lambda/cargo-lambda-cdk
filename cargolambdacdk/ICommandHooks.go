@@ -1,4 +1,3 @@
-// CDK Construct to build Rust functions with Cargo Lambda
 package cargolambdacdk
 
 import (
@@ -14,11 +13,11 @@ import (
 //
 // ```text
 // {
-//    // Run tests prior to bundling
-//    beforeBundling(inputDir: string, outputDir: string): string[] {
-//      return [`cargo test`];
-//    }
-//    // ...
+//   // Run tests prior to bundling
+//   beforeBundling(inputDir: string, outputDir: string): string[] {
+//     return [`cargo test`];
+//   }
+//   // ...
 // }
 // ```.
 type ICommandHooks interface {

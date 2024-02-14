@@ -1,6 +1,5 @@
 //go:build no_runtime_type_checking
 
-// CDK Construct to build Rust functions with Cargo Lambda
 package cargolambdacdk
 
 // Building without runtime type checking enabled, so all the below just return nil
