@@ -17,7 +17,8 @@ export interface RustFunctionProps extends FunctionOptions {
   readonly binaryName?: string;
 
   /**
-   * The Lambda runtime to deploy this function with. `provided.al2023` is the default.
+   * The Lambda runtime to deploy this function.
+   * `provided.al2023` is the default runtime when this option is not provided.
    */
   readonly runtime?: 'provided.al2023' | 'provided.al2';
 
