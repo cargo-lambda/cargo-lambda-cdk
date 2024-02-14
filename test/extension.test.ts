@@ -5,8 +5,8 @@ import { RustExtension, cargoLambdaVersion } from '../src/index';
 
 const forcedDockerBundling = !!env.FORCE_DOCKER_RUN || !cargoLambdaVersion();
 
-describe.skip('CargoLambda.RustExtension', () => {
-  describe.skip('With single package Cargo project', () => {
+describe('CargoLambda.RustExtension', () => {
+  describe('With single package Cargo project', () => {
     const app = new App();
     const stack = new Stack(app);
     const testSource = join(__dirname, 'fixtures/single-package');
@@ -23,7 +23,7 @@ describe.skip('CargoLambda.RustExtension', () => {
     });
   });
 
-  describe.skip('With a Cargo workspace', () => {
+  describe('With a Cargo workspace', () => {
     const app = new App();
     const stack = new Stack(app);
     const testSource = join(__dirname, 'fixtures/cargo-workspace');
