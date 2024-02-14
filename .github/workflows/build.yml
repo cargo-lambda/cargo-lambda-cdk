@@ -49,7 +49,7 @@ jobs:
       - name: Install dependencies
         run: npx projen install:ci
       - name: build
-        run: npx projen build
+        run: npx projen build --verbose
       - name: Find mutations
         id: self_mutation
         run: |-
