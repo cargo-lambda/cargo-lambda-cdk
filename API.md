@@ -28,7 +28,17 @@ lambda-project
 
 ### Runtime
 
-The `RustFunction` uses the `PROVIDED_AL2` runtime.
+The `RustFunction` uses the `PROVIDED_AL2023` runtime. If you want to change it, you can use the property `runtime`:
+
+```
+```ts
+import { RustFunction } from 'cargo-lambda-cdk';
+
+new RustFunction(stack, 'Rust function', {
+  manifestPath: 'path/to/package/directory/with/Cargo.toml',
+  runtime: 'provided.al2',
+});
+```
 
 ## Rust Extension
 
@@ -1581,7 +1591,7 @@ const rustFunctionProps: RustFunctionProps = { ... }
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.binaryName">binaryName</a></code> | <code>string</code> | The name of the binary to build, in case that's different than the package's name. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.bundling">bundling</a></code> | <code><a href="#cargo-lambda-cdk.BundlingOptions">BundlingOptions</a></code> | Bundling options. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.manifestPath">manifestPath</a></code> | <code>string</code> | Path to a directory containing your Cargo.toml file, or to your Cargo.toml directly. |
-| <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.runtime">runtime</a></code> | <code>string</code> | The Lambda runtime to deploy this function with. `provided.al2023` is the default. |
+| <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.runtime">runtime</a></code> | <code>string</code> | The Lambda runtime to deploy this function with. |
 
 ---
 
@@ -2129,9 +2139,9 @@ public readonly runtime: string;
 
 - *Type:* string
 
-The Lambda runtime to deploy this function with. `provided.al2023` is the default.
+The Lambda runtime to deploy this function with.
 
-The only valid values are `provided.al2023` and `provided.al2`.
+`provided.al2023` is the default.
 
 ---
 

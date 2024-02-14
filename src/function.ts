@@ -18,10 +18,8 @@ export interface RustFunctionProps extends FunctionOptions {
 
   /**
    * The Lambda runtime to deploy this function with. `provided.al2023` is the default.
-   *
-   * The only valid values are `provided.al2023` and `provided.al2`.
    */
-  readonly runtime?: string;
+  readonly runtime?: 'provided.al2023' | 'provided.al2';
 
   /**
    * Path to a directory containing your Cargo.toml file, or to your Cargo.toml directly.

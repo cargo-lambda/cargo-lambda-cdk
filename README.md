@@ -28,7 +28,17 @@ lambda-project
 
 ### Runtime
 
-The `RustFunction` uses the `PROVIDED_AL2` runtime.
+The `RustFunction` uses the `PROVIDED_AL2023` runtime. If you want to change it, you can use the property `runtime`:
+
+```
+```ts
+import { RustFunction } from 'cargo-lambda-cdk';
+
+new RustFunction(stack, 'Rust function', {
+  manifestPath: 'path/to/package/directory/with/Cargo.toml',
+  runtime: 'provided.al2',
+});
+```
 
 ## Rust Extension
 
