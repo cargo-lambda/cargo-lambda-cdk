@@ -138,3 +138,7 @@ By default this parameter is set to `AssetHashType.OUTPUT` which means that the 
 If you specify `AssetHashType.SOURCE`, the CDK will calculate the asset hash by looking at the folder
 that contains your `Cargo.toml` file. If you are deploying a single Lambda function, or you want to redeploy
 all of your functions if anything changes, then `AssetHashType.SOURCE` will probaby work.
+
+## LICENSE
+
+This software is released under MIT license.
