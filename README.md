@@ -28,7 +28,7 @@ lambda-project
 
 ### Runtime
 
-The `RustFunction` uses the `PROVIDED_AL2023` runtime. If you want to change it, you can use the property `runtime`:
+The `RustFunction` uses the `provided.al2023` runtime. If you want to change it, you can use the property `runtime`. The only other valid option is `provided.al2`:
 
 ```
 ```ts
