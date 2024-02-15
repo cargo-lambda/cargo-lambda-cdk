@@ -47,4 +47,12 @@ project.addBundledDeps('js-toml@^0.1.1');
 
 project.addGitIgnore('target');
 project.gitignore.removePatterns('*.tgz');
+
+const testTask = project.tasks.tryFind('test');
+if (testTask) {
+  testTask.reset();
+  testTask.exec('jest --passWithNoTests --updateSnapshot --verbose --runInBand', { receiveArgs: true });
+  testTask.spawn(project.tasks.tryFind('eslint'));
+}
+
 project.synth();
