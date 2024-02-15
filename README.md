@@ -30,7 +30,6 @@ lambda-project
 
 The `RustFunction` uses the `provided.al2023` runtime. If you want to change it, you can use the property `runtime`. The only other valid option is `provided.al2`:
 
-```
 ```ts
 import { RustFunction } from 'cargo-lambda-cdk';
 
