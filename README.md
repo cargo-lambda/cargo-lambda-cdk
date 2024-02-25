@@ -83,6 +83,7 @@ new RustFunction(this, 'Rust function', {
     },
   },
 });
+```
 
 ### Docker
 
