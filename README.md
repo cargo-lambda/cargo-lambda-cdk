@@ -57,8 +57,18 @@ new RustFunction(this, 'Rust function', {
   ],
 });
 ```
+## Bundling
 
-## Environment
+Bundling is the process by which `cargo lambda` gets called to build, package, and deliver the Rust
+binary for CDK. This construct provides two methods of bundling: 
+ - Local bundling where the locally installed cargo lambda tool will run
+ - Docker bundling where a Dockerfile can be specified to build an image
+
+### Local Bundling
+
+If `Cargo Lambda` is installed locally then it will be used to bundle your code in your environment. Otherwise, bundling will happen in a Lambda compatible Docker container with the Docker platform based on the target architecture of the Lambda function.
+
+### Environment
 
 Use the `environment` prop to define additional environment variables when Cargo Lambda runs:
 
@@ -75,11 +85,7 @@ new RustFunction(this, 'Rust function', {
 });
 ```
 
-## Local Bundling
-
-If `Cargo Lambda` is installed locally then it will be used to bundle your code in your environment. Otherwise, bundling will happen in a Lambda compatible Docker container with the Docker platform based on the target architecture of the Lambda function.
-
-## Docker
+### Docker
 
 To force bundling in a docker container even if `Cargo Lambda` is available in your environment, set the `forcedDockerBundling` prop to `true`. This is useful if you want to make sure that your function is built in a consistent Lambda compatible environment.
 
@@ -96,7 +102,7 @@ new RustFunction(this, 'Rust function', {
 });
 ```
 
-## Command hooks
+### Command hooks
 
 It is  possible to run additional commands by specifying the `commandHooks` prop:
 
