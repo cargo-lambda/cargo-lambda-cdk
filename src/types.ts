@@ -1,4 +1,5 @@
 import { AssetHashType, DockerImage } from 'aws-cdk-lib';
+import * as cdk from 'aws-cdk-lib';
 import { Architecture } from 'aws-cdk-lib/aws-lambda';
 
 /**
@@ -26,6 +27,15 @@ export interface BundlingOptions {
    * @default - use the Docker image provided by calavera/cargo-lambda:latest
    */
   readonly dockerImage?: DockerImage;
+
+  /**
+   * Additional options when using docker bundling. This option can override the
+   * `command`, `environment` and `local` options are normally specified by the
+   * `RustFunction`.
+   *
+   * @default - the same defaults as specified by `cdk.BundlingOptions`.
+   */
+  readonly dockerOptions?: Omit<cdk.BundlingOptions, 'image'>;
 
   /**
    * Determines how the asset hash is calculated. Assets will

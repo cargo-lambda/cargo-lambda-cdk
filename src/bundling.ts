@@ -67,6 +67,8 @@ export class Bundling implements cdk.BundlingOptions {
         command: bundling.command,
         environment: bundling.environment,
         local: bundling.local,
+        // Overwrite properties which are defined from the docker options.
+        ...Object.fromEntries(Object.entries(options.dockerOptions ?? {}).filter(([_, value]) => value !== undefined)),
       },
     });
   }
