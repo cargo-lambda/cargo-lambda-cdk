@@ -1,10 +1,12 @@
 import * as path from 'path';
 import { env } from 'process';
 import { App, Stack } from 'aws-cdk-lib';
+import * as cdk from 'aws-cdk-lib';
 import { Template } from 'aws-cdk-lib/assertions';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
+import { Bundling } from '../lib/bundling';
 import { getManifestPath } from '../src/cargo';
-import { RustFunction, RustFunctionProps, cargoLambdaVersion } from '../src/index';
+import { cargoLambdaVersion, RustFunction, RustFunctionProps } from '../src/index';
 import { bundlingOptionsFromRustFunctionProps } from '../src/util';
 
 describe('bundlingOptionsFromRustFunctionProps', () => {
@@ -51,12 +53,15 @@ describe('bundlingOptionsFromRustFunctionProps', () => {
 
 const forcedDockerBundling = !!env.FORCE_DOCKER_RUN || !cargoLambdaVersion();
 
+const getTestManifestPath = () => {
+  return getManifestPath(path.join(__dirname, 'fixtures/single-package/Cargo.toml'));
+};
+
 const templateWithProps = (props?: RustFunctionProps) => {
   const app = new App();
   const stack = new Stack(app);
-  const testSource = getManifestPath(path.join(__dirname, 'fixtures/single-package/Cargo.toml'));
 
-  new RustFunction(stack, 'arm-64-set-via-lambda-architecture', { manifestPath: testSource, ...props });
+  new RustFunction(stack, 'arm-64-set-via-lambda-architecture', { manifestPath: getTestManifestPath(), ...props });
 
   return Template.fromStack(stack);
 };
@@ -101,5 +106,31 @@ describe('CargoLambda.RustFunction', () => {
         Architectures: ['arm64'],
       });
     });
+  });
+});
+
+describe('bundlingOptionsOverrideDefaults', () => {
+  describe('Override command', () => {
+    const bundlingOptions = Bundling.bundle({
+      manifestPath: getTestManifestPath(),
+      forcedDockerBundling: true,
+      dockerOptions: {
+        command: [],
+      },
+    });
+
+    expect((bundlingOptions as any).options.bundling.command).toEqual([]);
+  });
+
+  describe('Override bundlingFileAccess', () => {
+    const bundlingOptions = Bundling.bundle({
+      manifestPath: getTestManifestPath(),
+      forcedDockerBundling: true,
+      dockerOptions: {
+        bundlingFileAccess: cdk.BundlingFileAccess.VOLUME_COPY,
+      },
+    });
+
+    expect((bundlingOptions as any).options.bundling.bundlingFileAccess).toEqual(cdk.BundlingFileAccess.VOLUME_COPY);
   });
 });

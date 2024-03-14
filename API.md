@@ -30,7 +30,6 @@ lambda-project
 
 The `RustFunction` uses the `provided.al2023` runtime. If you want to change it, you can use the property `runtime`. The only other valid option is `provided.al2`:
 
-```
 ```ts
 import { RustFunction } from 'cargo-lambda-cdk';
 
@@ -58,8 +57,18 @@ new RustFunction(this, 'Rust function', {
   ],
 });
 ```
+## Bundling
 
-## Environment
+Bundling is the process by which `cargo lambda` gets called to build, package, and deliver the Rust
+binary for CDK. This construct provides two methods of bundling:
+ - Local bundling where the locally installed cargo lambda tool will run
+ - Docker bundling where a Dockerfile can be specified to build an image
+
+### Local Bundling
+
+If `Cargo Lambda` is installed locally then it will be used to bundle your code in your environment. Otherwise, bundling will happen in a Lambda compatible Docker container with the Docker platform based on the target architecture of the Lambda function.
+
+### Environment
 
 Use the `environment` prop to define additional environment variables when Cargo Lambda runs:
 
@@ -76,11 +85,7 @@ new RustFunction(this, 'Rust function', {
 });
 ```
 
-## Local Bundling
-
-If `Cargo Lambda` is installed locally then it will be used to bundle your code in your environment. Otherwise, bundling will happen in a Lambda compatible Docker container with the Docker platform based on the target architecture of the Lambda function.
-
-## Docker
+### Docker
 
 To force bundling in a docker container even if `Cargo Lambda` is available in your environment, set the `forcedDockerBundling` prop to `true`. This is useful if you want to make sure that your function is built in a consistent Lambda compatible environment.
 
@@ -97,7 +102,7 @@ new RustFunction(this, 'Rust function', {
 });
 ```
 
-## Command hooks
+### Command hooks
 
 It is  possible to run additional commands by specifying the `commandHooks` prop:
 
@@ -257,6 +262,7 @@ permission on the layer version.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#cargo-lambda-cdk.RustExtension.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#cargo-lambda-cdk.RustExtension.isOwnedResource">isOwnedResource</a></code> | Returns true if the construct was created by CDK, and false otherwise. |
 | <code><a href="#cargo-lambda-cdk.RustExtension.isResource">isResource</a></code> | Check whether the given construct is a Resource. |
 | <code><a href="#cargo-lambda-cdk.RustExtension.fromLayerVersionArn">fromLayerVersionArn</a></code> | Imports a layer version by ARN. |
 | <code><a href="#cargo-lambda-cdk.RustExtension.fromLayerVersionAttributes">fromLayerVersionAttributes</a></code> | Imports a Layer that has been defined externally. |
@@ -278,6 +284,22 @@ Checks if `x` is a construct.
 - *Type:* any
 
 Any object.
+
+---
+
+##### `isOwnedResource` <a name="isOwnedResource" id="cargo-lambda-cdk.RustExtension.isOwnedResource"></a>
+
+```typescript
+import { RustExtension } from 'cargo-lambda-cdk'
+
+RustExtension.isOwnedResource(construct: IConstruct)
+```
+
+Returns true if the construct was created by CDK, and false otherwise.
+
+###### `construct`<sup>Required</sup> <a name="construct" id="cargo-lambda-cdk.RustExtension.isOwnedResource.parameter.construct"></a>
+
+- *Type:* constructs.IConstruct
 
 ---
 
@@ -368,8 +390,8 @@ the properties of the imported layer.
 | <code><a href="#cargo-lambda-cdk.RustExtension.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#cargo-lambda-cdk.RustExtension.property.env">env</a></code> | <code>aws-cdk-lib.ResourceEnvironment</code> | The environment this resource belongs to. |
 | <code><a href="#cargo-lambda-cdk.RustExtension.property.stack">stack</a></code> | <code>aws-cdk-lib.Stack</code> | The stack in which this resource is defined. |
-| <code><a href="#cargo-lambda-cdk.RustExtension.property.compatibleRuntimes">compatibleRuntimes</a></code> | <code>aws-cdk-lib.aws_lambda.Runtime[]</code> | The runtimes compatible with this Layer. |
 | <code><a href="#cargo-lambda-cdk.RustExtension.property.layerVersionArn">layerVersionArn</a></code> | <code>string</code> | The ARN of the Lambda Layer version that this Layer defines. |
+| <code><a href="#cargo-lambda-cdk.RustExtension.property.compatibleRuntimes">compatibleRuntimes</a></code> | <code>aws-cdk-lib.aws_lambda.Runtime[]</code> | The runtimes compatible with this Layer. |
 
 ---
 
@@ -416,18 +438,6 @@ The stack in which this resource is defined.
 
 ---
 
-##### `compatibleRuntimes`<sup>Optional</sup> <a name="compatibleRuntimes" id="cargo-lambda-cdk.RustExtension.property.compatibleRuntimes"></a>
-
-```typescript
-public readonly compatibleRuntimes: Runtime[];
-```
-
-- *Type:* aws-cdk-lib.aws_lambda.Runtime[]
-
-The runtimes compatible with this Layer.
-
----
-
 ##### `layerVersionArn`<sup>Required</sup> <a name="layerVersionArn" id="cargo-lambda-cdk.RustExtension.property.layerVersionArn"></a>
 
 ```typescript
@@ -437,6 +447,18 @@ public readonly layerVersionArn: string;
 - *Type:* string
 
 The ARN of the Lambda Layer version that this Layer defines.
+
+---
+
+##### `compatibleRuntimes`<sup>Optional</sup> <a name="compatibleRuntimes" id="cargo-lambda-cdk.RustExtension.property.compatibleRuntimes"></a>
+
+```typescript
+public readonly compatibleRuntimes: Runtime[];
+```
+
+- *Type:* aws-cdk-lib.aws_lambda.Runtime[]
+
+The runtimes compatible with this Layer.
 
 ---
 
@@ -487,17 +509,22 @@ new RustFunction(scope: Construct, resourceName: string, props?: RustFunctionPro
 | <code><a href="#cargo-lambda-cdk.RustFunction.applyRemovalPolicy">applyRemovalPolicy</a></code> | Apply the given removal policy to this resource. |
 | <code><a href="#cargo-lambda-cdk.RustFunction.addEventSource">addEventSource</a></code> | Adds an event source to this function. |
 | <code><a href="#cargo-lambda-cdk.RustFunction.addEventSourceMapping">addEventSourceMapping</a></code> | Adds an event source that maps to this AWS Lambda function. |
+| <code><a href="#cargo-lambda-cdk.RustFunction.addFunctionUrl">addFunctionUrl</a></code> | Adds a url to this lambda function. |
 | <code><a href="#cargo-lambda-cdk.RustFunction.addPermission">addPermission</a></code> | Adds a permission to the Lambda resource policy. |
 | <code><a href="#cargo-lambda-cdk.RustFunction.addToRolePolicy">addToRolePolicy</a></code> | Adds a statement to the IAM role assumed by the instance. |
 | <code><a href="#cargo-lambda-cdk.RustFunction.configureAsyncInvoke">configureAsyncInvoke</a></code> | Configures options for asynchronous invocation. |
+| <code><a href="#cargo-lambda-cdk.RustFunction.considerWarningOnInvokeFunctionPermissions">considerWarningOnInvokeFunctionPermissions</a></code> | A warning will be added to functions under the following conditions: - permissions that include `lambda:InvokeFunction` are added to the unqualified function. |
 | <code><a href="#cargo-lambda-cdk.RustFunction.grantInvoke">grantInvoke</a></code> | Grant the given identity permissions to invoke this Lambda. |
+| <code><a href="#cargo-lambda-cdk.RustFunction.grantInvokeUrl">grantInvokeUrl</a></code> | Grant the given identity permissions to invoke this Lambda Function URL. |
 | <code><a href="#cargo-lambda-cdk.RustFunction.metric">metric</a></code> | Return the given named metric for this Function. |
 | <code><a href="#cargo-lambda-cdk.RustFunction.metricDuration">metricDuration</a></code> | How long execution of this Lambda takes. |
 | <code><a href="#cargo-lambda-cdk.RustFunction.metricErrors">metricErrors</a></code> | How many invocations of this Lambda fail. |
 | <code><a href="#cargo-lambda-cdk.RustFunction.metricInvocations">metricInvocations</a></code> | How often this Lambda is invoked. |
 | <code><a href="#cargo-lambda-cdk.RustFunction.metricThrottles">metricThrottles</a></code> | How often this Lambda is throttled. |
+| <code><a href="#cargo-lambda-cdk.RustFunction.addAlias">addAlias</a></code> | Defines an alias for this function. |
 | <code><a href="#cargo-lambda-cdk.RustFunction.addEnvironment">addEnvironment</a></code> | Adds an environment variable to this Lambda function. |
 | <code><a href="#cargo-lambda-cdk.RustFunction.addLayers">addLayers</a></code> | Adds one or more Lambda Layers to this Lambda function. |
+| <code><a href="#cargo-lambda-cdk.RustFunction.invalidateVersionBasedOn">invalidateVersionBasedOn</a></code> | Mix additional information into the hash of the Version object. |
 
 ---
 
@@ -573,6 +600,20 @@ Adds an event source that maps to this AWS Lambda function.
 
 ---
 
+##### `addFunctionUrl` <a name="addFunctionUrl" id="cargo-lambda-cdk.RustFunction.addFunctionUrl"></a>
+
+```typescript
+public addFunctionUrl(options?: FunctionUrlOptions): FunctionUrl
+```
+
+Adds a url to this lambda function.
+
+###### `options`<sup>Optional</sup> <a name="options" id="cargo-lambda-cdk.RustFunction.addFunctionUrl.parameter.options"></a>
+
+- *Type:* aws-cdk-lib.aws_lambda.FunctionUrlOptions
+
+---
+
 ##### `addPermission` <a name="addPermission" id="cargo-lambda-cdk.RustFunction.addPermission"></a>
 
 ```typescript
@@ -627,6 +668,31 @@ Configures options for asynchronous invocation.
 
 ---
 
+##### `considerWarningOnInvokeFunctionPermissions` <a name="considerWarningOnInvokeFunctionPermissions" id="cargo-lambda-cdk.RustFunction.considerWarningOnInvokeFunctionPermissions"></a>
+
+```typescript
+public considerWarningOnInvokeFunctionPermissions(scope: Construct, action: string): void
+```
+
+A warning will be added to functions under the following conditions: - permissions that include `lambda:InvokeFunction` are added to the unqualified function.
+
+function.currentVersion is invoked before or after the permission is created.
+
+This applies only to permissions on Lambda functions, not versions or aliases.
+This function is overridden as a noOp for QualifiedFunctionBase.
+
+###### `scope`<sup>Required</sup> <a name="scope" id="cargo-lambda-cdk.RustFunction.considerWarningOnInvokeFunctionPermissions.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+###### `action`<sup>Required</sup> <a name="action" id="cargo-lambda-cdk.RustFunction.considerWarningOnInvokeFunctionPermissions.parameter.action"></a>
+
+- *Type:* string
+
+---
+
 ##### `grantInvoke` <a name="grantInvoke" id="cargo-lambda-cdk.RustFunction.grantInvoke"></a>
 
 ```typescript
@@ -636,6 +702,20 @@ public grantInvoke(grantee: IGrantable): Grant
 Grant the given identity permissions to invoke this Lambda.
 
 ###### `grantee`<sup>Required</sup> <a name="grantee" id="cargo-lambda-cdk.RustFunction.grantInvoke.parameter.grantee"></a>
+
+- *Type:* aws-cdk-lib.aws_iam.IGrantable
+
+---
+
+##### `grantInvokeUrl` <a name="grantInvokeUrl" id="cargo-lambda-cdk.RustFunction.grantInvokeUrl"></a>
+
+```typescript
+public grantInvokeUrl(grantee: IGrantable): Grant
+```
+
+Grant the given identity permissions to invoke this Lambda Function URL.
+
+###### `grantee`<sup>Required</sup> <a name="grantee" id="cargo-lambda-cdk.RustFunction.grantInvokeUrl.parameter.grantee"></a>
 
 - *Type:* aws-cdk-lib.aws_iam.IGrantable
 
@@ -725,6 +805,46 @@ Sum over 5 minutes
 
 ---
 
+##### `addAlias` <a name="addAlias" id="cargo-lambda-cdk.RustFunction.addAlias"></a>
+
+```typescript
+public addAlias(aliasName: string, options?: AliasOptions): Alias
+```
+
+Defines an alias for this function.
+
+The alias will automatically be updated to point to the latest version of
+the function as it is being updated during a deployment.
+
+```ts
+declare const fn: lambda.Function;
+
+fn.addAlias('Live');
+
+// Is equivalent to
+
+new lambda.Alias(this, 'AliasLive', {
+   aliasName: 'Live',
+   version: fn.currentVersion,
+});
+```
+
+###### `aliasName`<sup>Required</sup> <a name="aliasName" id="cargo-lambda-cdk.RustFunction.addAlias.parameter.aliasName"></a>
+
+- *Type:* string
+
+The name of the alias.
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="cargo-lambda-cdk.RustFunction.addAlias.parameter.options"></a>
+
+- *Type:* aws-cdk-lib.aws_lambda.AliasOptions
+
+Alias options.
+
+---
+
 ##### `addEnvironment` <a name="addEnvironment" id="cargo-lambda-cdk.RustFunction.addEnvironment"></a>
 
 ```typescript
@@ -775,15 +895,46 @@ the layers to be added.
 
 ---
 
+##### `invalidateVersionBasedOn` <a name="invalidateVersionBasedOn" id="cargo-lambda-cdk.RustFunction.invalidateVersionBasedOn"></a>
+
+```typescript
+public invalidateVersionBasedOn(x: string): void
+```
+
+Mix additional information into the hash of the Version object.
+
+The Lambda Function construct does its best to automatically create a new
+Version when anything about the Function changes (its code, its layers,
+any of the other properties).
+
+However, you can sometimes source information from places that the CDK cannot
+look into, like the deploy-time values of SSM parameters. In those cases,
+the CDK would not force the creation of a new Version object when it actually
+should.
+
+This method can be used to invalidate the current Version object. Pass in
+any string into this method, and make sure the string changes when you know
+a new Version needs to be created.
+
+This method may be called more than once.
+
+###### `x`<sup>Required</sup> <a name="x" id="cargo-lambda-cdk.RustFunction.invalidateVersionBasedOn.parameter.x"></a>
+
+- *Type:* string
+
+---
+
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#cargo-lambda-cdk.RustFunction.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#cargo-lambda-cdk.RustFunction.isOwnedResource">isOwnedResource</a></code> | Returns true if the construct was created by CDK, and false otherwise. |
 | <code><a href="#cargo-lambda-cdk.RustFunction.isResource">isResource</a></code> | Check whether the given construct is a Resource. |
 | <code><a href="#cargo-lambda-cdk.RustFunction.classifyVersionProperty">classifyVersionProperty</a></code> | Record whether specific properties in the `AWS::Lambda::Function` resource should also be associated to the Version resource. |
 | <code><a href="#cargo-lambda-cdk.RustFunction.fromFunctionArn">fromFunctionArn</a></code> | Import a lambda function into the CDK using its ARN. |
 | <code><a href="#cargo-lambda-cdk.RustFunction.fromFunctionAttributes">fromFunctionAttributes</a></code> | Creates a Lambda function object which represents a function not defined within this stack. |
+| <code><a href="#cargo-lambda-cdk.RustFunction.fromFunctionName">fromFunctionName</a></code> | Import a lambda function into the CDK using its name. |
 | <code><a href="#cargo-lambda-cdk.RustFunction.metricAll">metricAll</a></code> | Return the given named metric for this Lambda. |
 | <code><a href="#cargo-lambda-cdk.RustFunction.metricAllConcurrentExecutions">metricAllConcurrentExecutions</a></code> | Metric for the number of concurrent executions across all Lambdas. |
 | <code><a href="#cargo-lambda-cdk.RustFunction.metricAllDuration">metricAllDuration</a></code> | Metric for the Duration executing all Lambdas. |
@@ -809,6 +960,22 @@ Checks if `x` is a construct.
 - *Type:* any
 
 Any object.
+
+---
+
+##### `isOwnedResource` <a name="isOwnedResource" id="cargo-lambda-cdk.RustFunction.isOwnedResource"></a>
+
+```typescript
+import { RustFunction } from 'cargo-lambda-cdk'
+
+RustFunction.isOwnedResource(construct: IConstruct)
+```
+
+Returns true if the construct was created by CDK, and false otherwise.
+
+###### `construct`<sup>Required</sup> <a name="construct" id="cargo-lambda-cdk.RustFunction.isOwnedResource.parameter.construct"></a>
+
+- *Type:* constructs.IConstruct
 
 ---
 
@@ -915,6 +1082,34 @@ The name of the lambda construct.
 - *Type:* aws-cdk-lib.aws_lambda.FunctionAttributes
 
 the attributes of the function to import.
+
+---
+
+##### `fromFunctionName` <a name="fromFunctionName" id="cargo-lambda-cdk.RustFunction.fromFunctionName"></a>
+
+```typescript
+import { RustFunction } from 'cargo-lambda-cdk'
+
+RustFunction.fromFunctionName(scope: Construct, id: string, functionName: string)
+```
+
+Import a lambda function into the CDK using its name.
+
+###### `scope`<sup>Required</sup> <a name="scope" id="cargo-lambda-cdk.RustFunction.fromFunctionName.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+###### `id`<sup>Required</sup> <a name="id" id="cargo-lambda-cdk.RustFunction.fromFunctionName.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+###### `functionName`<sup>Required</sup> <a name="functionName" id="cargo-lambda-cdk.RustFunction.fromFunctionName.parameter.functionName"></a>
+
+- *Type:* string
 
 ---
 
@@ -1043,6 +1238,7 @@ Metric for the number of unreserved concurrent executions across all Lambdas.
 | <code><a href="#cargo-lambda-cdk.RustFunction.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#cargo-lambda-cdk.RustFunction.property.env">env</a></code> | <code>aws-cdk-lib.ResourceEnvironment</code> | The environment this resource belongs to. |
 | <code><a href="#cargo-lambda-cdk.RustFunction.property.stack">stack</a></code> | <code>aws-cdk-lib.Stack</code> | The stack in which this resource is defined. |
+| <code><a href="#cargo-lambda-cdk.RustFunction.property.architecture">architecture</a></code> | <code>aws-cdk-lib.aws_lambda.Architecture</code> | The architecture of this Lambda Function (this is an optional attribute and defaults to X86_64). |
 | <code><a href="#cargo-lambda-cdk.RustFunction.property.connections">connections</a></code> | <code>aws-cdk-lib.aws_ec2.Connections</code> | Access the Connections object. |
 | <code><a href="#cargo-lambda-cdk.RustFunction.property.functionArn">functionArn</a></code> | <code>string</code> | ARN of this function. |
 | <code><a href="#cargo-lambda-cdk.RustFunction.property.functionName">functionName</a></code> | <code>string</code> | Name of this function. |
@@ -1050,12 +1246,13 @@ Metric for the number of unreserved concurrent executions across all Lambdas.
 | <code><a href="#cargo-lambda-cdk.RustFunction.property.isBoundToVpc">isBoundToVpc</a></code> | <code>boolean</code> | Whether or not this Lambda function was bound to a VPC. |
 | <code><a href="#cargo-lambda-cdk.RustFunction.property.latestVersion">latestVersion</a></code> | <code>aws-cdk-lib.aws_lambda.IVersion</code> | The `$LATEST` version of this function. |
 | <code><a href="#cargo-lambda-cdk.RustFunction.property.permissionsNode">permissionsNode</a></code> | <code>constructs.Node</code> | The construct node where permissions are attached. |
+| <code><a href="#cargo-lambda-cdk.RustFunction.property.resourceArnsForGrantInvoke">resourceArnsForGrantInvoke</a></code> | <code>string[]</code> | The ARN(s) to put into the resource field of the generated IAM policy for grantInvoke(). |
 | <code><a href="#cargo-lambda-cdk.RustFunction.property.role">role</a></code> | <code>aws-cdk-lib.aws_iam.IRole</code> | Execution role associated with this function. |
-| <code><a href="#cargo-lambda-cdk.RustFunction.property.architecture">architecture</a></code> | <code>aws-cdk-lib.aws_lambda.Architecture</code> | The architecture of this Lambda Function (this is an optional attribute and defaults to X86_64). |
 | <code><a href="#cargo-lambda-cdk.RustFunction.property.currentVersion">currentVersion</a></code> | <code>aws-cdk-lib.aws_lambda.Version</code> | Returns a `lambda.Version` which represents the current version of this Lambda function. A new version will be created every time the function's configuration changes. |
-| <code><a href="#cargo-lambda-cdk.RustFunction.property.deadLetterQueue">deadLetterQueue</a></code> | <code>aws-cdk-lib.aws_sqs.IQueue</code> | The DLQ associated with this Lambda Function (this is an optional attribute). |
 | <code><a href="#cargo-lambda-cdk.RustFunction.property.logGroup">logGroup</a></code> | <code>aws-cdk-lib.aws_logs.ILogGroup</code> | The LogGroup where the Lambda function's logs are made available. |
 | <code><a href="#cargo-lambda-cdk.RustFunction.property.runtime">runtime</a></code> | <code>aws-cdk-lib.aws_lambda.Runtime</code> | The runtime configured for this lambda. |
+| <code><a href="#cargo-lambda-cdk.RustFunction.property.deadLetterQueue">deadLetterQueue</a></code> | <code>aws-cdk-lib.aws_sqs.IQueue</code> | The DLQ (as queue) associated with this Lambda Function (this is an optional attribute). |
+| <code><a href="#cargo-lambda-cdk.RustFunction.property.deadLetterTopic">deadLetterTopic</a></code> | <code>aws-cdk-lib.aws_sns.ITopic</code> | The DLQ (as topic) associated with this Lambda Function (this is an optional attribute). |
 | <code><a href="#cargo-lambda-cdk.RustFunction.property.timeout">timeout</a></code> | <code>aws-cdk-lib.Duration</code> | The timeout configured for this lambda. |
 
 ---
@@ -1100,6 +1297,18 @@ public readonly stack: Stack;
 - *Type:* aws-cdk-lib.Stack
 
 The stack in which this resource is defined.
+
+---
+
+##### `architecture`<sup>Required</sup> <a name="architecture" id="cargo-lambda-cdk.RustFunction.property.architecture"></a>
+
+```typescript
+public readonly architecture: Architecture;
+```
+
+- *Type:* aws-cdk-lib.aws_lambda.Architecture
+
+The architecture of this Lambda Function (this is an optional attribute and defaults to X86_64).
 
 ---
 
@@ -1198,6 +1407,18 @@ The construct node where permissions are attached.
 
 ---
 
+##### `resourceArnsForGrantInvoke`<sup>Required</sup> <a name="resourceArnsForGrantInvoke" id="cargo-lambda-cdk.RustFunction.property.resourceArnsForGrantInvoke"></a>
+
+```typescript
+public readonly resourceArnsForGrantInvoke: string[];
+```
+
+- *Type:* string[]
+
+The ARN(s) to put into the resource field of the generated IAM policy for grantInvoke().
+
+---
+
 ##### `role`<sup>Optional</sup> <a name="role" id="cargo-lambda-cdk.RustFunction.property.role"></a>
 
 ```typescript
@@ -1207,18 +1428,6 @@ public readonly role: IRole;
 - *Type:* aws-cdk-lib.aws_iam.IRole
 
 Execution role associated with this function.
-
----
-
-##### `architecture`<sup>Optional</sup> <a name="architecture" id="cargo-lambda-cdk.RustFunction.property.architecture"></a>
-
-```typescript
-public readonly architecture: Architecture;
-```
-
-- *Type:* aws-cdk-lib.aws_lambda.Architecture
-
-The architecture of this Lambda Function (this is an optional attribute and defaults to X86_64).
 
 ---
 
@@ -1234,18 +1443,6 @@ Returns a `lambda.Version` which represents the current version of this Lambda f
 
 You can specify options for this version using the `currentVersionOptions`
 prop when initializing the `lambda.Function`.
-
----
-
-##### `deadLetterQueue`<sup>Optional</sup> <a name="deadLetterQueue" id="cargo-lambda-cdk.RustFunction.property.deadLetterQueue"></a>
-
-```typescript
-public readonly deadLetterQueue: IQueue;
-```
-
-- *Type:* aws-cdk-lib.aws_sqs.IQueue
-
-The DLQ associated with this Lambda Function (this is an optional attribute).
 
 ---
 
@@ -1277,6 +1474,30 @@ public readonly runtime: Runtime;
 - *Type:* aws-cdk-lib.aws_lambda.Runtime
 
 The runtime configured for this lambda.
+
+---
+
+##### `deadLetterQueue`<sup>Optional</sup> <a name="deadLetterQueue" id="cargo-lambda-cdk.RustFunction.property.deadLetterQueue"></a>
+
+```typescript
+public readonly deadLetterQueue: IQueue;
+```
+
+- *Type:* aws-cdk-lib.aws_sqs.IQueue
+
+The DLQ (as queue) associated with this Lambda Function (this is an optional attribute).
+
+---
+
+##### `deadLetterTopic`<sup>Optional</sup> <a name="deadLetterTopic" id="cargo-lambda-cdk.RustFunction.property.deadLetterTopic"></a>
+
+```typescript
+public readonly deadLetterTopic: ITopic;
+```
+
+- *Type:* aws-cdk-lib.aws_sns.ITopic
+
+The DLQ (as topic) associated with this Lambda Function (this is an optional attribute).
 
 ---
 
@@ -1316,6 +1537,7 @@ const bundlingOptions: BundlingOptions = { ... }
 | <code><a href="#cargo-lambda-cdk.BundlingOptions.property.assetHashType">assetHashType</a></code> | <code>aws-cdk-lib.AssetHashType</code> | Determines how the asset hash is calculated. |
 | <code><a href="#cargo-lambda-cdk.BundlingOptions.property.commandHooks">commandHooks</a></code> | <code><a href="#cargo-lambda-cdk.ICommandHooks">ICommandHooks</a></code> | Command hooks. |
 | <code><a href="#cargo-lambda-cdk.BundlingOptions.property.dockerImage">dockerImage</a></code> | <code>aws-cdk-lib.DockerImage</code> | A custom bundling Docker image. |
+| <code><a href="#cargo-lambda-cdk.BundlingOptions.property.dockerOptions">dockerOptions</a></code> | <code><a href="#cargo-lambda-cdk.DockerOptions">DockerOptions</a></code> | Additional options when using docker bundling. |
 | <code><a href="#cargo-lambda-cdk.BundlingOptions.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Environment variables defined when Cargo runs. |
 | <code><a href="#cargo-lambda-cdk.BundlingOptions.property.forcedDockerBundling">forcedDockerBundling</a></code> | <code>boolean</code> | Force bundling in a Docker container even if local bundling is possible. |
 
@@ -1400,6 +1622,19 @@ A custom bundling Docker image.
 
 ---
 
+##### `dockerOptions`<sup>Optional</sup> <a name="dockerOptions" id="cargo-lambda-cdk.BundlingOptions.property.dockerOptions"></a>
+
+```typescript
+public readonly dockerOptions: DockerOptions;
+```
+
+- *Type:* <a href="#cargo-lambda-cdk.DockerOptions">DockerOptions</a>
+- *Default:* the same defaults as specified by `cdk.BundlingOptions`
+
+Additional options when using docker bundling.
+
+---
+
 ##### `environment`<sup>Optional</sup> <a name="environment" id="cargo-lambda-cdk.BundlingOptions.property.environment"></a>
 
 ```typescript
@@ -1423,6 +1658,196 @@ public readonly forcedDockerBundling: boolean;
 - *Default:* false
 
 Force bundling in a Docker container even if local bundling is possible.
+
+---
+
+### DockerOptions <a name="DockerOptions" id="cargo-lambda-cdk.DockerOptions"></a>
+
+Additional docker options when using docker bundling.
+
+Default values here inherit
+from `cdk.BundlingOptions`.
+
+#### Initializer <a name="Initializer" id="cargo-lambda-cdk.DockerOptions.Initializer"></a>
+
+```typescript
+import { DockerOptions } from 'cargo-lambda-cdk'
+
+const dockerOptions: DockerOptions = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#cargo-lambda-cdk.DockerOptions.property.bundlingFileAccess">bundlingFileAccess</a></code> | <code>aws-cdk-lib.BundlingFileAccess</code> | The access mechanism used to make source files available to the bundling container and to return the bundling output back to the host. |
+| <code><a href="#cargo-lambda-cdk.DockerOptions.property.command">command</a></code> | <code>string[]</code> | The command to run in the Docker container. |
+| <code><a href="#cargo-lambda-cdk.DockerOptions.property.entrypoint">entrypoint</a></code> | <code>string[]</code> | The entrypoint to run in the Docker container. |
+| <code><a href="#cargo-lambda-cdk.DockerOptions.property.local">local</a></code> | <code>aws-cdk-lib.ILocalBundling</code> | Local bundling provider. |
+| <code><a href="#cargo-lambda-cdk.DockerOptions.property.network">network</a></code> | <code>string</code> | Docker [Networking options](https://docs.docker.com/engine/reference/commandline/run/#connect-a-container-to-a-network---network). |
+| <code><a href="#cargo-lambda-cdk.DockerOptions.property.outputType">outputType</a></code> | <code>aws-cdk-lib.BundlingOutput</code> | The type of output that this bundling operation is producing. |
+| <code><a href="#cargo-lambda-cdk.DockerOptions.property.securityOpt">securityOpt</a></code> | <code>string</code> | [Security configuration](https://docs.docker.com/engine/reference/run/#security-configuration) when running the docker container. |
+| <code><a href="#cargo-lambda-cdk.DockerOptions.property.user">user</a></code> | <code>string</code> | The user to use when running the Docker container. |
+| <code><a href="#cargo-lambda-cdk.DockerOptions.property.volumes">volumes</a></code> | <code>aws-cdk-lib.DockerVolume[]</code> | Additional Docker volumes to mount. |
+| <code><a href="#cargo-lambda-cdk.DockerOptions.property.volumesFrom">volumesFrom</a></code> | <code>string[]</code> | Where to mount the specified volumes from. |
+| <code><a href="#cargo-lambda-cdk.DockerOptions.property.workingDirectory">workingDirectory</a></code> | <code>string</code> | Working directory inside the Docker container. |
+
+---
+
+##### `bundlingFileAccess`<sup>Optional</sup> <a name="bundlingFileAccess" id="cargo-lambda-cdk.DockerOptions.property.bundlingFileAccess"></a>
+
+```typescript
+public readonly bundlingFileAccess: BundlingFileAccess;
+```
+
+- *Type:* aws-cdk-lib.BundlingFileAccess
+- *Default:* BundlingFileAccess.BIND_MOUNT
+
+The access mechanism used to make source files available to the bundling container and to return the bundling output back to the host.
+
+---
+
+##### `command`<sup>Optional</sup> <a name="command" id="cargo-lambda-cdk.DockerOptions.property.command"></a>
+
+```typescript
+public readonly command: string[];
+```
+
+- *Type:* string[]
+- *Default:* a cargo lambda compilation
+
+The command to run in the Docker container.
+
+This is normally controlled by the `RustFunction`
+but can be overridden here.
+
+---
+
+##### `entrypoint`<sup>Optional</sup> <a name="entrypoint" id="cargo-lambda-cdk.DockerOptions.property.entrypoint"></a>
+
+```typescript
+public readonly entrypoint: string[];
+```
+
+- *Type:* string[]
+- *Default:* run the entrypoint defined in the image
+
+The entrypoint to run in the Docker container.
+
+> [https://docs.docker.com/engine/reference/builder/#entrypoint](https://docs.docker.com/engine/reference/builder/#entrypoint)
+
+---
+
+##### `local`<sup>Optional</sup> <a name="local" id="cargo-lambda-cdk.DockerOptions.property.local"></a>
+
+```typescript
+public readonly local: ILocalBundling;
+```
+
+- *Type:* aws-cdk-lib.ILocalBundling
+- *Default:* bundling will be performed locally if Rust and cargo-lambda are installed and `forcedDockerBundling` is not true, otherwise it will be performed in the docker container
+
+Local bundling provider.
+
+This is normally controlled by the `RustFunction`
+but can be overridden here.
+
+---
+
+##### `network`<sup>Optional</sup> <a name="network" id="cargo-lambda-cdk.DockerOptions.property.network"></a>
+
+```typescript
+public readonly network: string;
+```
+
+- *Type:* string
+- *Default:* no networking options
+
+Docker [Networking options](https://docs.docker.com/engine/reference/commandline/run/#connect-a-container-to-a-network---network).
+
+---
+
+##### `outputType`<sup>Optional</sup> <a name="outputType" id="cargo-lambda-cdk.DockerOptions.property.outputType"></a>
+
+```typescript
+public readonly outputType: BundlingOutput;
+```
+
+- *Type:* aws-cdk-lib.BundlingOutput
+- *Default:* BundlingOutput.AUTO_DISCOVER
+
+The type of output that this bundling operation is producing.
+
+---
+
+##### `securityOpt`<sup>Optional</sup> <a name="securityOpt" id="cargo-lambda-cdk.DockerOptions.property.securityOpt"></a>
+
+```typescript
+public readonly securityOpt: string;
+```
+
+- *Type:* string
+- *Default:* no security options
+
+[Security configuration](https://docs.docker.com/engine/reference/run/#security-configuration) when running the docker container.
+
+---
+
+##### `user`<sup>Optional</sup> <a name="user" id="cargo-lambda-cdk.DockerOptions.property.user"></a>
+
+```typescript
+public readonly user: string;
+```
+
+- *Type:* string
+- *Default:* uid:gid of the current user or 1000:1000 on Windows
+
+The user to use when running the Docker container.
+
+user | user:group | uid | uid:gid | user:gid | uid:group
+
+> [https://docs.docker.com/engine/reference/run/#user](https://docs.docker.com/engine/reference/run/#user)
+
+---
+
+##### `volumes`<sup>Optional</sup> <a name="volumes" id="cargo-lambda-cdk.DockerOptions.property.volumes"></a>
+
+```typescript
+public readonly volumes: DockerVolume[];
+```
+
+- *Type:* aws-cdk-lib.DockerVolume[]
+- *Default:* no additional volumes are mounted
+
+Additional Docker volumes to mount.
+
+---
+
+##### `volumesFrom`<sup>Optional</sup> <a name="volumesFrom" id="cargo-lambda-cdk.DockerOptions.property.volumesFrom"></a>
+
+```typescript
+public readonly volumesFrom: string[];
+```
+
+- *Type:* string[]
+- *Default:* no containers are specified to mount volumes from
+
+Where to mount the specified volumes from.
+
+> [https://docs.docker.com/engine/reference/commandline/run/#mount-volumes-from-container---volumes-from](https://docs.docker.com/engine/reference/commandline/run/#mount-volumes-from-container---volumes-from)
+
+---
+
+##### `workingDirectory`<sup>Optional</sup> <a name="workingDirectory" id="cargo-lambda-cdk.DockerOptions.property.workingDirectory"></a>
+
+```typescript
+public readonly workingDirectory: string;
+```
+
+- *Type:* string
+- *Default:* /asset-input
+
+Working directory inside the Docker container.
 
 ---
 
@@ -1563,6 +1988,7 @@ const rustFunctionProps: RustFunctionProps = { ... }
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.onFailure">onFailure</a></code> | <code>aws-cdk-lib.aws_lambda.IDestination</code> | The destination for failed invocations. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.onSuccess">onSuccess</a></code> | <code>aws-cdk-lib.aws_lambda.IDestination</code> | The destination for successful invocations. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.retryAttempts">retryAttempts</a></code> | <code>number</code> | The maximum number of times to retry when the function returns an error. |
+| <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.adotInstrumentation">adotInstrumentation</a></code> | <code>aws-cdk-lib.aws_lambda.AdotInstrumentationConfig</code> | Specify the configuration of AWS Distro for OpenTelemetry (ADOT) instrumentation. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.allowAllOutbound">allowAllOutbound</a></code> | <code>boolean</code> | Whether to allow the Lambda to send all network traffic. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.allowPublicSubnet">allowPublicSubnet</a></code> | <code>boolean</code> | Lambda Functions in a public subnet can NOT access the internet. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.architecture">architecture</a></code> | <code>aws-cdk-lib.aws_lambda.Architecture</code> | The system architectures compatible with this lambda function. |
@@ -1570,9 +1996,11 @@ const rustFunctionProps: RustFunctionProps = { ... }
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.currentVersionOptions">currentVersionOptions</a></code> | <code>aws-cdk-lib.aws_lambda.VersionOptions</code> | Options for the `lambda.Version` resource automatically created by the `fn.currentVersion` method. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.deadLetterQueue">deadLetterQueue</a></code> | <code>aws-cdk-lib.aws_sqs.IQueue</code> | The SQS queue to use if DLQ is enabled. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.deadLetterQueueEnabled">deadLetterQueueEnabled</a></code> | <code>boolean</code> | Enabled DLQ. |
+| <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.deadLetterTopic">deadLetterTopic</a></code> | <code>aws-cdk-lib.aws_sns.ITopic</code> | The SNS topic to use as a DLQ. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.description">description</a></code> | <code>string</code> | A description of the function. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Key-value pairs that Lambda caches and makes available for your Lambda functions. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.environmentEncryption">environmentEncryption</a></code> | <code>aws-cdk-lib.aws_kms.IKey</code> | The AWS KMS key that's used to encrypt your function's environment variables. |
+| <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.ephemeralStorageSize">ephemeralStorageSize</a></code> | <code>aws-cdk-lib.Size</code> | The size of the function’s /tmp directory in MiB. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.events">events</a></code> | <code>aws-cdk-lib.aws_lambda.IEventSource[]</code> | Event sources for this function. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.filesystem">filesystem</a></code> | <code>aws-cdk-lib.aws_lambda.FileSystem</code> | The filesystem configuration for the lambda function. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.functionName">functionName</a></code> | <code>string</code> | A name for the function. |
@@ -1654,6 +2082,21 @@ The maximum number of times to retry when the function returns an error.
 
 Minimum: 0
 Maximum: 2
+
+---
+
+##### `adotInstrumentation`<sup>Optional</sup> <a name="adotInstrumentation" id="cargo-lambda-cdk.RustFunctionProps.property.adotInstrumentation"></a>
+
+```typescript
+public readonly adotInstrumentation: AdotInstrumentationConfig;
+```
+
+- *Type:* aws-cdk-lib.aws_lambda.AdotInstrumentationConfig
+- *Default:* No ADOT instrumentation
+
+Specify the configuration of AWS Distro for OpenTelemetry (ADOT) instrumentation.
+
+> [https://aws-otel.github.io/docs/getting-started/lambda](https://aws-otel.github.io/docs/getting-started/lambda)
 
 ---
 
@@ -1740,6 +2183,8 @@ public readonly deadLetterQueue: IQueue;
 
 The SQS queue to use if DLQ is enabled.
 
+If SNS topic is desired, specify `deadLetterTopic` property instead.
+
 ---
 
 ##### `deadLetterQueueEnabled`<sup>Optional</sup> <a name="deadLetterQueueEnabled" id="cargo-lambda-cdk.RustFunctionProps.property.deadLetterQueueEnabled"></a>
@@ -1755,6 +2200,22 @@ Enabled DLQ.
 
 If `deadLetterQueue` is undefined,
 an SQS queue with default options will be defined for your Function.
+
+---
+
+##### `deadLetterTopic`<sup>Optional</sup> <a name="deadLetterTopic" id="cargo-lambda-cdk.RustFunctionProps.property.deadLetterTopic"></a>
+
+```typescript
+public readonly deadLetterTopic: ITopic;
+```
+
+- *Type:* aws-cdk-lib.aws_sns.ITopic
+- *Default:* no SNS topic
+
+The SNS topic to use as a DLQ.
+
+Note that if `deadLetterQueueEnabled` is set to `true`, an SQS queue will be created
+rather than an SNS topic. Using an SNS topic as a DLQ requires this property to be set explicitly.
 
 ---
 
@@ -1798,6 +2259,19 @@ public readonly environmentEncryption: IKey;
 - *Default:* AWS Lambda creates and uses an AWS managed customer master key (CMK).
 
 The AWS KMS key that's used to encrypt your function's environment variables.
+
+---
+
+##### `ephemeralStorageSize`<sup>Optional</sup> <a name="ephemeralStorageSize" id="cargo-lambda-cdk.RustFunctionProps.property.ephemeralStorageSize"></a>
+
+```typescript
+public readonly ephemeralStorageSize: Size;
+```
+
+- *Type:* aws-cdk-lib.Size
+- *Default:* 512 MiB
+
+The size of the function’s /tmp directory in MiB.
 
 ---
 
@@ -2075,6 +2549,7 @@ public readonly vpc: IVpc;
 VPC network to place Lambda network interfaces.
 
 Specify this if the Lambda function needs to access resources in a VPC.
+This is required when `vpcSubnets` is specified.
 
 ---
 
@@ -2089,8 +2564,11 @@ public readonly vpcSubnets: SubnetSelection;
 
 Where to place the network interfaces within the VPC.
 
-Only used if 'vpc' is supplied. Note: internet access for Lambdas
-requires a NAT gateway, so picking Public subnets is not allowed.
+This requires `vpc` to be specified in order for interfaces to actually be
+placed in the subnets. If `vpc` is not specify, this will raise an error.
+
+Note: Internet access for Lambda Functions requires a NAT Gateway, so picking
+public subnets is not allowed (unless `allowPublicSubnet` is set to `true`).
 
 ---
 
