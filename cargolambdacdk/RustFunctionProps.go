@@ -8,6 +8,7 @@ import (
 	"github.com/aws/aws-cdk-go/awscdk/v2/awskms"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awslambda"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awslogs"
+	"github.com/aws/aws-cdk-go/awscdk/v2/awssns"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awssqs"
 )
 
@@ -35,6 +36,12 @@ type RustFunctionProps struct {
 	// Default: 2.
 	//
 	RetryAttempts *float64 `field:"optional" json:"retryAttempts" yaml:"retryAttempts"`
+	// Specify the configuration of AWS Distro for OpenTelemetry (ADOT) instrumentation.
+	// See: https://aws-otel.github.io/docs/getting-started/lambda
+	//
+	// Default: - No ADOT instrumentation.
+	//
+	AdotInstrumentation *awslambda.AdotInstrumentationConfig `field:"optional" json:"adotInstrumentation" yaml:"adotInstrumentation"`
 	// Whether to allow the Lambda to send all network traffic.
 	//
 	// If set to false, you must individually add traffic rules to allow the
@@ -63,6 +70,8 @@ type RustFunctionProps struct {
 	//
 	CurrentVersionOptions *awslambda.VersionOptions `field:"optional" json:"currentVersionOptions" yaml:"currentVersionOptions"`
 	// The SQS queue to use if DLQ is enabled.
+	//
+	// If SNS topic is desired, specify `deadLetterTopic` property instead.
 	// Default: - SQS queue with 14 day retention period if `deadLetterQueueEnabled` is `true`.
 	//
 	DeadLetterQueue awssqs.IQueue `field:"optional" json:"deadLetterQueue" yaml:"deadLetterQueue"`
@@ -73,6 +82,13 @@ type RustFunctionProps struct {
 	// Default: - false unless `deadLetterQueue` is set, which implies DLQ is enabled.
 	//
 	DeadLetterQueueEnabled *bool `field:"optional" json:"deadLetterQueueEnabled" yaml:"deadLetterQueueEnabled"`
+	// The SNS topic to use as a DLQ.
+	//
+	// Note that if `deadLetterQueueEnabled` is set to `true`, an SQS queue will be created
+	// rather than an SNS topic. Using an SNS topic as a DLQ requires this property to be set explicitly.
+	// Default: - no SNS topic.
+	//
+	DeadLetterTopic awssns.ITopic `field:"optional" json:"deadLetterTopic" yaml:"deadLetterTopic"`
 	// A description of the function.
 	// Default: - No description.
 	//
@@ -89,6 +105,10 @@ type RustFunctionProps struct {
 	// Default: - AWS Lambda creates and uses an AWS managed customer master key (CMK).
 	//
 	EnvironmentEncryption awskms.IKey `field:"optional" json:"environmentEncryption" yaml:"environmentEncryption"`
+	// The size of the function’s /tmp directory in MiB.
+	// Default: 512 MiB.
+	//
+	EphemeralStorageSize awscdk.Size `field:"optional" json:"ephemeralStorageSize" yaml:"ephemeralStorageSize"`
 	// Event sources for this function.
 	//
 	// You can also add event sources using `addEventSource`.
@@ -205,13 +225,17 @@ type RustFunctionProps struct {
 	// VPC network to place Lambda network interfaces.
 	//
 	// Specify this if the Lambda function needs to access resources in a VPC.
+	// This is required when `vpcSubnets` is specified.
 	// Default: - Function is not placed within a VPC.
 	//
 	Vpc awsec2.IVpc `field:"optional" json:"vpc" yaml:"vpc"`
 	// Where to place the network interfaces within the VPC.
 	//
-	// Only used if 'vpc' is supplied. Note: internet access for Lambdas
-	// requires a NAT gateway, so picking Public subnets is not allowed.
+	// This requires `vpc` to be specified in order for interfaces to actually be
+	// placed in the subnets. If `vpc` is not specify, this will raise an error.
+	//
+	// Note: Internet access for Lambda Functions requires a NAT Gateway, so picking
+	// public subnets is not allowed (unless `allowPublicSubnet` is set to `true`).
 	// Default: - the Vpc default strategy if not specified.
 	//
 	VpcSubnets *awsec2.SubnetSelection `field:"optional" json:"vpcSubnets" yaml:"vpcSubnets"`

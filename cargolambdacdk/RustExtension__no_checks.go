@@ -32,6 +32,10 @@ func validateRustExtension_IsConstructParameters(x interface{}) error {
 	return nil
 }
 
+func validateRustExtension_IsOwnedResourceParameters(construct constructs.IConstruct) error {
+	return nil
+}
+
 func validateRustExtension_IsResourceParameters(construct constructs.IConstruct) error {
 	return nil
 }

@@ -30,8 +30,7 @@ lambda-project
 
 The `RustFunction` uses the `provided.al2023` runtime. If you want to change it, you can use the property `runtime`. The only other valid option is `provided.al2`:
 
-```
-```ts
+```go
 import { RustFunction } from 'cargo-lambda-cdk';
 
 new RustFunction(stack, 'Rust function', {
@@ -59,7 +58,19 @@ new RustFunction(this, 'Rust function', {
 });
 ```
 
-## Environment
+## Bundling
+
+Bundling is the process by which `cargo lambda` gets called to build, package, and deliver the Rust
+binary for CDK. This construct provides two methods of bundling:
+
+* Local bundling where the locally installed cargo lambda tool will run
+* Docker bundling where a Dockerfile can be specified to build an image
+
+### Local Bundling
+
+If `Cargo Lambda` is installed locally then it will be used to bundle your code in your environment. Otherwise, bundling will happen in a Lambda compatible Docker container with the Docker platform based on the target architecture of the Lambda function.
+
+### Environment
 
 Use the `environment` prop to define additional environment variables when Cargo Lambda runs:
 
@@ -76,11 +87,7 @@ new RustFunction(this, 'Rust function', {
 });
 ```
 
-## Local Bundling
-
-If `Cargo Lambda` is installed locally then it will be used to bundle your code in your environment. Otherwise, bundling will happen in a Lambda compatible Docker container with the Docker platform based on the target architecture of the Lambda function.
-
-## Docker
+### Docker
 
 To force bundling in a docker container even if `Cargo Lambda` is available in your environment, set the `forcedDockerBundling` prop to `true`. This is useful if you want to make sure that your function is built in a consistent Lambda compatible environment.
 
@@ -97,7 +104,25 @@ new RustFunction(this, 'Rust function', {
 });
 ```
 
-## Command hooks
+Additional docker options such as the user, file access, working directory or volumes can be configured by using the `bundling.dockerOptions` prop:
+
+```go
+import * as cdk from 'aws-cdk-lib';
+import { RustFunction } from 'cargo-lambda-cdk';
+
+new RustFunction(this, 'Rust function', {
+  manifestPath: 'path/to/package/directory/with/Cargo.toml',
+  bundling: {
+    dockerOptions: {
+      bundlingFileAccess: cdk.BundlingFileAccess.VOLUME_COPY,
+    },
+  },
+});
+```
+
+This property mirrors values from the `cdk.BundlingOptions` and is passed into `Code.fromAsset`.
+
+### Command hooks
 
 It is  possible to run additional commands by specifying the `commandHooks` prop:
 

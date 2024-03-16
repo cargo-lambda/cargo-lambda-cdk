@@ -10,6 +10,7 @@ import (
 	"github.com/aws/aws-cdk-go/awscdk/v2/awsiam"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awslambda"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awslogs"
+	"github.com/aws/aws-cdk-go/awscdk/v2/awssns"
 	"github.com/aws/aws-cdk-go/awscdk/v2/awssqs"
 	"github.com/aws/constructs-go/constructs/v10"
 	"github.com/cargo-lambda/cargo-lambda-cdk/cargolambdacdk/internal"
@@ -34,8 +35,10 @@ type RustFunction interface {
 	// You can specify options for this version using the `currentVersionOptions`
 	// prop when initializing the `lambda.Function`.
 	CurrentVersion() awslambda.Version
-	// The DLQ associated with this Lambda Function (this is an optional attribute).
+	// The DLQ (as queue) associated with this Lambda Function (this is an optional attribute).
 	DeadLetterQueue() awssqs.IQueue
+	// The DLQ (as topic) associated with this Lambda Function (this is an optional attribute).
+	DeadLetterTopic() awssns.ITopic
 	// The environment this resource belongs to.
 	//
 	// For resources that are created and managed by the CDK
@@ -85,6 +88,8 @@ type RustFunction interface {
 	// - a concrete name generated automatically during synthesis, in
 	//    cross-environment scenarios.
 	PhysicalName() *string
+	// The ARN(s) to put into the resource field of the generated IAM policy for grantInvoke().
+	ResourceArnsForGrantInvoke() *[]*string
 	// Execution role associated with this function.
 	Role() awsiam.IRole
 	// The runtime configured for this lambda.
@@ -93,6 +98,24 @@ type RustFunction interface {
 	Stack() awscdk.Stack
 	// The timeout configured for this lambda.
 	Timeout() awscdk.Duration
+	// Defines an alias for this function.
+	//
+	// The alias will automatically be updated to point to the latest version of
+	// the function as it is being updated during a deployment.
+	//
+	// ```ts
+	// declare const fn: lambda.Function;
+	//
+	// fn.addAlias('Live');
+	//
+	// // Is equivalent to
+	//
+	// new lambda.Alias(this, 'AliasLive', {
+	//    aliasName: 'Live',
+	//    version: fn.currentVersion,
+	// });
+	// ```.
+	AddAlias(aliasName *string, options *awslambda.AliasOptions) awslambda.Alias
 	// Adds an environment variable to this Lambda function.
 	//
 	// If this is a ref to a Lambda function, this operation results in a no-op.
@@ -109,6 +132,8 @@ type RustFunction interface {
 	AddEventSource(source awslambda.IEventSource)
 	// Adds an event source that maps to this AWS Lambda function.
 	AddEventSourceMapping(id *string, options *awslambda.EventSourceMappingOptions) awslambda.EventSourceMapping
+	// Adds a url to this lambda function.
+	AddFunctionUrl(options *awslambda.FunctionUrlOptions) awslambda.FunctionUrl
 	// Adds one or more Lambda Layers to this Lambda function.
 	AddLayers(layers ...awslambda.ILayerVersion)
 	// Adds a permission to the Lambda resource policy.
@@ -129,6 +154,13 @@ type RustFunction interface {
 	ApplyRemovalPolicy(policy awscdk.RemovalPolicy)
 	// Configures options for asynchronous invocation.
 	ConfigureAsyncInvoke(options *awslambda.EventInvokeConfigOptions)
+	// A warning will be added to functions under the following conditions: - permissions that include `lambda:InvokeFunction` are added to the unqualified function.
+	//
+	// - function.currentVersion is invoked before or after the permission is created.
+	//
+	// This applies only to permissions on Lambda functions, not versions or aliases.
+	// This function is overridden as a noOp for QualifiedFunctionBase.
+	ConsiderWarningOnInvokeFunctionPermissions(scope constructs.Construct, action *string)
 	GeneratePhysicalName() *string
 	// Returns an environment-sensitive token that should be used for the resource's "ARN" attribute (e.g. `bucket.bucketArn`).
 	//
@@ -145,6 +177,25 @@ type RustFunction interface {
 	GetResourceNameAttribute(nameAttr *string) *string
 	// Grant the given identity permissions to invoke this Lambda.
 	GrantInvoke(grantee awsiam.IGrantable) awsiam.Grant
+	// Grant the given identity permissions to invoke this Lambda Function URL.
+	GrantInvokeUrl(grantee awsiam.IGrantable) awsiam.Grant
+	// Mix additional information into the hash of the Version object.
+	//
+	// The Lambda Function construct does its best to automatically create a new
+	// Version when anything about the Function changes (its code, its layers,
+	// any of the other properties).
+	//
+	// However, you can sometimes source information from places that the CDK cannot
+	// look into, like the deploy-time values of SSM parameters. In those cases,
+	// the CDK would not force the creation of a new Version object when it actually
+	// should.
+	//
+	// This method can be used to invalidate the current Version object. Pass in
+	// any string into this method, and make sure the string changes when you know
+	// a new Version needs to be created.
+	//
+	// This method may be called more than once.
+	InvalidateVersionBasedOn(x *string)
 	// Return the given named metric for this Function.
 	Metric(metricName *string, props *awscloudwatch.MetricOptions) awscloudwatch.Metric
 	// How long execution of this Lambda takes.
@@ -165,6 +216,7 @@ type RustFunction interface {
 	MetricThrottles(props *awscloudwatch.MetricOptions) awscloudwatch.Metric
 	// Returns a string representation of this construct.
 	ToString() *string
+	WarnInvokeFunctionPermissions(scope constructs.Construct)
 }
 
 // The jsii proxy struct for RustFunction
@@ -217,6 +269,16 @@ func (j *jsiiProxy_RustFunction) DeadLetterQueue() awssqs.IQueue {
 	_jsii_.Get(
 		j,
 		"deadLetterQueue",
+		&returns,
+	)
+	return returns
+}
+
+func (j *jsiiProxy_RustFunction) DeadLetterTopic() awssns.ITopic {
+	var returns awssns.ITopic
+	_jsii_.Get(
+		j,
+		"deadLetterTopic",
 		&returns,
 	)
 	return returns
@@ -317,6 +379,16 @@ func (j *jsiiProxy_RustFunction) PhysicalName() *string {
 	_jsii_.Get(
 		j,
 		"physicalName",
+		&returns,
+	)
+	return returns
+}
+
+func (j *jsiiProxy_RustFunction) ResourceArnsForGrantInvoke() *[]*string {
+	var returns *[]*string
+	_jsii_.Get(
+		j,
+		"resourceArnsForGrantInvoke",
 		&returns,
 	)
 	return returns
@@ -444,6 +516,25 @@ func RustFunction_FromFunctionAttributes(scope constructs.Construct, id *string,
 	return returns
 }
 
+// Import a lambda function into the CDK using its name.
+func RustFunction_FromFunctionName(scope constructs.Construct, id *string, functionName *string) awslambda.IFunction {
+	_init_.Initialize()
+
+	if err := validateRustFunction_FromFunctionNameParameters(scope, id, functionName); err != nil {
+		panic(err)
+	}
+	var returns awslambda.IFunction
+
+	_jsii_.StaticInvoke(
+		"cargo-lambda-cdk.RustFunction",
+		"fromFunctionName",
+		[]interface{}{scope, id, functionName},
+		&returns,
+	)
+
+	return returns
+}
+
 // Checks if `x` is a construct.
 //
 // Returns: true if `x` is an object created from a class which extends `Construct`.
@@ -460,6 +551,25 @@ func RustFunction_IsConstruct(x interface{}) *bool {
 		"cargo-lambda-cdk.RustFunction",
 		"isConstruct",
 		[]interface{}{x},
+		&returns,
+	)
+
+	return returns
+}
+
+// Returns true if the construct was created by CDK, and false otherwise.
+func RustFunction_IsOwnedResource(construct constructs.IConstruct) *bool {
+	_init_.Initialize()
+
+	if err := validateRustFunction_IsOwnedResourceParameters(construct); err != nil {
+		panic(err)
+	}
+	var returns *bool
+
+	_jsii_.StaticInvoke(
+		"cargo-lambda-cdk.RustFunction",
+		"isOwnedResource",
+		[]interface{}{construct},
 		&returns,
 	)
 
@@ -630,6 +740,22 @@ func RustFunction_MetricAllUnreservedConcurrentExecutions(props *awscloudwatch.M
 	return returns
 }
 
+func (r *jsiiProxy_RustFunction) AddAlias(aliasName *string, options *awslambda.AliasOptions) awslambda.Alias {
+	if err := r.validateAddAliasParameters(aliasName, options); err != nil {
+		panic(err)
+	}
+	var returns awslambda.Alias
+
+	_jsii_.Invoke(
+		r,
+		"addAlias",
+		[]interface{}{aliasName, options},
+		&returns,
+	)
+
+	return returns
+}
+
 func (r *jsiiProxy_RustFunction) AddEnvironment(key *string, value *string, options *awslambda.EnvironmentOptions) awslambda.Function {
 	if err := r.validateAddEnvironmentParameters(key, value, options); err != nil {
 		panic(err)
@@ -667,6 +793,22 @@ func (r *jsiiProxy_RustFunction) AddEventSourceMapping(id *string, options *awsl
 		r,
 		"addEventSourceMapping",
 		[]interface{}{id, options},
+		&returns,
+	)
+
+	return returns
+}
+
+func (r *jsiiProxy_RustFunction) AddFunctionUrl(options *awslambda.FunctionUrlOptions) awslambda.FunctionUrl {
+	if err := r.validateAddFunctionUrlParameters(options); err != nil {
+		panic(err)
+	}
+	var returns awslambda.FunctionUrl
+
+	_jsii_.Invoke(
+		r,
+		"addFunctionUrl",
+		[]interface{}{options},
 		&returns,
 	)
 
@@ -730,6 +872,17 @@ func (r *jsiiProxy_RustFunction) ConfigureAsyncInvoke(options *awslambda.EventIn
 	)
 }
 
+func (r *jsiiProxy_RustFunction) ConsiderWarningOnInvokeFunctionPermissions(scope constructs.Construct, action *string) {
+	if err := r.validateConsiderWarningOnInvokeFunctionPermissionsParameters(scope, action); err != nil {
+		panic(err)
+	}
+	_jsii_.InvokeVoid(
+		r,
+		"considerWarningOnInvokeFunctionPermissions",
+		[]interface{}{scope, action},
+	)
+}
+
 func (r *jsiiProxy_RustFunction) GeneratePhysicalName() *string {
 	var returns *string
 
@@ -789,6 +942,33 @@ func (r *jsiiProxy_RustFunction) GrantInvoke(grantee awsiam.IGrantable) awsiam.G
 	)
 
 	return returns
+}
+
+func (r *jsiiProxy_RustFunction) GrantInvokeUrl(grantee awsiam.IGrantable) awsiam.Grant {
+	if err := r.validateGrantInvokeUrlParameters(grantee); err != nil {
+		panic(err)
+	}
+	var returns awsiam.Grant
+
+	_jsii_.Invoke(
+		r,
+		"grantInvokeUrl",
+		[]interface{}{grantee},
+		&returns,
+	)
+
+	return returns
+}
+
+func (r *jsiiProxy_RustFunction) InvalidateVersionBasedOn(x *string) {
+	if err := r.validateInvalidateVersionBasedOnParameters(x); err != nil {
+		panic(err)
+	}
+	_jsii_.InvokeVoid(
+		r,
+		"invalidateVersionBasedOn",
+		[]interface{}{x},
+	)
 }
 
 func (r *jsiiProxy_RustFunction) Metric(metricName *string, props *awscloudwatch.MetricOptions) awscloudwatch.Metric {
@@ -882,5 +1062,16 @@ func (r *jsiiProxy_RustFunction) ToString() *string {
 	)
 
 	return returns
+}
+
+func (r *jsiiProxy_RustFunction) WarnInvokeFunctionPermissions(scope constructs.Construct) {
+	if err := r.validateWarnInvokeFunctionPermissionsParameters(scope); err != nil {
+		panic(err)
+	}
+	_jsii_.InvokeVoid(
+		r,
+		"warnInvokeFunctionPermissions",
+		[]interface{}{scope},
+	)
 }
 

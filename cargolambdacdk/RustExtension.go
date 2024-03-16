@@ -230,6 +230,25 @@ func RustExtension_IsConstruct(x interface{}) *bool {
 	return returns
 }
 
+// Returns true if the construct was created by CDK, and false otherwise.
+func RustExtension_IsOwnedResource(construct constructs.IConstruct) *bool {
+	_init_.Initialize()
+
+	if err := validateRustExtension_IsOwnedResourceParameters(construct); err != nil {
+		panic(err)
+	}
+	var returns *bool
+
+	_jsii_.StaticInvoke(
+		"cargo-lambda-cdk.RustExtension",
+		"isOwnedResource",
+		[]interface{}{construct},
+		&returns,
+	)
+
+	return returns
+}
+
 // Check whether the given construct is a Resource.
 func RustExtension_IsResource(construct constructs.IConstruct) *bool {
 	_init_.Initialize()

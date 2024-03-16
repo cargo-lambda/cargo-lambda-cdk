@@ -42,6 +42,10 @@ type BundlingOptions struct {
 	// Default: - use the Docker image provided by calavera/cargo-lambda:latest.
 	//
 	DockerImage awscdk.DockerImage `field:"optional" json:"dockerImage" yaml:"dockerImage"`
+	// Additional options when using docker bundling.
+	// Default: - the same defaults as specified by `cdk.BundlingOptions`
+	//
+	DockerOptions *DockerOptions `field:"optional" json:"dockerOptions" yaml:"dockerOptions"`
 	// Environment variables defined when Cargo runs.
 	// Default: - no environment variables are defined.
 	//

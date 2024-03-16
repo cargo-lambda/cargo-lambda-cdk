@@ -101,6 +101,14 @@ func validateRustExtension_IsConstructParameters(x interface{}) error {
 	return nil
 }
 
+func validateRustExtension_IsOwnedResourceParameters(construct constructs.IConstruct) error {
+	if construct == nil {
+		return fmt.Errorf("parameter construct is required, but nil was provided")
+	}
+
+	return nil
+}
+
 func validateRustExtension_IsResourceParameters(construct constructs.IConstruct) error {
 	if construct == nil {
 		return fmt.Errorf("parameter construct is required, but nil was provided")

@@ -14,6 +14,18 @@ import (
 	"github.com/aws/constructs-go/constructs/v10"
 )
 
+func (r *jsiiProxy_RustFunction) validateAddAliasParameters(aliasName *string, options *awslambda.AliasOptions) error {
+	if aliasName == nil {
+		return fmt.Errorf("parameter aliasName is required, but nil was provided")
+	}
+
+	if err := _jsii_.ValidateStruct(options, func() string { return "parameter options" }); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (r *jsiiProxy_RustFunction) validateAddEnvironmentParameters(key *string, value *string, options *awslambda.EnvironmentOptions) error {
 	if key == nil {
 		return fmt.Errorf("parameter key is required, but nil was provided")
@@ -46,6 +58,14 @@ func (r *jsiiProxy_RustFunction) validateAddEventSourceMappingParameters(id *str
 	if options == nil {
 		return fmt.Errorf("parameter options is required, but nil was provided")
 	}
+	if err := _jsii_.ValidateStruct(options, func() string { return "parameter options" }); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *jsiiProxy_RustFunction) validateAddFunctionUrlParameters(options *awslambda.FunctionUrlOptions) error {
 	if err := _jsii_.ValidateStruct(options, func() string { return "parameter options" }); err != nil {
 		return err
 	}
@@ -95,6 +115,18 @@ func (r *jsiiProxy_RustFunction) validateConfigureAsyncInvokeParameters(options 
 	return nil
 }
 
+func (r *jsiiProxy_RustFunction) validateConsiderWarningOnInvokeFunctionPermissionsParameters(scope constructs.Construct, action *string) error {
+	if scope == nil {
+		return fmt.Errorf("parameter scope is required, but nil was provided")
+	}
+
+	if action == nil {
+		return fmt.Errorf("parameter action is required, but nil was provided")
+	}
+
+	return nil
+}
+
 func (r *jsiiProxy_RustFunction) validateGetResourceArnAttributeParameters(arnAttr *string, arnComponents *awscdk.ArnComponents) error {
 	if arnAttr == nil {
 		return fmt.Errorf("parameter arnAttr is required, but nil was provided")
@@ -121,6 +153,22 @@ func (r *jsiiProxy_RustFunction) validateGetResourceNameAttributeParameters(name
 func (r *jsiiProxy_RustFunction) validateGrantInvokeParameters(grantee awsiam.IGrantable) error {
 	if grantee == nil {
 		return fmt.Errorf("parameter grantee is required, but nil was provided")
+	}
+
+	return nil
+}
+
+func (r *jsiiProxy_RustFunction) validateGrantInvokeUrlParameters(grantee awsiam.IGrantable) error {
+	if grantee == nil {
+		return fmt.Errorf("parameter grantee is required, but nil was provided")
+	}
+
+	return nil
+}
+
+func (r *jsiiProxy_RustFunction) validateInvalidateVersionBasedOnParameters(x *string) error {
+	if x == nil {
+		return fmt.Errorf("parameter x is required, but nil was provided")
 	}
 
 	return nil
@@ -165,6 +213,14 @@ func (r *jsiiProxy_RustFunction) validateMetricInvocationsParameters(props *awsc
 func (r *jsiiProxy_RustFunction) validateMetricThrottlesParameters(props *awscloudwatch.MetricOptions) error {
 	if err := _jsii_.ValidateStruct(props, func() string { return "parameter props" }); err != nil {
 		return err
+	}
+
+	return nil
+}
+
+func (r *jsiiProxy_RustFunction) validateWarnInvokeFunctionPermissionsParameters(scope constructs.Construct) error {
+	if scope == nil {
+		return fmt.Errorf("parameter scope is required, but nil was provided")
 	}
 
 	return nil
@@ -217,9 +273,33 @@ func validateRustFunction_FromFunctionAttributesParameters(scope constructs.Cons
 	return nil
 }
 
+func validateRustFunction_FromFunctionNameParameters(scope constructs.Construct, id *string, functionName *string) error {
+	if scope == nil {
+		return fmt.Errorf("parameter scope is required, but nil was provided")
+	}
+
+	if id == nil {
+		return fmt.Errorf("parameter id is required, but nil was provided")
+	}
+
+	if functionName == nil {
+		return fmt.Errorf("parameter functionName is required, but nil was provided")
+	}
+
+	return nil
+}
+
 func validateRustFunction_IsConstructParameters(x interface{}) error {
 	if x == nil {
 		return fmt.Errorf("parameter x is required, but nil was provided")
+	}
+
+	return nil
+}
+
+func validateRustFunction_IsOwnedResourceParameters(construct constructs.IConstruct) error {
+	if construct == nil {
+		return fmt.Errorf("parameter construct is required, but nil was provided")
 	}
 
 	return nil

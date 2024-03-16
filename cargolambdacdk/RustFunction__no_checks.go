@@ -4,6 +4,10 @@ package cargolambdacdk
 
 // Building without runtime type checking enabled, so all the below just return nil
 
+func (r *jsiiProxy_RustFunction) validateAddAliasParameters(aliasName *string, options *awslambda.AliasOptions) error {
+	return nil
+}
+
 func (r *jsiiProxy_RustFunction) validateAddEnvironmentParameters(key *string, value *string, options *awslambda.EnvironmentOptions) error {
 	return nil
 }
@@ -13,6 +17,10 @@ func (r *jsiiProxy_RustFunction) validateAddEventSourceParameters(source awslamb
 }
 
 func (r *jsiiProxy_RustFunction) validateAddEventSourceMappingParameters(id *string, options *awslambda.EventSourceMappingOptions) error {
+	return nil
+}
+
+func (r *jsiiProxy_RustFunction) validateAddFunctionUrlParameters(options *awslambda.FunctionUrlOptions) error {
 	return nil
 }
 
@@ -32,6 +40,10 @@ func (r *jsiiProxy_RustFunction) validateConfigureAsyncInvokeParameters(options 
 	return nil
 }
 
+func (r *jsiiProxy_RustFunction) validateConsiderWarningOnInvokeFunctionPermissionsParameters(scope constructs.Construct, action *string) error {
+	return nil
+}
+
 func (r *jsiiProxy_RustFunction) validateGetResourceArnAttributeParameters(arnAttr *string, arnComponents *awscdk.ArnComponents) error {
 	return nil
 }
@@ -41,6 +53,14 @@ func (r *jsiiProxy_RustFunction) validateGetResourceNameAttributeParameters(name
 }
 
 func (r *jsiiProxy_RustFunction) validateGrantInvokeParameters(grantee awsiam.IGrantable) error {
+	return nil
+}
+
+func (r *jsiiProxy_RustFunction) validateGrantInvokeUrlParameters(grantee awsiam.IGrantable) error {
+	return nil
+}
+
+func (r *jsiiProxy_RustFunction) validateInvalidateVersionBasedOnParameters(x *string) error {
 	return nil
 }
 
@@ -64,6 +84,10 @@ func (r *jsiiProxy_RustFunction) validateMetricThrottlesParameters(props *awsclo
 	return nil
 }
 
+func (r *jsiiProxy_RustFunction) validateWarnInvokeFunctionPermissionsParameters(scope constructs.Construct) error {
+	return nil
+}
+
 func validateRustFunction_ClassifyVersionPropertyParameters(propertyName *string, locked *bool) error {
 	return nil
 }
@@ -76,7 +100,15 @@ func validateRustFunction_FromFunctionAttributesParameters(scope constructs.Cons
 	return nil
 }
 
+func validateRustFunction_FromFunctionNameParameters(scope constructs.Construct, id *string, functionName *string) error {
+	return nil
+}
+
 func validateRustFunction_IsConstructParameters(x interface{}) error {
+	return nil
+}
+
+func validateRustFunction_IsOwnedResourceParameters(construct constructs.IConstruct) error {
 	return nil
 }
 
