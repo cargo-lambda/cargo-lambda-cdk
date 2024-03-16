@@ -102,6 +102,24 @@ new RustFunction(this, 'Rust function', {
 });
 ```
 
+Additional docker options such as the user, file access, working directory or volumes can be configured by using the `bundling.dockerOptions` prop:
+
+```ts
+import * as cdk from 'aws-cdk-lib';
+import { RustFunction } from 'cargo-lambda-cdk';
+
+new RustFunction(this, 'Rust function', {
+  manifestPath: 'path/to/package/directory/with/Cargo.toml',
+  bundling: {
+    dockerOptions: {
+      bundlingFileAccess: cdk.BundlingFileAccess.VOLUME_COPY,
+    },
+  },
+});
+```
+
+This property mirrors values from the `cdk.BundlingOptions` and is passed into `Code.fromAsset`.
+
 ### Command hooks
 
 It is  possible to run additional commands by specifying the `commandHooks` prop:
