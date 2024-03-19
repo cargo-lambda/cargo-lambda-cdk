@@ -38,6 +38,11 @@ export interface BundlingProps extends BundlingOptions {
    * Whether the code to compile is a Lambda Extension or not.
    */
   readonly lambdaExtension?: boolean;
+
+  /**
+   * Whether to disable optimizations (`--disable-optimizations` in Cargo Lambda).
+   */
+  readonly disableOptimizations?: boolean;
 }
 
 interface CommandOptions {
@@ -47,6 +52,7 @@ interface CommandOptions {
   readonly osPlatform: NodeJS.Platform;
   readonly architecture?: Architecture;
   readonly lambdaExtension?: boolean;
+  readonly disableOptimizations?: boolean;
   readonly manifest: Manifest;
 }
 
@@ -111,6 +117,7 @@ export class Bundling implements cdk.BundlingOptions {
       binaryName: props.binaryName,
       architecture: props.architecture,
       lambdaExtension: props.lambdaExtension,
+      disableOptimizations: props.disableOptimizations,
     });
 
     this.command = ['bash', '-c', bundlingCommand];
@@ -127,6 +134,7 @@ export class Bundling implements cdk.BundlingOptions {
           binaryName: props.binaryName,
           architecture: props.architecture,
           lambdaExtension: props.lambdaExtension,
+          disableOptimizations: props.disableOptimizations,
         });
       };
 
@@ -173,6 +181,10 @@ export class Bundling implements cdk.BundlingOptions {
 
     if (props.lambdaExtension) {
       buildBinary.push('--extension');
+    }
+
+    if (props.disableOptimizations) {
+      buildBinary.push('--disable-optimizations');
     }
 
     if (props.architecture) {
