@@ -2040,6 +2040,7 @@ const rustFunctionProps: RustFunctionProps = { ... }
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.vpcSubnets">vpcSubnets</a></code> | <code>aws-cdk-lib.aws_ec2.SubnetSelection</code> | Where to place the network interfaces within the VPC. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.binaryName">binaryName</a></code> | <code>string</code> | The name of the binary to build, in case that's different than the package's name. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.bundling">bundling</a></code> | <code><a href="#cargo-lambda-cdk.BundlingOptions">BundlingOptions</a></code> | Bundling options. |
+| <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.disableOptimizations">disableOptimizations</a></code> | <code>boolean</code> | Whether to disable optimizations (`--disable-optimizations` in Cargo Lambda). |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.manifestPath">manifestPath</a></code> | <code>string</code> | Path to a directory containing your Cargo.toml file, or to your Cargo.toml directly. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.runtime">runtime</a></code> | <code>string</code> | The Lambda runtime to deploy this function. |
 
@@ -2612,6 +2613,18 @@ public readonly bundling: BundlingOptions;
 - *Default:* use default bundling options
 
 Bundling options.
+
+---
+
+##### `disableOptimizations`<sup>Optional</sup> <a name="disableOptimizations" id="cargo-lambda-cdk.RustFunctionProps.property.disableOptimizations"></a>
+
+```typescript
+public readonly disableOptimizations: boolean;
+```
+
+- *Type:* boolean
+
+Whether to disable optimizations (`--disable-optimizations` in Cargo Lambda).
 
 ---
 

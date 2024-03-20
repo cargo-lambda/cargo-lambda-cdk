@@ -66,4 +66,22 @@ describe('CargoLambda.RustFunction', () => {
       app.synth();
     });
   });
+
+  describe('With disableOptimizations', () => {
+    const app = new App();
+    const stack = new Stack(app);
+    const testSource = join(__dirname, 'fixtures/single-package');
+
+    new RustFunction(stack, 'rust function', {
+      manifestPath: testSource,
+      bundling: {
+        forcedDockerBundling,
+      },
+      disableOptimizations: true,
+    });
+
+    test('bundle function', () => {
+      app.synth();
+    });
+  });
 });

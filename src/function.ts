@@ -39,6 +39,11 @@ export interface RustFunctionProps extends FunctionOptions {
    * @default - use default bundling options
    */
   readonly bundling?: BundlingOptions;
+
+  /**
+   * Whether to disable optimizations (`--disable-optimizations` in Cargo Lambda).
+   */
+  readonly disableOptimizations?: boolean;
 }
 
 /**
@@ -59,6 +64,7 @@ export class RustFunction extends Function {
         ...bundling,
         manifestPath,
         binaryName: props?.binaryName,
+        disableOptimizations: props?.disableOptimizations,
       }),
       handler: 'bootstrap',
     });
