@@ -34,6 +34,8 @@ type BundlingOptions struct {
 	// the default is `CUSTOM`.
 	//
 	AssetHashType awscdk.AssetHashType `field:"optional" json:"assetHashType" yaml:"assetHashType"`
+	// Additional list of flags to pass to `cargo lambda build`.
+	CargoLambdaFlags *[]*string `field:"optional" json:"cargoLambdaFlags" yaml:"cargoLambdaFlags"`
 	// Command hooks.
 	// Default: - do not run additional commands.
 	//
