@@ -133,4 +133,16 @@ describe('bundlingOptionsOverrideDefaults', () => {
 
     expect((bundlingOptions as any).options.bundling.bundlingFileAccess).toEqual(cdk.BundlingFileAccess.VOLUME_COPY);
   });
+
+  describe('Add Cargo Lambda Build flags', () => {
+    const bundlingOptions = Bundling.bundle({
+      manifestPath: getTestManifestPath(),
+      forcedDockerBundling: true,
+      cargoLambdaFlags: ['--disable-optimizations'],
+    });
+
+    const command = 'cargo lambda build --lambda-dir /asset-output --release --flatten simple-package --disable-optimizations';
+
+    expect((bundlingOptions as any).options.bundling.command).toContain(command);
+  })
 });

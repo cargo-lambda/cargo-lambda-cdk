@@ -85,6 +85,28 @@ new RustFunction(this, 'Rust function', {
 });
 ```
 
+### Cargo Lambda Build flags
+
+Use the `cargoLambdaFlags` option to add additional flags to the `cargo lambda build` command that's executed to bundle your function. You don't need to use this flag to set options like the target architecture or the binary to compile, since the construct infers those from other props.
+
+If these flags include a `--target` flag, it will override the `architecture` option. If these flags include a `--release` or `--debug` flag, it will override the CDK's debug option.
+
+```ts
+import { RustFunction } from 'cargo-lambda-cdk';
+
+new RustFunction(this, 'Rust function', {
+  manifestPath: 'path/to/package/directory/with/Cargo.toml',
+  bundling: {
+    cargoLambdaFlags: [
+      '--target',
+      'x86_64-unknown-linux-musl',
+      '--debug',
+      '--disable-optimizations',
+    ],
+  },
+});
+```
+
 ### Docker
 
 To force bundling in a docker container even if `Cargo Lambda` is available in your environment, set the `forcedDockerBundling` prop to `true`. This is useful if you want to make sure that your function is built in a consistent Lambda compatible environment.

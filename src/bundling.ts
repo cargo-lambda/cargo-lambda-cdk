@@ -40,9 +40,9 @@ export interface BundlingProps extends BundlingOptions {
   readonly lambdaExtension?: boolean;
 
   /**
-   * Whether to disable optimizations (`--disable-optimizations` in Cargo Lambda).
+   * Set a list of flags to pass to `cargo lambda build`.
    */
-  readonly disableOptimizations?: boolean;
+  readonly cargoLambdaFlags?: string[];
 }
 
 interface CommandOptions {
@@ -52,7 +52,7 @@ interface CommandOptions {
   readonly osPlatform: NodeJS.Platform;
   readonly architecture?: Architecture;
   readonly lambdaExtension?: boolean;
-  readonly disableOptimizations?: boolean;
+  readonly cargoLambdaFlags: string[];
   readonly manifest: Manifest;
 }
 
@@ -108,16 +108,18 @@ export class Bundling implements cdk.BundlingOptions {
 
     const manifest = getManifest(props.manifestPath);
 
+    const cargoLambdaFlags = props.cargoLambdaFlags ?? [];
+
     const osPlatform = platform();
     const bundlingCommand = this.createBundlingCommand({
       osPlatform,
       manifest,
+      cargoLambdaFlags,
       outputDir: cdk.AssetStaging.BUNDLING_OUTPUT_DIR,
       inputDir: cdk.AssetStaging.BUNDLING_INPUT_DIR,
       binaryName: props.binaryName,
       architecture: props.architecture,
       lambdaExtension: props.lambdaExtension,
-      disableOptimizations: props.disableOptimizations,
     });
 
     this.command = ['bash', '-c', bundlingCommand];
@@ -130,11 +132,11 @@ export class Bundling implements cdk.BundlingOptions {
           osPlatform,
           manifest,
           outputDir,
+          cargoLambdaFlags,
           inputDir: projectRoot,
           binaryName: props.binaryName,
           architecture: props.architecture,
           lambdaExtension: props.lambdaExtension,
-          disableOptimizations: props.disableOptimizations,
         });
       };
 
@@ -174,20 +176,20 @@ export class Bundling implements cdk.BundlingOptions {
       'cargo',
       'lambda',
       'build',
-      '--release',
       '--lambda-dir',
       props.outputDir,
     ];
+
+    if (!props.cargoLambdaFlags.includes('--release') &&
+      !props.cargoLambdaFlags.includes('--debug')) {
+      buildBinary.push('--release');
+    }
 
     if (props.lambdaExtension) {
       buildBinary.push('--extension');
     }
 
-    if (props.disableOptimizations) {
-      buildBinary.push('--disable-optimizations');
-    }
-
-    if (props.architecture) {
+    if (props.architecture && !props.cargoLambdaFlags.includes('--target')) {
       const targetFlag = props.architecture.name == Architecture.ARM_64.name ? '--arm64' : '--x86-64';
       buildBinary.push(targetFlag);
     }
@@ -224,7 +226,7 @@ export class Bundling implements cdk.BundlingOptions {
       buildBinary.push(packageName);
     }
 
-    const command = buildBinary.join(' ');
+    const command = buildBinary.concat(props.cargoLambdaFlags).join(' ');
 
     return chain([
       ...this.props.commandHooks?.beforeBundling(props.inputDir, props.outputDir) ?? [],
