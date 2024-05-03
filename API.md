@@ -1575,6 +1575,7 @@ const bundlingOptions: BundlingOptions = { ... }
 | <code><a href="#cargo-lambda-cdk.BundlingOptions.property.architecture">architecture</a></code> | <code>aws-cdk-lib.aws_lambda.Architecture</code> | The system architecture of the lambda function. |
 | <code><a href="#cargo-lambda-cdk.BundlingOptions.property.assetHash">assetHash</a></code> | <code>string</code> | Specify a custom hash for this asset. |
 | <code><a href="#cargo-lambda-cdk.BundlingOptions.property.assetHashType">assetHashType</a></code> | <code>aws-cdk-lib.AssetHashType</code> | Determines how the asset hash is calculated. |
+| <code><a href="#cargo-lambda-cdk.BundlingOptions.property.cargoLambdaFlags">cargoLambdaFlags</a></code> | <code>string[]</code> | Additional list of flags to pass to `cargo lambda build`. |
 | <code><a href="#cargo-lambda-cdk.BundlingOptions.property.commandHooks">commandHooks</a></code> | <code><a href="#cargo-lambda-cdk.ICommandHooks">ICommandHooks</a></code> | Command hooks. |
 | <code><a href="#cargo-lambda-cdk.BundlingOptions.property.dockerImage">dockerImage</a></code> | <code>aws-cdk-lib.DockerImage</code> | A custom bundling Docker image. |
 | <code><a href="#cargo-lambda-cdk.BundlingOptions.property.dockerOptions">dockerOptions</a></code> | <code><a href="#cargo-lambda-cdk.DockerOptions">DockerOptions</a></code> | Additional options when using docker bundling. |
@@ -1633,6 +1634,18 @@ Determines how the asset hash is calculated.
 
 Assets will
 get rebuilt and uploaded only if their hash has changed.
+
+---
+
+##### `cargoLambdaFlags`<sup>Optional</sup> <a name="cargoLambdaFlags" id="cargo-lambda-cdk.BundlingOptions.property.cargoLambdaFlags"></a>
+
+```typescript
+public readonly cargoLambdaFlags: string[];
+```
+
+- *Type:* string[]
+
+Additional list of flags to pass to `cargo lambda build`.
 
 ---
 

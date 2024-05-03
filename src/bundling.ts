@@ -25,11 +25,6 @@ export interface BundlingProps extends BundlingOptions {
   readonly manifestPath: string;
 
   /**
-   * The system architecture of the lambda function
-   */
-  readonly architecture?: Architecture;
-
-  /**
    * The name of the binary to build, in case that's different than the package's name.
    */
   readonly binaryName?: string;
@@ -38,11 +33,6 @@ export interface BundlingProps extends BundlingOptions {
    * Whether the code to compile is a Lambda Extension or not.
    */
   readonly lambdaExtension?: boolean;
-
-  /**
-   * Set a list of flags to pass to `cargo lambda build`.
-   */
-  readonly cargoLambdaFlags?: string[];
 }
 
 interface CommandOptions {

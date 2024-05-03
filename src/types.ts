@@ -175,6 +175,11 @@ export interface BundlingOptions {
    * @default - X86_64
    */
   readonly architecture?: Architecture;
+
+  /**
+   * Additional list of flags to pass to `cargo lambda build`.
+   */
+  readonly cargoLambdaFlags?: string[];
 }
 
 /**
