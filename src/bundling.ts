@@ -40,12 +40,6 @@ export interface BundlingProps extends BundlingOptions {
   readonly lambdaExtension?: boolean;
 
   /**
-   * @deprecated Use the `cargoLambdaFlags` option instead.
-   * Whether to disable optimizations (`--disable-optimizations` in Cargo Lambda).
-   */
-  readonly disableOptimizations?: boolean;
-
-  /**
    * Set a list of flags to pass to `cargo lambda build`.
    */
   readonly cargoLambdaFlags?: string[];
@@ -115,9 +109,6 @@ export class Bundling implements cdk.BundlingOptions {
     const manifest = getManifest(props.manifestPath);
 
     const cargoLambdaFlags = props.cargoLambdaFlags ?? [];
-    if (props.disableOptimizations) {
-      cargoLambdaFlags.push('--disable-optimizations');
-    }
 
     const osPlatform = platform();
     const bundlingCommand = this.createBundlingCommand({

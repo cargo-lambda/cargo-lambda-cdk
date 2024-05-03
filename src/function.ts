@@ -39,12 +39,6 @@ export interface RustFunctionProps extends FunctionOptions {
    * @default - use default bundling options
    */
   readonly bundling?: BundlingOptions;
-
-  /**
-   * @deprecated Use BundlingOptions#cargoLambdaFlags instead
-   * Whether to disable optimizations (`--disable-optimizations` in Cargo Lambda).
-   */
-  readonly disableOptimizations?: boolean;
 }
 
 /**
