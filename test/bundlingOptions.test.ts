@@ -144,5 +144,5 @@ describe('bundlingOptionsOverrideDefaults', () => {
     const command = 'cargo lambda build --lambda-dir /asset-output --release --flatten simple-package --disable-optimizations';
 
     expect((bundlingOptions as any).options.bundling.command).toContain(command);
-  })
+  });
 });
