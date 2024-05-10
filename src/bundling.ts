@@ -43,6 +43,7 @@ interface CommandOptions {
   readonly architecture?: Architecture;
   readonly lambdaExtension?: boolean;
   readonly cargoLambdaFlags: string[];
+  readonly profile: string;
   readonly manifest: Manifest;
 }
 
@@ -99,12 +100,14 @@ export class Bundling implements cdk.BundlingOptions {
     const manifest = getManifest(props.manifestPath);
 
     const cargoLambdaFlags = props.cargoLambdaFlags ?? [];
+    const profile = props.profile ?? 'release';
 
     const osPlatform = platform();
     const bundlingCommand = this.createBundlingCommand({
       osPlatform,
       manifest,
       cargoLambdaFlags,
+      profile,
       outputDir: cdk.AssetStaging.BUNDLING_OUTPUT_DIR,
       inputDir: cdk.AssetStaging.BUNDLING_INPUT_DIR,
       binaryName: props.binaryName,
@@ -123,6 +126,7 @@ export class Bundling implements cdk.BundlingOptions {
           manifest,
           outputDir,
           cargoLambdaFlags,
+          profile,
           inputDir: projectRoot,
           binaryName: props.binaryName,
           architecture: props.architecture,
@@ -170,9 +174,14 @@ export class Bundling implements cdk.BundlingOptions {
       props.outputDir,
     ];
 
-    if (!props.cargoLambdaFlags.includes('--release') &&
-      !props.cargoLambdaFlags.includes('--debug')) {
-      buildBinary.push('--release');
+    if (!props.cargoLambdaFlags.includes('--profile')
+      && !props.cargoLambdaFlags.includes('--release')) {
+      if (props.profile === 'release') {
+        buildBinary.push('--release');
+      } else {
+        buildBinary.push('--profile');
+        buildBinary.push(props.profile);
+      }
     }
 
     if (props.lambdaExtension) {

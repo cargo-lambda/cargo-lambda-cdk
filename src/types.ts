@@ -180,6 +180,13 @@ export interface BundlingOptions {
    * Additional list of flags to pass to `cargo lambda build`.
    */
   readonly cargoLambdaFlags?: string[];
+
+  /**
+   * Specify the Cargo Build profile to use.
+   *
+   * @default - `release`
+   */
+  readonly profile?: string;
 }
 
 /**

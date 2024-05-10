@@ -1581,6 +1581,7 @@ const bundlingOptions: BundlingOptions = { ... }
 | <code><a href="#cargo-lambda-cdk.BundlingOptions.property.dockerOptions">dockerOptions</a></code> | <code><a href="#cargo-lambda-cdk.DockerOptions">DockerOptions</a></code> | Additional options when using docker bundling. |
 | <code><a href="#cargo-lambda-cdk.BundlingOptions.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Environment variables defined when Cargo runs. |
 | <code><a href="#cargo-lambda-cdk.BundlingOptions.property.forcedDockerBundling">forcedDockerBundling</a></code> | <code>boolean</code> | Force bundling in a Docker container even if local bundling is possible. |
+| <code><a href="#cargo-lambda-cdk.BundlingOptions.property.profile">profile</a></code> | <code>string</code> | Specify the Cargo Build profile to use. |
 
 ---
 
@@ -1711,6 +1712,19 @@ public readonly forcedDockerBundling: boolean;
 - *Default:* false
 
 Force bundling in a Docker container even if local bundling is possible.
+
+---
+
+##### `profile`<sup>Optional</sup> <a name="profile" id="cargo-lambda-cdk.BundlingOptions.property.profile"></a>
+
+```typescript
+public readonly profile: string;
+```
+
+- *Type:* string
+- *Default:* `release`
+
+Specify the Cargo Build profile to use.
 
 ---
 

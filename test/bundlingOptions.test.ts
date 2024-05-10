@@ -145,4 +145,63 @@ describe('bundlingOptionsOverrideDefaults', () => {
 
     expect((bundlingOptions as any).options.bundling.command).toContain(command);
   });
+
+  describe('Add Cargo Lambda Build with release flag', () => {
+    const bundlingOptions = Bundling.bundle({
+      manifestPath: getTestManifestPath(),
+      forcedDockerBundling: true,
+      cargoLambdaFlags: ['--release'],
+    });
+
+    const command = 'cargo lambda build --lambda-dir /asset-output --flatten simple-package --release';
+
+    expect((bundlingOptions as any).options.bundling.command).toContain(command);
+  });
+
+  describe('Add Cargo Lambda Build with profile flag', () => {
+    const bundlingOptions = Bundling.bundle({
+      manifestPath: getTestManifestPath(),
+      forcedDockerBundling: true,
+      cargoLambdaFlags: ['--profile', 'dev'],
+    });
+
+    const command = 'cargo lambda build --lambda-dir /asset-output --flatten simple-package --profile dev';
+
+    expect((bundlingOptions as any).options.bundling.command).toContain(command);
+  });
+
+  describe('Add Cargo Lambda Build without profile info', () => {
+    const bundlingOptions = Bundling.bundle({
+      manifestPath: getTestManifestPath(),
+      forcedDockerBundling: true,
+    });
+
+    const command = 'cargo lambda build --lambda-dir /asset-output --release --flatten simple-package';
+
+    expect((bundlingOptions as any).options.bundling.command).toContain(command);
+  });
+
+  describe('Add Cargo Lambda Build with profile info', () => {
+    const bundlingOptions = Bundling.bundle({
+      manifestPath: getTestManifestPath(),
+      forcedDockerBundling: true,
+      profile: 'test',
+    });
+
+    const command = 'cargo lambda build --lambda-dir /asset-output --profile test --flatten simple-package';
+
+    expect((bundlingOptions as any).options.bundling.command).toContain(command);
+  });
+
+  describe('Add Cargo Lambda Build with release profile info', () => {
+    const bundlingOptions = Bundling.bundle({
+      manifestPath: getTestManifestPath(),
+      forcedDockerBundling: true,
+      profile: 'release',
+    });
+
+    const command = 'cargo lambda build --lambda-dir /asset-output --release --flatten simple-package';
+
+    expect((bundlingOptions as any).options.bundling.command).toContain(command);
+  });
 });
