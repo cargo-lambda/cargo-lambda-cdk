@@ -85,11 +85,26 @@ new RustFunction(this, 'Rust function', {
 });
 ```
 
+### Cargo Build profiles
+
+Use the `profile` option if you want to build with a different Cargo profile that's not `release`:
+
+```ts
+import { RustFunction } from 'cargo-lambda-cdk';
+
+new RustFunction(this, 'Rust function', {
+  manifestPath: 'path/to/package/directory/with/Cargo.toml',
+  bundling: {
+    profile: 'dev'
+  },
+});
+```
+
 ### Cargo Lambda Build flags
 
 Use the `cargoLambdaFlags` option to add additional flags to the `cargo lambda build` command that's executed to bundle your function. You don't need to use this flag to set options like the target architecture or the binary to compile, since the construct infers those from other props.
 
-If these flags include a `--target` flag, it will override the `architecture` option. If these flags include a `--release` or `--debug` flag, it will override the CDK's debug option.
+If these flags include a `--target` flag, it will override the `architecture` option. If these flags include a `--release` or `--profile` flag, it will override the release or any other profile specified.
 
 ```ts
 import { RustFunction } from 'cargo-lambda-cdk';
