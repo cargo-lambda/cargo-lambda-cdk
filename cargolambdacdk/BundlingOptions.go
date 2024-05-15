@@ -56,5 +56,9 @@ type BundlingOptions struct {
 	// Default: - false.
 	//
 	ForcedDockerBundling *bool `field:"optional" json:"forcedDockerBundling" yaml:"forcedDockerBundling"`
+	// Specify the Cargo Build profile to use.
+	// Default: - `release`.
+	//
+	Profile *string `field:"optional" json:"profile" yaml:"profile"`
 }
 
