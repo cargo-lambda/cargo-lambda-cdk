@@ -110,6 +110,11 @@
       "type": "override"
     },
     {
+      "name": "@oven/zig",
+      "version": "0.12.0-dev.1286",
+      "type": "peer"
+    },
+    {
       "name": "aws-cdk-lib",
       "version": "^2.63.0",
       "type": "peer"

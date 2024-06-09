@@ -44,6 +44,7 @@ project.addDevDeps('@types/node@^18');
 project.addDevDeps('jest@^29');
 project.addDevDeps('ts-jest@^29');
 project.addBundledDeps('js-toml@^0.1.1');
+project.addPeerDeps('@oven/zig@0.12.0-dev.1286');
 
 project.addGitIgnore('target');
 project.gitignore.removePatterns('*.tgz');

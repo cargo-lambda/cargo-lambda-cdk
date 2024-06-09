@@ -813,6 +813,48 @@
   resolved "https://registry.npmjs.org/@oozcitak/util/-/util-8.3.8.tgz"
   integrity sha512-T8TbSnGsxo6TDBJx/Sgv/BlVJL3tshxZP7Aq5R1mSnM5OcHY2dQaxLMu2+E8u3gN0MLOzdjurqN4ZRVuzQycOQ==
 
+"@oven/zig-darwin-arm64@0.12.0-dev.1286+cc394431a":
+  version "0.12.0-dev.1286"
+  resolved "https://registry.yarnpkg.com/@oven/zig-darwin-arm64/-/zig-darwin-arm64-0.12.0-dev.1286.tgz#0877b1171835d195b6589f83dee7f3922313a28e"
+  integrity sha512-NgD2mUxLHi2Tx2T2MXbylaHwDTUTWdanwj1aCY4OY72YD2ODXaNBN2pfXqH8DI1rXzc2pSDTvtg44KWHwkdEzQ==
+
+"@oven/zig-darwin-x64@0.12.0-dev.1286+cc394431a":
+  version "0.12.0-dev.1286"
+  resolved "https://registry.yarnpkg.com/@oven/zig-darwin-x64/-/zig-darwin-x64-0.12.0-dev.1286.tgz#0ae13960e6a33825864ce21e40779943dd3e8669"
+  integrity sha512-W+hTSAbfHHtzcMtYcft5Z2pT5t4m9VWEfjVNRVMuKRkIOGCZniP/1gPNzxSRFf2b98SoqaARZtU7YUCWYTnV0g==
+
+"@oven/zig-linux-arm64@0.12.0-dev.1286+cc394431a":
+  version "0.12.0-dev.1286"
+  resolved "https://registry.yarnpkg.com/@oven/zig-linux-arm64/-/zig-linux-arm64-0.12.0-dev.1286.tgz#73f5004085c9bdf128e80e95b9103c53adf4ebdf"
+  integrity sha512-hPc9boRWfZjz+7LwFAeGD2GtbtQd4pfoplkrA3r4QzYig5NcFXGWoSsrp7iFqpJ7fq2KZPIKVaAJjH1VD4b05A==
+
+"@oven/zig-linux-x64@0.12.0-dev.1286+cc394431a":
+  version "0.12.0-dev.1286"
+  resolved "https://registry.yarnpkg.com/@oven/zig-linux-x64/-/zig-linux-x64-0.12.0-dev.1286.tgz#f7ed423dbe7eb624c3383e5976d73a2320b9122e"
+  integrity sha512-8vT8FO4smHeurOHFdJ7zyUvOifxkTtii2Y7+lEkkSKBEHozsHUKSnElSV8q7hNl3pH5Rl4u/rw9eWsF+ejGNLg==
+
+"@oven/zig-win32-arm64@0.12.0-dev.1286+cc394431a":
+  version "0.12.0-dev.1286"
+  resolved "https://registry.yarnpkg.com/@oven/zig-win32-arm64/-/zig-win32-arm64-0.12.0-dev.1286.tgz#b7c9e673623d4c6f5e1ea7066d48541750aa9364"
+  integrity sha512-3xRKfL4Ww0ExbMD8t8SoUp4m6Bd1vYUG3IbmdpYEIltY21cp6KE7TmKGR4z2IfljuvQSD7RsBpVPIpAC0ZN0pg==
+
+"@oven/zig-win32-x64@0.12.0-dev.1286+cc394431a":
+  version "0.12.0-dev.1286"
+  resolved "https://registry.yarnpkg.com/@oven/zig-win32-x64/-/zig-win32-x64-0.12.0-dev.1286.tgz#07a3705aabfd71f1bcea1eecc05a73f3f5ca3123"
+  integrity sha512-gFHG4Euq1YYoJNJPolCremn3+A3zhuJ+B0v5JG+wqphokWzvGifyIirbI/318HA3uMKRGHBDQO7yBZhn476m3g==
+
+"@oven/zig@0.12.0-dev.1286":
+  version "0.12.0-dev.1286"
+  resolved "https://registry.yarnpkg.com/@oven/zig/-/zig-0.12.0-dev.1286.tgz#a6904ff1510f905bb62174d59887a85fced9dc0c"
+  integrity sha512-3a0pWrUiuWuqCjSI5yPX5WD2PNNYaHH4nkzQVuo9eg6hvTU8vqk0hCNegw7mJCVjwoslT0zyoEq19QRqX7T89A==
+  optionalDependencies:
+    "@oven/zig-darwin-arm64" "0.12.0-dev.1286+cc394431a"
+    "@oven/zig-darwin-x64" "0.12.0-dev.1286+cc394431a"
+    "@oven/zig-linux-arm64" "0.12.0-dev.1286+cc394431a"
+    "@oven/zig-linux-x64" "0.12.0-dev.1286+cc394431a"
+    "@oven/zig-win32-arm64" "0.12.0-dev.1286+cc394431a"
+    "@oven/zig-win32-x64" "0.12.0-dev.1286+cc394431a"
+
 "@pkgjs/parseargs@^0.11.0":
   version "0.11.0"
   resolved "https://registry.npmjs.org/@pkgjs/parseargs/-/parseargs-0.11.0.tgz"

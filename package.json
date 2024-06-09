@@ -38,6 +38,7 @@
     "organization": false
   },
   "devDependencies": {
+    "@oven/zig": "0.12.0-dev.1286",
     "@types/jest": "^27",
     "@types/node": "^18",
     "@typescript-eslint/eslint-plugin": "^6",
@@ -61,6 +62,7 @@
     "typescript": "5.x"
   },
   "peerDependencies": {
+    "@oven/zig": "0.12.0-dev.1286",
     "aws-cdk-lib": "^2.63.0",
     "constructs": "^10.0.5"
   },

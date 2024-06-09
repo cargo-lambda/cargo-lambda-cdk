@@ -55,20 +55,19 @@ export class Bundling implements cdk.BundlingOptions {
     const projectRoot = dirname(options.manifestPath);
     const bundling = new Bundling(projectRoot, options);
 
+    const dockerOptions = Object.fromEntries(
+      Object.entries(options.dockerOptions ?? {}).filter(
+        ([_, value]) => value !== undefined,
+      ),
+    );
+
     return Code.fromAsset(projectRoot, {
       assetHashType: options.assetHashType ?? cdk.AssetHashType.OUTPUT,
       assetHash: options.assetHash,
       bundling: {
-        image: bundling.image,
-        command: bundling.command,
-        environment: bundling.environment,
-        local: bundling.local,
+        ...bundling,
         // Overwrite properties which are defined from the docker options.
-        ...Object.fromEntries(
-          Object.entries(options.dockerOptions ?? {}).filter(
-            ([_, value]) => value !== undefined,
-          ),
-        ),
+        ...dockerOptions,
       },
     });
   }
