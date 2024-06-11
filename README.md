@@ -5,6 +5,34 @@ This library provides constructs for Rust Lambda functions built with Cargo Lamb
 To use this module you will either need to have [Cargo Lambda installed](https://www.cargo-lambda.info/guide/installation.html) (`0.12.0` or later), or `Docker` installed.
 See [Local Bundling](#local-bundling)/[Docker Bundling](#docker-bundling) for more information.
 
+## Installation
+
+### JavaScript / TypeScript
+
+You can add [the npm package](https://npmjs.com/package/cargo-lambda-cdk) to your program as follows,
+
+```bash
+npm i cargo-lambda-cdk
+```
+
+Or using any other compatible package manager
+
+### Go
+
+Add the following to your imports,
+
+```go
+github.com/cargo-lambda/cargo-lambda-cdk/cargolambdacdk
+```
+
+### Python
+
+You can add [the Python package](https://pypi.org/project/cargo-lambda-cdk) using `pip`, or any other package manager compatible with PyPI,
+
+```bash
+pip install cargo-lambda-cdk
+```
+
 ## Rust Function
 
 Define a `RustFunction`:
