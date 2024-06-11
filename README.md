@@ -21,7 +21,7 @@ Or using any other compatible package manager
 
 Add the following to your imports,
 
-```go
+```plain
 github.com/cargo-lambda/cargo-lambda-cdk/cargolambdacdk
 ```
 
