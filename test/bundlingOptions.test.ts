@@ -4,7 +4,7 @@ import { App, Stack } from 'aws-cdk-lib';
 import * as cdk from 'aws-cdk-lib';
 import { Template } from 'aws-cdk-lib/assertions';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
-import { Bundling } from '../lib/bundling';
+import { Bundling } from '../src/bundling';
 import { getManifestPath } from '../src/cargo';
 import { cargoLambdaVersion, RustFunction, RustFunctionProps } from '../src/index';
 import { bundlingOptionsFromRustFunctionProps } from '../src/util';
