@@ -38,6 +38,7 @@
     "organization": false
   },
   "devDependencies": {
+    "@types/is-url": "^1.2.32",
     "@types/jest": "^27",
     "@types/node": "^18",
     "@typescript-eslint/eslint-plugin": "^6",
@@ -65,9 +66,11 @@
     "constructs": "^10.0.5"
   },
   "dependencies": {
+    "is-url": "^1.2.4",
     "js-toml": "^0.1.1"
   },
   "bundledDependencies": [
+    "is-url",
     "js-toml"
   ],
   "resolutions": {
