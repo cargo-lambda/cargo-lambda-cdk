@@ -20,7 +20,7 @@ export interface Manifest {
 
 export function getManifestPath(manifestPath: string): string {
   // Determine what type of URL this is and download (git repo) locally
-  if (isValidUrl(manifestPath)) {
+  if (isValidGitUrl(manifestPath)) {
     // i.e: 3ed81b4751e8f09bfa39fe743ee143df60304db5        HEAD
     const latestCommit = exec('git', ['ls-remote', manifestPath, 'HEAD']).stdout.toString().split(/(\s+)/)[0];
     const localPath = join(tmpdir(), latestCommit);
@@ -50,13 +50,12 @@ export function getManifestPath(manifestPath: string): string {
   return manifestPathResult;
 }
 
-function isValidUrl(s: string): boolean {
-  try {
-    new URL(s);
-    return true;
-  } catch (err) {
-    return false;
-  }
+function isValidGitUrl(url: string): boolean {
+  const httpsRegex = /^https:\/\/[\w.-]+(:\d+)?\/[\w.-]+\/[\w.-]+(\.git)?$/;
+  const sshRegex = /^ssh:\/\/[\w.-]+@[\w.-]+(:\d+)?\/[\w.-]+\/[\w.-]+(\.git)?$/;
+  const gitSshRegex = /^git@[\w.-]+:[\w.-]+\/[\w.-]+(\.git)?$/;
+
+  return httpsRegex.test(url) || sshRegex.test(url) || gitSshRegex.test(url);
 }
 
 /**

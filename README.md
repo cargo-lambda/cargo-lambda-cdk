@@ -61,6 +61,11 @@ import { RustFunction } from 'cargo-lambda-cdk';
 
 new RustFunction(stack, 'Rust function', {
   manifestPath: 'https://github.com/your_user/your_repo'
+  // Other flavors of git urls should work ☝️ too:
+  //
+  // https://github.com/user/repo.git
+  // ssh://user@host:22/user/repo.git
+  // git@github.com:user/repo.git
 });
 ```
 
