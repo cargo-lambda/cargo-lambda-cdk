@@ -26,7 +26,9 @@ export function getManifestPath(manifestPath: string): string {
     const localPath = join(tmpdir(), latestCommit);
     mkdirSync(localPath, { recursive: true });
 
-    exec('git', ['clone', '--depth', '1', manifestPath, localPath]);
+    if (!existsSync(localPath)) {
+      exec('git', ['clone', '--depth', '1', manifestPath, localPath]);
+    }
 
     // Append Cargo.toml to the path
     manifestPath = join(localPath, 'Cargo.toml');
