@@ -70,11 +70,6 @@ function isValidGitUrl(url: string): boolean {
   return httpsRegex.test(url) || sshRegex.test(url) || gitSshRegex.test(url);
 }
 
-/**
- * Takes in a manifest path and returns the original file if this is not a url.
- * Otherwise, it attempts to clone a repository at the URL location, and returns
- * a path to the cloned respository.
- */
 export function getManifest(manifestPath: string): Manifest {
   const data = readFileSync(manifestPath);
   return load(data.toString('utf-8')) as Manifest;
