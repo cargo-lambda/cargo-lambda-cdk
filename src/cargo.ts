@@ -1,4 +1,4 @@
-import { mkdirSync, existsSync, readFileSync } from 'node:fs';
+import { mkdirSync, existsSync, readFileSync, rmSync } from 'node:fs';
 import { join, parse } from 'node:path';
 import { tmpdir } from 'os';
 import { load } from 'js-toml';
@@ -18,16 +18,26 @@ export interface Manifest {
   workspace?: Workspace;
 }
 
-export function getManifestPath(manifestPath: string): string {
+export function getManifestPath(manifestPath: string, branch?: string, alwaysClone?: boolean): string {
   // Determine what type of URL this is and download (git repo) locally
   if (isValidGitUrl(manifestPath)) {
     // i.e: 3ed81b4751e8f09bfa39fe743ee143df60304db5        HEAD
-    const latestCommit = exec('git', ['ls-remote', manifestPath, 'HEAD']).stdout.toString().split(/(\s+)/)[0];
+    let latestCommit = exec('git', ['ls-remote', manifestPath, branch ?? 'HEAD']).stdout.toString().split(/(\s+)/)[0];
     const localPath = join(tmpdir(), latestCommit);
-    mkdirSync(localPath, { recursive: true });
+
+    if (alwaysClone) {
+      rmSync(localPath, { recursive: true, force: true });
+    }
 
     if (!existsSync(localPath)) {
-      exec('git', ['clone', '--depth', '1', manifestPath, localPath]);
+      mkdirSync(localPath, { recursive: true });
+
+      const args = ['clone', '--depth', '1', manifestPath, localPath];
+      if (branch !== undefined) {
+        args.push('--branch', branch);
+      }
+
+      exec('git', args);
     }
 
     // Append Cargo.toml to the path

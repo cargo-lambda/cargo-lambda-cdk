@@ -5,6 +5,34 @@ This library provides constructs for Rust Lambda functions built with Cargo Lamb
 To use this module you will either need to have [Cargo Lambda installed](https://www.cargo-lambda.info/guide/installation.html) (`0.12.0` or later), or `Docker` installed.
 See [Local Bundling](#local-bundling)/[Docker Bundling](#docker-bundling) for more information.
 
+## Installation
+
+### JavaScript / TypeScript
+
+You can add [the npm package](https://npmjs.com/package/cargo-lambda-cdk) to your program as follows,
+
+```bash
+npm i cargo-lambda-cdk
+```
+
+Or using any other compatible package manager
+
+### Go
+
+Add the following to your imports,
+
+```plain
+github.com/cargo-lambda/cargo-lambda-cdk/cargolambdacdk
+```
+
+### Python
+
+You can add [the Python package](https://pypi.org/project/cargo-lambda-cdk) using `pip`, or any other package manager compatible with PyPI,
+
+```bash
+pip install cargo-lambda-cdk
+```
+
 ## Rust Function
 
 Define a `RustFunction`:
@@ -24,6 +52,23 @@ lambda-project
 ├── Cargo.toml
 └── src
     └── main.rs
+```
+
+Note that `manifestPath` can be a remote git repository which will be cloned for you, i.e:
+
+```ts
+import { RustFunction } from 'cargo-lambda-cdk';
+
+new RustFunction(stack, 'Rust function', {
+  // Specify the branch to clone, defaults to HEAD.
+  branch: 'branch',
+  manifestPath: 'https://github.com/your_user/your_repo',
+  // Other flavors of git urls should work ☝️ too:
+  //
+  // https://github.com/user/repo.git
+  // ssh://user@host:22/user/repo.git
+  // git@github.com:user/repo.git
+});
 ```
 
 ### Runtime
@@ -1951,7 +1996,9 @@ const rustExtensionProps: RustExtensionProps = { ... }
 | <code><a href="#cargo-lambda-cdk.RustExtensionProps.property.layerVersionName">layerVersionName</a></code> | <code>string</code> | The name of the layer. |
 | <code><a href="#cargo-lambda-cdk.RustExtensionProps.property.license">license</a></code> | <code>string</code> | The SPDX licence identifier or URL to the license file for this layer. |
 | <code><a href="#cargo-lambda-cdk.RustExtensionProps.property.removalPolicy">removalPolicy</a></code> | <code>aws-cdk-lib.RemovalPolicy</code> | Whether to retain this version of the layer when a new version is added or when the stack is deleted. |
+| <code><a href="#cargo-lambda-cdk.RustExtensionProps.property.alwaysClone">alwaysClone</a></code> | <code>boolean</code> | Always clone the repository if using a git `manifestPath`, even if it has already been cloned to the temporary directory. |
 | <code><a href="#cargo-lambda-cdk.RustExtensionProps.property.binaryName">binaryName</a></code> | <code>string</code> | The name of the binary to build, in case that's different than the package's name. |
+| <code><a href="#cargo-lambda-cdk.RustExtensionProps.property.branch">branch</a></code> | <code>string</code> | The branch to clone if the `manifestPath` is a git repository. |
 | <code><a href="#cargo-lambda-cdk.RustExtensionProps.property.bundling">bundling</a></code> | <code><a href="#cargo-lambda-cdk.BundlingOptions">BundlingOptions</a></code> | Bundling options. |
 | <code><a href="#cargo-lambda-cdk.RustExtensionProps.property.manifestPath">manifestPath</a></code> | <code>string</code> | Path to a directory containing your Cargo.toml file, or to your Cargo.toml directly. |
 
@@ -2009,6 +2056,19 @@ Whether to retain this version of the layer when a new version is added or when 
 
 ---
 
+##### `alwaysClone`<sup>Optional</sup> <a name="alwaysClone" id="cargo-lambda-cdk.RustExtensionProps.property.alwaysClone"></a>
+
+```typescript
+public readonly alwaysClone: boolean;
+```
+
+- *Type:* boolean
+- *Default:* clones only if the repository and branch does not already exist in the temporary directory.
+
+Always clone the repository if using a git `manifestPath`, even if it has already been cloned to the temporary directory.
+
+---
+
 ##### `binaryName`<sup>Optional</sup> <a name="binaryName" id="cargo-lambda-cdk.RustExtensionProps.property.binaryName"></a>
 
 ```typescript
@@ -2018,6 +2078,19 @@ public readonly binaryName: string;
 - *Type:* string
 
 The name of the binary to build, in case that's different than the package's name.
+
+---
+
+##### `branch`<sup>Optional</sup> <a name="branch" id="cargo-lambda-cdk.RustExtensionProps.property.branch"></a>
+
+```typescript
+public readonly branch: string;
+```
+
+- *Type:* string
+- *Default:* the default branch, i.e. HEAD.
+
+The branch to clone if the `manifestPath` is a git repository.
 
 ---
 
@@ -2045,8 +2118,11 @@ public readonly manifestPath: string;
 
 Path to a directory containing your Cargo.toml file, or to your Cargo.toml directly.
 
-This will accept either a directory path containing a `Cargo.toml` file
-or a filepath to your `Cargo.toml` file (i.e. `path/to/Cargo.toml`).
+This will accept a directory path containing a `Cargo.toml` file, a filepath to your
+`Cargo.toml` file (i.e. `path/to/Cargo.toml`), or a git repository URL
+(e.g. `https://github.com/your_user/your_repo`).
+
+When using a git repository URL, the repository will be cloned to a temporary directory.
 
 ---
 
@@ -2102,7 +2178,9 @@ const rustFunctionProps: RustFunctionProps = { ... }
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.tracing">tracing</a></code> | <code>aws-cdk-lib.aws_lambda.Tracing</code> | Enable AWS X-Ray Tracing for Lambda Function. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.vpc">vpc</a></code> | <code>aws-cdk-lib.aws_ec2.IVpc</code> | VPC network to place Lambda network interfaces. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.vpcSubnets">vpcSubnets</a></code> | <code>aws-cdk-lib.aws_ec2.SubnetSelection</code> | Where to place the network interfaces within the VPC. |
+| <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.alwaysClone">alwaysClone</a></code> | <code>boolean</code> | Always clone the repository if using a git `manifestPath`, even if it has already been cloned to the temporary directory. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.binaryName">binaryName</a></code> | <code>string</code> | The name of the binary to build, in case that's different than the package's name. |
+| <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.branch">branch</a></code> | <code>string</code> | The branch to clone if the `manifestPath` is a git repository. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.bundling">bundling</a></code> | <code><a href="#cargo-lambda-cdk.BundlingOptions">BundlingOptions</a></code> | Bundling options. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.manifestPath">manifestPath</a></code> | <code>string</code> | Path to a directory containing your Cargo.toml file, or to your Cargo.toml directly. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.runtime">runtime</a></code> | <code>string</code> | The Lambda runtime to deploy this function. |
@@ -2654,6 +2732,19 @@ public subnets is not allowed (unless `allowPublicSubnet` is set to `true`).
 
 ---
 
+##### `alwaysClone`<sup>Optional</sup> <a name="alwaysClone" id="cargo-lambda-cdk.RustFunctionProps.property.alwaysClone"></a>
+
+```typescript
+public readonly alwaysClone: boolean;
+```
+
+- *Type:* boolean
+- *Default:* clones only if the repository and branch does not already exist in the temporary directory.
+
+Always clone the repository if using a git `manifestPath`, even if it has already been cloned to the temporary directory.
+
+---
+
 ##### `binaryName`<sup>Optional</sup> <a name="binaryName" id="cargo-lambda-cdk.RustFunctionProps.property.binaryName"></a>
 
 ```typescript
@@ -2663,6 +2754,19 @@ public readonly binaryName: string;
 - *Type:* string
 
 The name of the binary to build, in case that's different than the package's name.
+
+---
+
+##### `branch`<sup>Optional</sup> <a name="branch" id="cargo-lambda-cdk.RustFunctionProps.property.branch"></a>
+
+```typescript
+public readonly branch: string;
+```
+
+- *Type:* string
+- *Default:* the default branch, i.e. HEAD.
+
+The branch to clone if the `manifestPath` is a git repository.
 
 ---
 
@@ -2690,8 +2794,11 @@ public readonly manifestPath: string;
 
 Path to a directory containing your Cargo.toml file, or to your Cargo.toml directly.
 
-This will accept either a directory path containing a `Cargo.toml` file
-or a filepath to your `Cargo.toml` file (i.e. `path/to/Cargo.toml`).
+This will accept a directory path containing a `Cargo.toml` file, a filepath to your
+`Cargo.toml` file (i.e. `path/to/Cargo.toml`), or a git repository url
+(e.g. `https://github.com/your_user/your_repo`).
+
+When using a git repository URL, the repository will be cloned to a temporary directory.
 
 ---
 
