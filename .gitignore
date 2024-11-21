@@ -28,6 +28,7 @@ jspm_packages/
 .eslintcache
 .yarn-integrity
 .cache
+!/.projenrc.js
 /test-reports/
 junit.xml
 /coverage/
@@ -45,4 +46,3 @@ junit.xml
 tsconfig.json
 !/API.md
 target
-!/.projenrc.js
