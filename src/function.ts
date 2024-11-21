@@ -25,8 +25,11 @@ export interface RustFunctionProps extends FunctionOptions {
   /**
    * Path to a directory containing your Cargo.toml file, or to your Cargo.toml directly.
    *
-   * This will accept either a directory path containing a `Cargo.toml` file
-   * or a filepath to your `Cargo.toml` file (i.e. `path/to/Cargo.toml`).
+   * This will accept a directory path containing a `Cargo.toml` file, a filepath to your
+   * `Cargo.toml` file (i.e. `path/to/Cargo.toml`), or a git repository url
+   * (e.g. `https://github.com/your_user/your_repo`).
+   *
+   * When using a git repository URL, the repository will be cloned to a temporary directory.
    *
    * @default - check the current directory for a `Cargo.toml` file, and throws
    *  an error if the file doesn't exist.
@@ -39,6 +42,22 @@ export interface RustFunctionProps extends FunctionOptions {
    * @default - use default bundling options
    */
   readonly bundling?: BundlingOptions;
+
+  /**
+   * The branch to clone if the `manifestPath` is a git repository.
+   *
+   * @default - the default branch, i.e. HEAD.
+   */
+  readonly branch?: string;
+
+  /**
+   * Always clone the repository if using a git `manifestPath`, even if it has already been
+   * cloned to the temporary directory.
+   *
+   * @default - clones only if the repository and branch does not already exist in the
+   * temporary directory.
+   */
+  readonly alwaysClone?: boolean;
 }
 
 /**
@@ -46,7 +65,7 @@ export interface RustFunctionProps extends FunctionOptions {
  */
 export class RustFunction extends Function {
   constructor(scope: Construct, resourceName: string, props?: RustFunctionProps) {
-    const manifestPath = getManifestPath(props?.manifestPath ?? 'Cargo.toml');
+    const manifestPath = getManifestPath(props?.manifestPath ?? 'Cargo.toml', props?.branch, props?.alwaysClone);
 
     const runtime = new Runtime(props?.runtime || 'provided.al2023');
     const bundling = bundlingOptionsFromRustFunctionProps(props);

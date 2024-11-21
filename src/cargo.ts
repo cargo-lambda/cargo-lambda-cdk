@@ -1,6 +1,8 @@
-import { existsSync, readFileSync } from 'node:fs';
+import { mkdirSync, existsSync, readFileSync, rmSync } from 'node:fs';
 import { join, parse } from 'node:path';
+import { tmpdir } from 'os';
 import { load } from 'js-toml';
+import { exec } from './util';
 
 export interface Workspace {
   members: string[];
@@ -16,10 +18,34 @@ export interface Manifest {
   workspace?: Workspace;
 }
 
-export function getManifestPath(manifestPath: string): string {
-  // const manifestPathProp = props.manifestPath ?? 'Cargo.toml';
-  const parsedManifestPath = parse(manifestPath);
-  let manifestPathResult: string;
+export function getManifestPath(manifestPath: string, branch?: string, alwaysClone?: boolean): string {
+  // Determine what type of URL this is and download (git repo) locally
+  if (isValidGitUrl(manifestPath)) {
+    // i.e: 3ed81b4751e8f09bfa39fe743ee143df60304db5        HEAD
+    let latestCommit = exec('git', ['ls-remote', manifestPath, branch ?? 'HEAD']).stdout.toString().split(/(\s+)/)[0];
+    const localPath = join(tmpdir(), latestCommit);
+
+    if (alwaysClone) {
+      rmSync(localPath, { recursive: true, force: true });
+    }
+
+    if (!existsSync(localPath)) {
+      mkdirSync(localPath, { recursive: true });
+
+      const args = ['clone', '--depth', '1', manifestPath, localPath];
+      if (branch !== undefined) {
+        args.push('--branch', branch);
+      }
+
+      exec('git', args);
+    }
+
+    // Append Cargo.toml to the path
+    manifestPath = join(localPath, 'Cargo.toml');
+  }
+
+  let manifestPathResult;
+  let parsedManifestPath = parse(manifestPath);
 
   if (parsedManifestPath.base && parsedManifestPath.ext && parsedManifestPath.base === 'Cargo.toml') {
     manifestPathResult = manifestPath;
@@ -34,6 +60,14 @@ export function getManifestPath(manifestPath: string): string {
   }
 
   return manifestPathResult;
+}
+
+function isValidGitUrl(url: string): boolean {
+  const httpsRegex = /^https:\/\/[\w.-]+(:\d+)?\/[\w.-]+\/[\w.-]+(\.git)?$/;
+  const sshRegex = /^ssh:\/\/[\w.-]+@[\w.-]+(:\d+)?\/[\w.-]+\/[\w.-]+(\.git)?$/;
+  const gitSshRegex = /^git@[\w.-]+:[\w.-]+\/[\w.-]+(\.git)?$/;
+
+  return httpsRegex.test(url) || sshRegex.test(url) || gitSshRegex.test(url);
 }
 
 export function getManifest(manifestPath: string): Manifest {

@@ -54,6 +54,23 @@ lambda-project
     └── main.rs
 ```
 
+Note that `manifestPath` can be a remote git repository which will be cloned for you, i.e:
+
+```ts
+import { RustFunction } from 'cargo-lambda-cdk';
+
+new RustFunction(stack, 'Rust function', {
+  // Specify the branch to clone, defaults to HEAD.
+  branch: 'branch',
+  manifestPath: 'https://github.com/your_user/your_repo',
+  // Other flavors of git urls should work ☝️ too:
+  //
+  // https://github.com/user/repo.git
+  // ssh://user@host:22/user/repo.git
+  // git@github.com:user/repo.git
+});
+```
+
 ### Runtime
 
 The `RustFunction` uses the `provided.al2023` runtime. If you want to change it, you can use the property `runtime`. The only other valid option is `provided.al2`:
