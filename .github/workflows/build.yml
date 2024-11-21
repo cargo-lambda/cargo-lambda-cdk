@@ -51,7 +51,7 @@ jobs:
       - name: build
         run: npx projen build --verbose
       - name: Backup artifact permissions
-        run: cd dist && getfacl -R . > permissions-backup.acl
+        run: getfacl -R . > permissions-backup.acl
         continue-on-error: true
       - name: Upload artifact
         uses: actions/upload-artifact@v4

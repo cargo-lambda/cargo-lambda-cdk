@@ -64,7 +64,7 @@ jobs:
         run: echo "latest_commit=$(git ls-remote origin -h ${{ github.ref }} | cut -f1)" >> $GITHUB_OUTPUT
       - name: Backup artifact permissions
         if: ${{ steps.git_remote.outputs.latest_commit == github.sha }}
-        run: cd dist && getfacl -R . > permissions-backup.acl
+        run: getfacl -R . > permissions-backup.acl
         continue-on-error: true
       - name: Upload artifact
         if: ${{ steps.git_remote.outputs.latest_commit == github.sha }}
@@ -72,8 +72,10 @@ jobs:
         with:
           name: build-artifact
           path: |
-            dist
-            !dist/**/target
+            .
+            !dist
+            !**/target
+            !examples
           include-hidden-files: true
   release_github:
     name: Publish to GitHub Releases
@@ -90,9 +92,9 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-artifact
-          path: dist
+          path: .repo
       - name: Restore build artifact permissions
-        run: cd dist && setfacl --restore=permissions-backup.acl
+        run: cd .repo && setfacl --restore=permissions-backup.acl
         continue-on-error: true
       - name: Release
         env:
@@ -115,12 +117,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-artifact
-          path: dist
+          path: .repo
       - name: Restore build artifact permissions
-        run: cd dist && setfacl --restore=permissions-backup.acl
+        run: cd .repo && setfacl --restore=permissions-backup.acl
         continue-on-error: true
-      - name: Prepare Repository
-        run: mv dist .repo
       - name: Install Dependencies
         run: cd .repo && npx projen install:ci
       - name: Create js artifact
@@ -152,12 +152,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-artifact
-          path: dist
+          path: .repo
       - name: Restore build artifact permissions
-        run: cd dist && setfacl --restore=permissions-backup.acl
+        run: cd .repo && setfacl --restore=permissions-backup.acl
         continue-on-error: true
-      - name: Prepare Repository
-        run: mv dist .repo
       - name: Install Dependencies
         run: cd .repo && npx projen install:ci
       - name: Create java artifact
@@ -190,12 +188,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-artifact
-          path: dist
+          path: .repo
       - name: Restore build artifact permissions
-        run: cd dist && setfacl --restore=permissions-backup.acl
+        run: cd .repo && setfacl --restore=permissions-backup.acl
         continue-on-error: true
-      - name: Prepare Repository
-        run: mv dist .repo
       - name: Install Dependencies
         run: cd .repo && npx projen install:ci
       - name: Create python artifact
@@ -225,12 +221,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-artifact
-          path: dist
+          path: .repo
       - name: Restore build artifact permissions
-        run: cd dist && setfacl --restore=permissions-backup.acl
+        run: cd .repo && setfacl --restore=permissions-backup.acl
         continue-on-error: true
-      - name: Prepare Repository
-        run: mv dist .repo
       - name: Install Dependencies
         run: cd .repo && npx projen install:ci
       - name: Create dotnet artifact
@@ -259,12 +253,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-artifact
-          path: dist
+          path: .repo
       - name: Restore build artifact permissions
-        run: cd dist && setfacl --restore=permissions-backup.acl
+        run: cd .repo && setfacl --restore=permissions-backup.acl
         continue-on-error: true
-      - name: Prepare Repository
-        run: mv dist .repo
       - name: Install Dependencies
         run: cd .repo && npx projen install:ci
       - name: Create go artifact
