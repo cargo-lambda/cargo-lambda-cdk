@@ -70,12 +70,10 @@ jobs:
         run: |
           echo "tag=$(cat dist/releasetag.txt)" >> $GITHUB_OUTPUT
           echo "version=$(cat dist/version.txt)" >> $GITHUB_OUTPUT
-          echo "changelog=$(cat dist/changelog.md)" >> $GITHUB_OUTPUT
       - name: Output release data
         run: |
           echo ${{ steps.release_data.outputs.tag }}
           echo ${{ steps.release_data.outputs.version }}
-          echo ${{ steps.release_data.outputs.changelog }}
       - name: Release GitHub
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
