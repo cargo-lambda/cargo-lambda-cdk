@@ -7,10 +7,8 @@ on:
       - 'src/**'
       - package.json
       - API.md
+      - .github/workflows/release.yml
   workflow_dispatch: {}
-
-env:
-  CI: "true"
 
 jobs:
   release_github:
@@ -57,10 +55,27 @@ jobs:
           python-version: 3.12.3
       - name: Install NPM dependencies
         run: npx projen install:ci
+        env:
+          CI: "true"
       - name: Build
+        env:
+          CI: "true"
         run: npx projen build --verbose
       - name: Release
+        env:
+          CI: "true"
         run: npx projen release
+      - name: Store release data
+        id: release_data
+        run: |
+          echo "tag=$(cat dist/releasetag.txt)" >> $GITHUB_OUTPUT
+          echo "version=$(cat dist/version.txt)" >> $GITHUB_OUTPUT
+          echo "changelog=$(cat dist/changelog.md)" >> $GITHUB_OUTPUT
+      - name: Output release data
+        run: |
+          echo ${{ steps.release_data.outputs.tag }}
+          echo ${{ steps.release_data.outputs.version }}
+          echo ${{ steps.release_data.outputs.changelog }}
       - name: Release GitHub
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -68,7 +83,7 @@ jobs:
           GITHUB_REF: ${{ github.ref }}
         run: errout=$(mktemp); gh release create $(cat dist/releasetag.txt) -R $GITHUB_REPOSITORY -F dist/changelog.md -t $(cat dist/releasetag.txt) --target $GITHUB_REF 2> $errout && true; exitcode=$?; if [ $exitcode -ne 0 ] && ! grep -q "Release.tag_name already exists" $errout; then cat $errout; exit $exitcode; fi
       - name: Create JS Artifact
-        run: rm -rf dist/js && npx projen package:js
+        run: rm -rf dist/js && npx projen package:js && ls -la dist/js
       - name: Release JS Artifact
         env:
           NPM_DIST_TAG: latest
