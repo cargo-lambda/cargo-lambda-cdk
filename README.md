@@ -54,23 +54,6 @@ lambda-project
     └── main.rs
 ```
 
-Note that `manifestPath` can be a remote git repository which will be cloned for you, i.e:
-
-```ts
-import { RustFunction } from 'cargo-lambda-cdk';
-
-new RustFunction(stack, 'Rust function', {
-  // Specify the branch to clone, defaults to HEAD.
-  branch: 'branch',
-  manifestPath: 'https://github.com/your_user/your_repo',
-  // Other flavors of git urls should work ☝️ too:
-  //
-  // https://github.com/user/repo.git
-  // ssh://user@host:22/user/repo.git
-  // git@github.com:user/repo.git
-});
-```
-
 ### Runtime
 
 The `RustFunction` uses the `provided.al2023` runtime. If you want to change it, you can use the property `runtime`. The only other valid option is `provided.al2`:
@@ -102,6 +85,28 @@ new RustFunction(this, 'Rust function', {
   ],
 });
 ```
+
+## Remote Git sources
+
+Both `RustFunction` and `RustExtension` support cloning a git repository to get the source code for the function or extension.
+To download the source code from a remote git repository, specify the `gitRemote`. This option can be a valid git remote url, such as `https://github.com/your_user/your_repo`, or a valid ssh url, such as `git@github.com:your_user/your_repo.git`.
+
+By default, the latest commit from the `HEAD` branch will be downloaded. To download a different git reference, specify the `gitReference` option. This can be a branch name, tag, or commit hash.
+
+If you want to always clone the repository even if it has already been cloned to the temporary directory, set the `gitForceClone` option to `true`.
+
+If you specify a `manifestPath`, it will be relative to the root of the git repository once it has been cloned.
+
+```ts
+import { RustFunction } from 'cargo-lambda-cdk';
+
+new RustFunction(stack, 'Rust function', {
+  gitRemote: 'https://github.com/your_user/your_repo',
+  gitReference: 'branch',
+  gitForceClone: true,
+});
+```
+
 ## Bundling
 
 Bundling is the process by which `cargo lambda` gets called to build, package, and deliver the Rust

@@ -54,7 +54,7 @@ describe('bundlingOptionsFromRustFunctionProps', () => {
 const forcedDockerBundling = !!env.FORCE_DOCKER_RUN || !cargoLambdaVersion();
 
 const getTestManifestPath = () => {
-  return getManifestPath(path.join(__dirname, 'fixtures/single-package/Cargo.toml'));
+  return getManifestPath({ manifestPath: path.join(__dirname, 'fixtures/single-package/Cargo.toml') });
 };
 
 const templateWithProps = (props?: RustFunctionProps) => {

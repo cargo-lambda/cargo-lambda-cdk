@@ -2,7 +2,23 @@ import { mkdirSync, existsSync, readFileSync, rmSync } from 'node:fs';
 import { join, parse } from 'node:path';
 import { tmpdir } from 'os';
 import { load } from 'js-toml';
+import { BundlingOptions } from './types';
 import { exec } from './util';
+
+/**
+ * Base properties for a Cargo project.
+ *
+ * RustFunctionProps and RustExtensionProps cannot inherit from this interface
+ * because jsii only supports direct inheritance from a single interface.
+ */
+interface CargoProject {
+  readonly bundling?: BundlingOptions;
+  readonly binaryName?: string;
+  readonly manifestPath?: string;
+  readonly gitRemote?: string;
+  readonly gitReference?: string;
+  readonly gitForceClone?: boolean;
+}
 
 export interface Workspace {
   members: string[];
@@ -18,30 +34,40 @@ export interface Manifest {
   workspace?: Workspace;
 }
 
-export function getManifestPath(manifestPath: string, branch?: string, alwaysClone?: boolean): string {
+export function getManifestPath(project: CargoProject): string {
+  const defaultManifestPath = project.manifestPath || 'Cargo.toml';
+  let manifestPath = defaultManifestPath;
+
   // Determine what type of URL this is and download (git repo) locally
-  if (isValidGitUrl(manifestPath)) {
+  if (project.gitRemote && isValidGitUrl(project.gitRemote)) {
+    const gitReference = project.gitReference || 'HEAD';
+
     // i.e: 3ed81b4751e8f09bfa39fe743ee143df60304db5        HEAD
-    let latestCommit = exec('git', ['ls-remote', manifestPath, branch ?? 'HEAD']).stdout.toString().split(/(\s+)/)[0];
+    let latestCommit = exec('git', ['ls-remote', project.gitRemote, gitReference]).stdout.toString().split(/(\s+)/)[0];
     const localPath = join(tmpdir(), latestCommit);
 
-    if (alwaysClone) {
+    if (project.gitForceClone) {
       rmSync(localPath, { recursive: true, force: true });
     }
 
     if (!existsSync(localPath)) {
       mkdirSync(localPath, { recursive: true });
 
-      const args = ['clone', '--depth', '1', manifestPath, localPath];
-      if (branch !== undefined) {
-        args.push('--branch', branch);
+      const args = ['clone'];
+      if (gitReference === 'HEAD') {
+        args.push('--depth', '1');
       }
 
+      args.push(project.gitRemote, localPath);
       exec('git', args);
-    }
 
-    // Append Cargo.toml to the path
-    manifestPath = join(localPath, 'Cargo.toml');
+      if (gitReference !== 'HEAD') {
+        exec('git', ['checkout', gitReference], { cwd: localPath });
+      }
+
+      // Append Cargo.toml to the path
+      manifestPath = join(localPath, defaultManifestPath);
+    }
   }
 
   let manifestPathResult;
