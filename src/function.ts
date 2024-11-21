@@ -12,24 +12,29 @@ export { cargoLambdaVersion } from './bundling';
  */
 export interface RustFunctionProps extends FunctionOptions {
   /**
-   * The name of the binary to build, in case that's different than the package's name.
-   */
-  readonly binaryName?: string;
-
-  /**
    * The Lambda runtime to deploy this function.
    * `provided.al2023` is the default runtime when this option is not provided.
    */
   readonly runtime?: 'provided.al2023' | 'provided.al2';
 
   /**
+  * Bundling options
+ *
+ * @default - use default bundling options
+ */
+  readonly bundling?: BundlingOptions;
+
+  /**
+   * The name of the binary to build, in case that's different than the package's name.
+   */
+  readonly binaryName?: string;
+
+  /**
    * Path to a directory containing your Cargo.toml file, or to your Cargo.toml directly.
    *
-   * This will accept a directory path containing a `Cargo.toml` file, a filepath to your
-   * `Cargo.toml` file (i.e. `path/to/Cargo.toml`), or a git repository url
-   * (e.g. `https://github.com/your_user/your_repo`).
-   *
-   * When using a git repository URL, the repository will be cloned to a temporary directory.
+   * This will accept a directory path containing a `Cargo.toml` file (i.e. `path/to/package`), or a filepath to your
+   * `Cargo.toml` file (i.e. `path/to/Cargo.toml`). When the `gitRemote` option is provided,
+   * the `manifestPath` is relative to the root of the git repository.
    *
    * @default - check the current directory for a `Cargo.toml` file, and throws
    *  an error if the file doesn't exist.
@@ -37,27 +42,30 @@ export interface RustFunctionProps extends FunctionOptions {
   readonly manifestPath?: string;
 
   /**
-   * Bundling options
+   * The git remote URL to clone (e.g `https://github.com/your_user/your_repo`).
    *
-   * @default - use default bundling options
+   * This repository will be cloned to a temporary directory using `git`.
+   * The `git` command must be available in the PATH.
    */
-  readonly bundling?: BundlingOptions;
+  readonly gitRemote?: string;
 
   /**
-   * The branch to clone if the `manifestPath` is a git repository.
+   * The git reference to checkout. This can be a branch, tag, or commit hash.
+   *
+   * If this option is not provided, `git clone` will run with the flag `--depth 1`.
    *
    * @default - the default branch, i.e. HEAD.
    */
-  readonly branch?: string;
+  readonly gitReference?: string;
 
   /**
-   * Always clone the repository if using a git `manifestPath`, even if it has already been
+   * Always clone the repository if using the `gitRemote` option, even if it has already been
    * cloned to the temporary directory.
    *
-   * @default - clones only if the repository and branch does not already exist in the
+   * @default - clones only if the repository and reference don't already exist in the
    * temporary directory.
    */
-  readonly alwaysClone?: boolean;
+  readonly gitForceClone?: boolean;
 }
 
 /**
@@ -65,7 +73,7 @@ export interface RustFunctionProps extends FunctionOptions {
  */
 export class RustFunction extends Function {
   constructor(scope: Construct, resourceName: string, props?: RustFunctionProps) {
-    const manifestPath = getManifestPath(props?.manifestPath ?? 'Cargo.toml', props?.branch, props?.alwaysClone);
+    const manifestPath = getManifestPath(props || {});
 
     const runtime = new Runtime(props?.runtime || 'provided.al2023');
     const bundling = bundlingOptionsFromRustFunctionProps(props);

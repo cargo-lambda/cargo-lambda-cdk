@@ -4,22 +4,22 @@ import { getManifest, getManifestPath } from '../src/cargo';
 describe('getManifestPath', () => {
   it('works with a path to an existent Cargo.toml file', () => {
     const fixture = join(__dirname, 'fixtures/single-package/Cargo.toml');
-    expect(getManifestPath(fixture)).toEqual(fixture);
+    expect(getManifestPath({ manifestPath: fixture })).toEqual(fixture);
   });
 
   it('works with a base directory', () => {
     const fixture = join(__dirname, 'fixtures/single-package');
-    expect(getManifestPath(fixture)).toEqual(join(fixture, 'Cargo.toml'));
+    expect(getManifestPath({ manifestPath: fixture })).toEqual(join(fixture, 'Cargo.toml'));
   });
 
   it('fails with a different file', () => {
     const fixture = join(__dirname, 'fixtures/single-package/src/main.rs');
-    expect(() => getManifestPath(fixture)).toThrow('manifestPath is specifying a file that is not Cargo.toml');
+    expect(() => getManifestPath({ manifestPath: fixture })).toThrow('manifestPath is specifying a file that is not Cargo.toml');
   });
 
   it('fails with a directory that doesn\'t include a Cargo.toml file', () => {
     const fixture = join(__dirname, 'fixtures/single-package/src');
-    expect(() => getManifestPath(fixture)).toThrow(`'${fixture}/Cargo.toml' is not a path to a Cargo.toml file, use the option \`manifestPath\` to specify the location of the Cargo.toml file`);
+    expect(() => getManifestPath({ manifestPath: fixture })).toThrow(`'${fixture}/Cargo.toml' is not a path to a Cargo.toml file, use the option \`manifestPath\` to specify the location of the Cargo.toml file`);
   });
 });
 
