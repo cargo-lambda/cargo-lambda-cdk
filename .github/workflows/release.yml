@@ -67,12 +67,16 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_REF: ${{ github.ref }}
         run: errout=$(mktemp); gh release create $(cat dist/releasetag.txt) -R $GITHUB_REPOSITORY -F dist/changelog.md -t $(cat dist/releasetag.txt) --target $GITHUB_REF 2> $errout && true; exitcode=$?; if [ $exitcode -ne 0 ] && ! grep -q "Release.tag_name already exists" $errout; then cat $errout; exit $exitcode; fi
+      - name: Create JS Artifact
+        run: npx projen package:js
       - name: Release JS Artifact
         env:
           NPM_DIST_TAG: latest
           NPM_REGISTRY: registry.npmjs.org
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npx -p publib@latest publib-npm
+      - name: Create Java Artifact
+        run: npx projen package:java
       - name: Release Java Artifact
         env:
           MAVEN_SERVER_ID: 'github'
@@ -81,15 +85,21 @@ jobs:
           MAVEN_USERNAME: ${{ github.actor }}
           MAVEN_PASSWORD: ${{ secrets.CDK_PACKAGES_REGISTRY_GITHUB_TOKEN }}
         run: npx -p publib@latest publib-maven
+      - name: Create Python Artifact
+        run: npx projen package:python
       - name: Release Python Artifact
         env:
           TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
         run: npx -p publib@latest publib-pypi
+      - name: Create Dotnet Artifact
+        run: npx projen package:dotnet
       - name: Release Dotnet Artifact
         env:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
         run: npx -p publib@latest publib-nuget
+      - name: Create Go Artifact
+        run: npx projen package:go
       - name: Release Go Artifact
         env:
           GIT_USER_NAME: github-actions
