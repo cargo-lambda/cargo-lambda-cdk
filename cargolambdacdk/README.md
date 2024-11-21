@@ -5,6 +5,34 @@ This library provides constructs for Rust Lambda functions built with Cargo Lamb
 To use this module you will either need to have [Cargo Lambda installed](https://www.cargo-lambda.info/guide/installation.html) (`0.12.0` or later), or `Docker` installed.
 See [Local Bundling](#local-bundling)/[Docker Bundling](#docker-bundling) for more information.
 
+## Installation
+
+### JavaScript / TypeScript
+
+You can add [the npm package](https://npmjs.com/package/cargo-lambda-cdk) to your program as follows,
+
+```bash
+npm i cargo-lambda-cdk
+```
+
+Or using any other compatible package manager
+
+### Go
+
+Add the following to your imports,
+
+```plain
+github.com/cargo-lambda/cargo-lambda-cdk/cargolambdacdk
+```
+
+### Python
+
+You can add [the Python package](https://pypi.org/project/cargo-lambda-cdk) using `pip`, or any other package manager compatible with PyPI,
+
+```bash
+pip install cargo-lambda-cdk
+```
+
 ## Rust Function
 
 Define a `RustFunction`:
@@ -55,6 +83,27 @@ new RustFunction(this, 'Rust function', {
   layers: [
     extensionLayer
   ],
+});
+```
+
+## Remote Git sources
+
+Both `RustFunction` and `RustExtension` support cloning a git repository to get the source code for the function or extension.
+To download the source code from a remote git repository, specify the `gitRemote`. This option can be a valid git remote url, such as `https://github.com/your_user/your_repo`, or a valid ssh url, such as `git@github.com:your_user/your_repo.git`.
+
+By default, the latest commit from the `HEAD` branch will be downloaded. To download a different git reference, specify the `gitReference` option. This can be a branch name, tag, or commit hash.
+
+If you want to always clone the repository even if it has already been cloned to the temporary directory, set the `gitForceClone` option to `true`.
+
+If you specify a `manifestPath`, it will be relative to the root of the git repository once it has been cloned.
+
+```go
+import { RustFunction } from 'cargo-lambda-cdk';
+
+new RustFunction(stack, 'Rust function', {
+  gitRemote: 'https://github.com/your_user/your_repo',
+  gitReference: 'branch',
+  gitForceClone: true,
 });
 ```
 

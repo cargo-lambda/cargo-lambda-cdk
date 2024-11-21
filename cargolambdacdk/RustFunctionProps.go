@@ -245,10 +245,27 @@ type RustFunctionProps struct {
 	// Default: - use default bundling options.
 	//
 	Bundling *BundlingOptions `field:"optional" json:"bundling" yaml:"bundling"`
+	// Always clone the repository if using the `gitRemote` option, even if it has already been cloned to the temporary directory.
+	// Default: - clones only if the repository and reference don't already exist in the
+	// temporary directory.
+	//
+	GitForceClone *bool `field:"optional" json:"gitForceClone" yaml:"gitForceClone"`
+	// The git reference to checkout. This can be a branch, tag, or commit hash.
+	//
+	// If this option is not provided, `git clone` will run with the flag `--depth 1`.
+	// Default: - the default branch, i.e. HEAD.
+	//
+	GitReference *string `field:"optional" json:"gitReference" yaml:"gitReference"`
+	// The git remote URL to clone (e.g `https://github.com/your_user/your_repo`).
+	//
+	// This repository will be cloned to a temporary directory using `git`.
+	// The `git` command must be available in the PATH.
+	GitRemote *string `field:"optional" json:"gitRemote" yaml:"gitRemote"`
 	// Path to a directory containing your Cargo.toml file, or to your Cargo.toml directly.
 	//
-	// This will accept either a directory path containing a `Cargo.toml` file
-	// or a filepath to your `Cargo.toml` file (i.e. `path/to/Cargo.toml`).
+	// This will accept a directory path containing a `Cargo.toml` file (i.e. `path/to/package`), or a filepath to your
+	// `Cargo.toml` file (i.e. `path/to/Cargo.toml`). When the `gitRemote` option is provided,
+	// the `manifestPath` is relative to the root of the git repository.
 	// Default: - check the current directory for a `Cargo.toml` file, and throws
 	// an error if the file doesn't exist.
 	//
