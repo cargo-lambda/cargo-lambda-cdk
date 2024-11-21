@@ -982,14 +982,14 @@ Environment variable options.
 ##### `addLayers` <a name="addLayers" id="cargo-lambda-cdk.RustFunction.addLayers"></a>
 
 ```typescript
-public addLayers(layers: ILayerVersion): void
+public addLayers(layers: ...ILayerVersion[]): void
 ```
 
 Adds one or more Lambda Layers to this Lambda function.
 
 ###### `layers`<sup>Required</sup> <a name="layers" id="cargo-lambda-cdk.RustFunction.addLayers.parameter.layers"></a>
 
-- *Type:* aws-cdk-lib.aws_lambda.ILayerVersion
+- *Type:* ...aws-cdk-lib.aws_lambda.ILayerVersion[]
 
 the layers to be added.
 
@@ -2892,5 +2892,3 @@ Commands are chained with `&&`.
 - *Type:* string
 
 ---
-
-
