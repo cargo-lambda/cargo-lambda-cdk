@@ -22,4 +22,6 @@ dist
 tsconfig.tsbuildinfo
 /.eslintrc.json
 !.jsii
+examples
+cargolambdacdk
 /.gitattributes
