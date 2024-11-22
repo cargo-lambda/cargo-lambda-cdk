@@ -81,13 +81,18 @@ jobs:
           GITHUB_REF: ${{ github.ref }}
         run: errout=$(mktemp); gh release create $(cat dist/releasetag.txt) -R $GITHUB_REPOSITORY -F dist/changelog.md -t $(cat dist/releasetag.txt) --target $GITHUB_REF 2> $errout && true; exitcode=$?; if [ $exitcode -ne 0 ] && ! grep -q "Release.tag_name already exists" $errout; then cat $errout; exit $exitcode; fi
       - name: Create JS Artifact
-        run: rm -rf dist/js && npx projen package:js && ls -la dist/js
+        run: |
+          rm -rf dist/js
+          npx projen package:js
+          ls -la dist/js
       - name: Release JS Artifact
         env:
           NPM_DIST_TAG: latest
           NPM_REGISTRY: registry.npmjs.org
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npx -p publib@latest publib-npm
+        run: |
+          npx projen bump
+          npx -p publib@latest publib-npm
       - name: Create Java Artifact
         run: npx projen package:java
       - name: Release Java Artifact

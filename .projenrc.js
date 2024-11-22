@@ -48,6 +48,9 @@ project.addBundledDeps('js-toml@^0.1.1');
 project.addGitIgnore('target');
 project.gitignore.removePatterns('*.tgz');
 
+project.npmignore.exclude('examples');
+project.npmignore.exclude('cargolambdacdk');
+
 const testTask = project.tasks.tryFind('test');
 if (testTask) {
   testTask.reset();
