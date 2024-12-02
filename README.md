@@ -176,7 +176,7 @@ new RustFunction(this, 'Rust function', {
 
 To force bundling in a docker container even if `Cargo Lambda` is available in your environment, set the `forcedDockerBundling` prop to `true`. This is useful if you want to make sure that your function is built in a consistent Lambda compatible environment.
 
-By default, these constructs use `ghcr.io/cargo-lambda/cargo-lambda` as the image to build with. Use the `bundling.dockerImage` prop to use a custom bundling image:
+By default, these constructs use [ghcr.io/cargo-lambda/cargo-lambda](https://github.com/cargo-lambda/cargo-lambda/pkgs/container/cargo-lambda) as the image to build with. Use the `bundling.dockerImage` prop to use a custom bundling image:
 
 ```ts
 import { RustFunction } from 'cargo-lambda-cdk';
@@ -206,6 +206,45 @@ new RustFunction(this, 'Rust function', {
 ```
 
 This property mirrors values from the `cdk.BundlingOptions` and is passed into `Code.fromAsset`.
+
+If you want to use a custom Docker image, you can use the `bundling.dockerImage` prop:
+
+```ts
+import { RustFunction } from 'cargo-lambda-cdk';
+
+new RustFunction(this, 'Rust function', {
+  manifestPath: 'path/to/package/directory/with/Cargo.toml',
+  bundling: {
+    dockerImage: DockerImage.fromRegistry('your_docker_image'),
+  },
+});
+```
+
+If you want to mount additional volumes to the Docker container, you can use the `dockerOptions.volumes` prop. This is useful if you want to mount Cargo's cache directory to speed up the build process. The `CARGO_HOME` in the default image is `/usr/local/cargo`.
+
+```ts
+import { RustFunction } from 'cargo-lambda-cdk';
+import { homedir } from 'os';
+import { join } from 'path';
+
+const cargoHome = process.env.CARGO_HOME || join(homedir(), '.cargo');
+
+new RustFunction(this, 'Rust function', {
+  manifestPath: 'path/to/package/directory/with/Cargo.toml',
+  bundling: {
+    dockerOptions: {
+      volumes: [{
+        hostPath: join(cargoHome, 'registry'),
+        containerPath: '/usr/local/cargo/registry',
+      },
+      {
+        hostPath: join(cargoHome, 'git'),
+        containerPath: '/usr/local/cargo/git',
+      }],
+    },
+  },
+});
+```
 
 ### Command hooks
 
