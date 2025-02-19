@@ -13,7 +13,7 @@ import (
 	constructs "github.com/aws/constructs-go/constructs/v10/jsii"
 )
 
-//go:embed cargo-lambda-cdk-0.0.31.tgz
+//go:embed cargo-lambda-cdk-0.0.32.tgz
 var tarball []byte
 
 // Initialize loads the necessary packages in the @jsii/kernel to support the enclosing module.
@@ -24,5 +24,5 @@ func Initialize() {
 	constructs.Initialize()
 
 	// Load this library into the kernel
-	_jsii_.Load("cargo-lambda-cdk", "0.0.31", tarball)
+	_jsii_.Load("cargo-lambda-cdk", "0.0.32", tarball)
 }
