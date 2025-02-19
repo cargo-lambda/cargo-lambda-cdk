@@ -64,10 +64,10 @@ export function getManifestPath(project: CargoProject): string {
       if (gitReference !== 'HEAD') {
         exec('git', ['checkout', gitReference], { cwd: localPath });
       }
-
-      // Append Cargo.toml to the path
-      manifestPath = join(localPath, defaultManifestPath);
     }
+
+    // Append Cargo.toml to the path
+    manifestPath = join(localPath, defaultManifestPath);
   }
 
   let manifestPathResult;
