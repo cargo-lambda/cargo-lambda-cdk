@@ -1,4 +1,8 @@
-import { LayerVersion, LayerVersionOptions } from 'aws-cdk-lib/aws-lambda';
+import {
+  LayerVersion,
+  LayerVersionOptions,
+  Architecture,
+} from 'aws-cdk-lib/aws-lambda';
 import { Construct } from 'constructs';
 import { Bundling } from './bundling';
 import { getManifestPath } from './cargo';
@@ -9,10 +13,10 @@ import { BundlingOptions } from './types';
  */
 export interface RustExtensionProps extends LayerVersionOptions {
   /**
- * Bundling options
- *
- * @default - use default bundling options
- */
+   * Bundling options
+   *
+   * @default - use default bundling options
+   */
   readonly bundling?: BundlingOptions;
 
   /**
@@ -57,23 +61,37 @@ export interface RustExtensionProps extends LayerVersionOptions {
    * temporary directory.
    */
   readonly gitForceClone?: boolean;
+
+  /**
+   * The system architecture of the lambda extension
+   *
+   * @default - Architecture.X86_64
+   */
+  readonly architecture?: Architecture;
 }
 
 /**
  * A Lambda extension written in Rust
  */
 export class RustExtension extends LayerVersion {
-  constructor(scope: Construct, resourceName: string, props?: RustExtensionProps) {
+  constructor(
+    scope: Construct,
+    resourceName: string,
+    props?: RustExtensionProps,
+  ) {
     const manifestPath = getManifestPath(props || {});
     const bundling = props?.bundling ?? {};
+    const architecture = props?.architecture ?? Architecture.X86_64;
 
     super(scope, resourceName, {
       ...props,
+      compatibleArchitectures: [architecture],
       code: Bundling.bundle({
         ...bundling,
         manifestPath,
         binaryName: props?.binaryName,
         lambdaExtension: true,
+        architecture,
       }),
     });
   }

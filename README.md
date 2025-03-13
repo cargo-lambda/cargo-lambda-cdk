@@ -72,10 +72,11 @@ new RustFunction(stack, 'Rust function', {
 Define a `RustExtension` that get's deployed as a layer to use it with any other function later.
 
 ```ts
-import { RustExtension, RustFunction } from 'cargo-lambda-cdk';
+import { RustExtension, RustFunction, Architecture } from 'cargo-lambda-cdk';
 
 const extensionLayer = new RustExtension(this, 'Rust extension', {
   manifestPath: 'path/to/package/directory/with/Cargo.toml',
+  architecture: Architecture.ARM_64,
 });
 
 new RustFunction(this, 'Rust function', {
