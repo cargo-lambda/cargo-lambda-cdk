@@ -72,7 +72,8 @@ new RustFunction(stack, 'Rust function', {
 Define a `RustExtension` that get's deployed as a layer to use it with any other function later.
 
 ```ts
-import { RustExtension, RustFunction, Architecture } from 'cargo-lambda-cdk';
+import { RustExtension, RustFunction } from 'cargo-lambda-cdk';
+import { Architecture } from 'aws-cdk-lib/aws-lambda';
 
 const extensionLayer = new RustExtension(this, 'Rust extension', {
   manifestPath: 'path/to/package/directory/with/Cargo.toml',
