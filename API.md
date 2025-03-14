@@ -1748,6 +1748,7 @@ const rustExtensionProps: RustExtensionProps = { ... }
 | <code><a href="#cargo-lambda-cdk.RustExtensionProps.property.layerVersionName">layerVersionName</a></code> | <code>string</code> | The name of the layer. |
 | <code><a href="#cargo-lambda-cdk.RustExtensionProps.property.license">license</a></code> | <code>string</code> | The SPDX licence identifier or URL to the license file for this layer. |
 | <code><a href="#cargo-lambda-cdk.RustExtensionProps.property.removalPolicy">removalPolicy</a></code> | <code>aws-cdk-lib.RemovalPolicy</code> | Whether to retain this version of the layer when a new version is added or when the stack is deleted. |
+| <code><a href="#cargo-lambda-cdk.RustExtensionProps.property.architecture">architecture</a></code> | <code>aws-cdk-lib.aws_lambda.Architecture</code> | The system architecture of the lambda extension. |
 | <code><a href="#cargo-lambda-cdk.RustExtensionProps.property.binaryName">binaryName</a></code> | <code>string</code> | The name of the binary to build, in case that's different than the package's name. |
 | <code><a href="#cargo-lambda-cdk.RustExtensionProps.property.bundling">bundling</a></code> | <code><a href="#cargo-lambda-cdk.BundlingOptions">BundlingOptions</a></code> | Bundling options. |
 | <code><a href="#cargo-lambda-cdk.RustExtensionProps.property.gitForceClone">gitForceClone</a></code> | <code>boolean</code> | Always clone the repository if using the `gitRemote` option, even if it has already been cloned to the temporary directory. |
@@ -1806,6 +1807,19 @@ public readonly removalPolicy: RemovalPolicy;
 - *Default:* RemovalPolicy.DESTROY
 
 Whether to retain this version of the layer when a new version is added or when the stack is deleted.
+
+---
+
+##### `architecture`<sup>Optional</sup> <a name="architecture" id="cargo-lambda-cdk.RustExtensionProps.property.architecture"></a>
+
+```typescript
+public readonly architecture: Architecture;
+```
+
+- *Type:* aws-cdk-lib.aws_lambda.Architecture
+- *Default:* Architecture.X86_64
+
+The system architecture of the lambda extension.
 
 ---
 
