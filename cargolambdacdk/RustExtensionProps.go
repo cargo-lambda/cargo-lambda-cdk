@@ -2,6 +2,7 @@ package cargolambdacdk
 
 import (
 	"github.com/aws/aws-cdk-go/awscdk/v2"
+	"github.com/aws/aws-cdk-go/awscdk/v2/awslambda"
 )
 
 // Properties for a RustExtension.
@@ -22,6 +23,10 @@ type RustExtensionProps struct {
 	// Default: RemovalPolicy.DESTROY
 	//
 	RemovalPolicy awscdk.RemovalPolicy `field:"optional" json:"removalPolicy" yaml:"removalPolicy"`
+	// The system architecture of the lambda extension.
+	// Default: - Architecture.X86_64
+	//
+	Architecture awslambda.Architecture `field:"optional" json:"architecture" yaml:"architecture"`
 	// The name of the binary to build, in case that's different than the package's name.
 	BinaryName *string `field:"optional" json:"binaryName" yaml:"binaryName"`
 	// Bundling options.

@@ -73,9 +73,11 @@ Define a `RustExtension` that get's deployed as a layer to use it with any other
 
 ```go
 import { RustExtension, RustFunction } from 'cargo-lambda-cdk';
+import { Architecture } from 'aws-cdk-lib/aws-lambda';
 
 const extensionLayer = new RustExtension(this, 'Rust extension', {
   manifestPath: 'path/to/package/directory/with/Cargo.toml',
+  architecture: Architecture.ARM_64,
 });
 
 new RustFunction(this, 'Rust function', {
