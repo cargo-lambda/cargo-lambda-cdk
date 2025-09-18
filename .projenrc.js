@@ -2,7 +2,7 @@ const { awscdk } = require('projen');
 
 const project = new awscdk.AwsCdkConstructLibrary({
   author: 'David Calavera',
-  cdkVersion: '2.63.0',
+  cdkVersion: '2.215.0',
   defaultReleaseBranch: 'main',
   name: 'cargo-lambda-cdk',
   repositoryUrl: 'https://github.com/cargo-lambda/cargo-lambda-cdk.git',

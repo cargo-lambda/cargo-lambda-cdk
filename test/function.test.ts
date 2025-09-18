@@ -1,6 +1,7 @@
 import { join } from 'path';
 import { env } from 'process';
 import { App, Stack } from 'aws-cdk-lib';
+import { LogGroup, RetentionDays } from 'aws-cdk-lib/aws-logs';
 import { RustFunction, cargoLambdaVersion } from '../src/index';
 
 const forcedDockerBundling = !!env.FORCE_DOCKER_RUN || !cargoLambdaVersion();
@@ -61,6 +62,27 @@ describe('CargoLambda.RustFunction', () => {
         forcedDockerBundling,
       },
     });
+
+    test('bundle function', () => {
+      app.synth();
+    });
+  });
+
+  describe('With log group specified', () => {
+    const app = new App();
+    const stack = new Stack(app);
+    const testSource = join(__dirname, 'fixtures/single-package');
+
+    const logGroup = new LogGroup(stack, 'LogGroup', {
+      retention: RetentionDays.ONE_WEEK,
+    });
+
+    const rustFunction = new RustFunction(stack, 'rust function', {
+      manifestPath: testSource,
+      logGroup: logGroup,
+    });
+
+    logGroup.grantWrite(rustFunction);
 
     test('bundle function', () => {
       app.synth();
