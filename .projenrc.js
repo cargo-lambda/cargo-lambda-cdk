@@ -43,7 +43,7 @@ project.addDevDeps('typescript@5.x');
 project.addDevDeps('@types/node@^18');
 project.addDevDeps('jest@^29');
 project.addDevDeps('ts-jest@^29');
-project.addBundledDeps('js-toml@^0.1.1');
+project.addBundledDeps('js-toml@^1.0.2');
 
 project.addGitIgnore('target');
 project.gitignore.removePatterns('*.tgz');
