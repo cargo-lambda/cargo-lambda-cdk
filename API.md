@@ -238,10 +238,10 @@ the properties of the imported layer.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cargo-lambda-cdk.RustExtension.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#cargo-lambda-cdk.RustExtension.property.env">env</a></code> | <code>aws-cdk-lib.ResourceEnvironment</code> | The environment this resource belongs to. |
+| <code><a href="#cargo-lambda-cdk.RustExtension.property.env">env</a></code> | <code>aws-cdk-lib.interfaces.ResourceEnvironment</code> | The environment this resource belongs to. |
 | <code><a href="#cargo-lambda-cdk.RustExtension.property.stack">stack</a></code> | <code>aws-cdk-lib.Stack</code> | The stack in which this resource is defined. |
 | <code><a href="#cargo-lambda-cdk.RustExtension.property.layerVersionArn">layerVersionArn</a></code> | <code>string</code> | The ARN of the Lambda Layer version that this Layer defines. |
-| <code><a href="#cargo-lambda-cdk.RustExtension.property.layerVersionRef">layerVersionRef</a></code> | <code>aws-cdk-lib.aws_lambda.LayerVersionReference</code> | A reference to a LayerVersion resource. |
+| <code><a href="#cargo-lambda-cdk.RustExtension.property.layerVersionRef">layerVersionRef</a></code> | <code>aws-cdk-lib.interfaces.aws_lambda.LayerVersionReference</code> | A reference to a LayerVersion resource. |
 | <code><a href="#cargo-lambda-cdk.RustExtension.property.compatibleRuntimes">compatibleRuntimes</a></code> | <code>aws-cdk-lib.aws_lambda.Runtime[]</code> | The runtimes compatible with this Layer. |
 
 ---
@@ -264,16 +264,17 @@ The tree node.
 public readonly env: ResourceEnvironment;
 ```
 
-- *Type:* aws-cdk-lib.ResourceEnvironment
+- *Type:* aws-cdk-lib.interfaces.ResourceEnvironment
 
 The environment this resource belongs to.
 
-For resources that are created and managed by the CDK
-(generally, those created by creating new class instances like Role, Bucket, etc.),
-this is always the same as the environment of the stack they belong to;
-however, for imported resources
-(those obtained from static methods like fromRoleArn, fromBucketName, etc.),
-that might be different than the stack they were imported into.
+For resources that are created and managed in a Stack (those created by
+creating new class instances like `new Role()`, `new Bucket()`, etc.), this
+is always the same as the environment of the stack they belong to.
+
+For referenced resources (those obtained from referencing methods like
+`Role.fromRoleArn()`, `Bucket.fromBucketName()`, etc.), they might be
+different than the stack they were imported into.
 
 ---
 
@@ -307,7 +308,7 @@ The ARN of the Lambda Layer version that this Layer defines.
 public readonly layerVersionRef: LayerVersionReference;
 ```
 
-- *Type:* aws-cdk-lib.aws_lambda.LayerVersionReference
+- *Type:* aws-cdk-lib.interfaces.aws_lambda.LayerVersionReference
 
 A reference to a LayerVersion resource.
 
@@ -1175,19 +1176,20 @@ Metric for the number of unreserved concurrent executions across all Lambdas.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#cargo-lambda-cdk.RustFunction.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#cargo-lambda-cdk.RustFunction.property.env">env</a></code> | <code>aws-cdk-lib.ResourceEnvironment</code> | The environment this resource belongs to. |
+| <code><a href="#cargo-lambda-cdk.RustFunction.property.env">env</a></code> | <code>aws-cdk-lib.interfaces.ResourceEnvironment</code> | The environment this resource belongs to. |
 | <code><a href="#cargo-lambda-cdk.RustFunction.property.stack">stack</a></code> | <code>aws-cdk-lib.Stack</code> | The stack in which this resource is defined. |
 | <code><a href="#cargo-lambda-cdk.RustFunction.property.architecture">architecture</a></code> | <code>aws-cdk-lib.aws_lambda.Architecture</code> | The architecture of this Lambda Function (this is an optional attribute and defaults to X86_64). |
 | <code><a href="#cargo-lambda-cdk.RustFunction.property.connections">connections</a></code> | <code>aws-cdk-lib.aws_ec2.Connections</code> | Access the Connections object. |
 | <code><a href="#cargo-lambda-cdk.RustFunction.property.functionArn">functionArn</a></code> | <code>string</code> | ARN of this function. |
 | <code><a href="#cargo-lambda-cdk.RustFunction.property.functionName">functionName</a></code> | <code>string</code> | Name of this function. |
-| <code><a href="#cargo-lambda-cdk.RustFunction.property.functionRef">functionRef</a></code> | <code>aws-cdk-lib.aws_lambda.FunctionReference</code> | A reference to a Function resource. |
+| <code><a href="#cargo-lambda-cdk.RustFunction.property.functionRef">functionRef</a></code> | <code>aws-cdk-lib.interfaces.aws_lambda.FunctionReference</code> | A reference to a Function resource. |
 | <code><a href="#cargo-lambda-cdk.RustFunction.property.grantPrincipal">grantPrincipal</a></code> | <code>aws-cdk-lib.aws_iam.IPrincipal</code> | The principal this Lambda Function is running as. |
 | <code><a href="#cargo-lambda-cdk.RustFunction.property.isBoundToVpc">isBoundToVpc</a></code> | <code>boolean</code> | Whether or not this Lambda function was bound to a VPC. |
 | <code><a href="#cargo-lambda-cdk.RustFunction.property.latestVersion">latestVersion</a></code> | <code>aws-cdk-lib.aws_lambda.IVersion</code> | The `$LATEST` version of this function. |
 | <code><a href="#cargo-lambda-cdk.RustFunction.property.permissionsNode">permissionsNode</a></code> | <code>constructs.Node</code> | The construct node where permissions are attached. |
 | <code><a href="#cargo-lambda-cdk.RustFunction.property.resourceArnsForGrantInvoke">resourceArnsForGrantInvoke</a></code> | <code>string[]</code> | The ARN(s) to put into the resource field of the generated IAM policy for grantInvoke(). |
 | <code><a href="#cargo-lambda-cdk.RustFunction.property.role">role</a></code> | <code>aws-cdk-lib.aws_iam.IRole</code> | Execution role associated with this function. |
+| <code><a href="#cargo-lambda-cdk.RustFunction.property.tenancyConfig">tenancyConfig</a></code> | <code>aws-cdk-lib.aws_lambda.TenancyConfig</code> | The tenancy configuration for this function. |
 | <code><a href="#cargo-lambda-cdk.RustFunction.property.currentVersion">currentVersion</a></code> | <code>aws-cdk-lib.aws_lambda.Version</code> | Returns a `lambda.Version` which represents the current version of this Lambda function. A new version will be created every time the function's configuration changes. |
 | <code><a href="#cargo-lambda-cdk.RustFunction.property.logGroup">logGroup</a></code> | <code>aws-cdk-lib.aws_logs.ILogGroup</code> | The LogGroup where the Lambda function's logs are made available. |
 | <code><a href="#cargo-lambda-cdk.RustFunction.property.runtime">runtime</a></code> | <code>aws-cdk-lib.aws_lambda.Runtime</code> | The runtime configured for this lambda. |
@@ -1215,16 +1217,17 @@ The tree node.
 public readonly env: ResourceEnvironment;
 ```
 
-- *Type:* aws-cdk-lib.ResourceEnvironment
+- *Type:* aws-cdk-lib.interfaces.ResourceEnvironment
 
 The environment this resource belongs to.
 
-For resources that are created and managed by the CDK
-(generally, those created by creating new class instances like Role, Bucket, etc.),
-this is always the same as the environment of the stack they belong to;
-however, for imported resources
-(those obtained from static methods like fromRoleArn, fromBucketName, etc.),
-that might be different than the stack they were imported into.
+For resources that are created and managed in a Stack (those created by
+creating new class instances like `new Role()`, `new Bucket()`, etc.), this
+is always the same as the environment of the stack they belong to.
+
+For referenced resources (those obtained from referencing methods like
+`Role.fromRoleArn()`, `Bucket.fromBucketName()`, etc.), they might be
+different than the stack they were imported into.
 
 ---
 
@@ -1296,7 +1299,7 @@ Name of this function.
 public readonly functionRef: FunctionReference;
 ```
 
-- *Type:* aws-cdk-lib.aws_lambda.FunctionReference
+- *Type:* aws-cdk-lib.interfaces.aws_lambda.FunctionReference
 
 A reference to a Function resource.
 
@@ -1380,6 +1383,18 @@ public readonly role: IRole;
 - *Type:* aws-cdk-lib.aws_iam.IRole
 
 Execution role associated with this function.
+
+---
+
+##### `tenancyConfig`<sup>Optional</sup> <a name="tenancyConfig" id="cargo-lambda-cdk.RustFunction.property.tenancyConfig"></a>
+
+```typescript
+public readonly tenancyConfig: TenancyConfig;
+```
+
+- *Type:* aws-cdk-lib.aws_lambda.TenancyConfig
+
+The tenancy configuration for this function.
 
 ---
 
@@ -2056,14 +2071,14 @@ const rustFunctionProps: RustFunctionProps = { ... }
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.applicationLogLevel">applicationLogLevel</a></code> | <code>string</code> | Sets the application log level for the function. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.applicationLogLevelV2">applicationLogLevelV2</a></code> | <code>aws-cdk-lib.aws_lambda.ApplicationLogLevel</code> | Sets the application log level for the function. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.architecture">architecture</a></code> | <code>aws-cdk-lib.aws_lambda.Architecture</code> | The system architectures compatible with this lambda function. |
-| <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.codeSigningConfig">codeSigningConfig</a></code> | <code>aws-cdk-lib.aws_lambda.ICodeSigningConfigRef</code> | Code signing config associated with this function. |
+| <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.codeSigningConfig">codeSigningConfig</a></code> | <code>aws-cdk-lib.interfaces.aws_lambda.ICodeSigningConfigRef</code> | Code signing config associated with this function. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.currentVersionOptions">currentVersionOptions</a></code> | <code>aws-cdk-lib.aws_lambda.VersionOptions</code> | Options for the `lambda.Version` resource automatically created by the `fn.currentVersion` method. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.deadLetterQueue">deadLetterQueue</a></code> | <code>aws-cdk-lib.aws_sqs.IQueue</code> | The SQS queue to use if DLQ is enabled. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.deadLetterQueueEnabled">deadLetterQueueEnabled</a></code> | <code>boolean</code> | Enabled DLQ. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.deadLetterTopic">deadLetterTopic</a></code> | <code>aws-cdk-lib.aws_sns.ITopic</code> | The SNS topic to use as a DLQ. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.description">description</a></code> | <code>string</code> | A description of the function. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.environment">environment</a></code> | <code>{[ key: string ]: string}</code> | Key-value pairs that Lambda caches and makes available for your Lambda functions. |
-| <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.environmentEncryption">environmentEncryption</a></code> | <code>aws-cdk-lib.aws_kms.IKeyRef</code> | The AWS KMS key that's used to encrypt your function's environment variables. |
+| <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.environmentEncryption">environmentEncryption</a></code> | <code>aws-cdk-lib.interfaces.aws_kms.IKeyRef</code> | The AWS KMS key that's used to encrypt your function's environment variables. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.ephemeralStorageSize">ephemeralStorageSize</a></code> | <code>aws-cdk-lib.Size</code> | The size of the function’s /tmp directory in MiB. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.events">events</a></code> | <code>aws-cdk-lib.aws_lambda.IEventSource[]</code> | Event sources for this function. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.filesystem">filesystem</a></code> | <code>aws-cdk-lib.aws_lambda.FileSystem</code> | The filesystem configuration for the lambda function. |
@@ -2091,6 +2106,7 @@ const rustFunctionProps: RustFunctionProps = { ... }
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.snapStart">snapStart</a></code> | <code>aws-cdk-lib.aws_lambda.SnapStartConf</code> | Enable SnapStart for Lambda Function. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.systemLogLevel">systemLogLevel</a></code> | <code>string</code> | Sets the system log level for the function. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.systemLogLevelV2">systemLogLevelV2</a></code> | <code>aws-cdk-lib.aws_lambda.SystemLogLevel</code> | Sets the system log level for the function. |
+| <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.tenancyConfig">tenancyConfig</a></code> | <code>aws-cdk-lib.aws_lambda.TenancyConfig</code> | The tenancy configuration for the function. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.timeout">timeout</a></code> | <code>aws-cdk-lib.Duration</code> | The function execution time (in seconds) after which Lambda terminates the function. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.tracing">tracing</a></code> | <code>aws-cdk-lib.aws_lambda.Tracing</code> | Enable AWS X-Ray Tracing for Lambda Function. |
 | <code><a href="#cargo-lambda-cdk.RustFunctionProps.property.vpc">vpc</a></code> | <code>aws-cdk-lib.aws_ec2.IVpc</code> | VPC network to place Lambda network interfaces. |
@@ -2281,7 +2297,7 @@ The system architectures compatible with this lambda function.
 public readonly codeSigningConfig: ICodeSigningConfigRef;
 ```
 
-- *Type:* aws-cdk-lib.aws_lambda.ICodeSigningConfigRef
+- *Type:* aws-cdk-lib.interfaces.aws_lambda.ICodeSigningConfigRef
 - *Default:* Not Sign the Code
 
 Code signing config associated with this function.
@@ -2384,7 +2400,7 @@ Lambda function source code.
 public readonly environmentEncryption: IKeyRef;
 ```
 
-- *Type:* aws-cdk-lib.aws_kms.IKeyRef
+- *Type:* aws-cdk-lib.interfaces.aws_kms.IKeyRef
 - *Default:* AWS Lambda creates and uses an AWS managed customer master key (CMK).
 
 The AWS KMS key that's used to encrypt your function's environment variables.
@@ -2826,6 +2842,19 @@ public readonly systemLogLevelV2: SystemLogLevel;
 - *Default:* SystemLogLevel.INFO
 
 Sets the system log level for the function.
+
+---
+
+##### `tenancyConfig`<sup>Optional</sup> <a name="tenancyConfig" id="cargo-lambda-cdk.RustFunctionProps.property.tenancyConfig"></a>
+
+```typescript
+public readonly tenancyConfig: TenancyConfig;
+```
+
+- *Type:* aws-cdk-lib.aws_lambda.TenancyConfig
+- *Default:* Tenant isolation is not enabled
+
+The tenancy configuration for the function.
 
 ---
 
