@@ -71,8 +71,7 @@
     "js-toml"
   ],
   "resolutions": {
-    "@types/babel__traverse": "7.18.2",
-    "@types/prettier": "2.6.0"
+    "chevrotain": "^11.1.1"
   },
   "keywords": [
     "cdk"
