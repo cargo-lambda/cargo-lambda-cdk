@@ -49,7 +49,7 @@ project.addBundledDeps('js-toml@^1.0.2');
 // js-toml -> chevrotain -> lodash-es@4.17.21 is vulnerable
 // Force chevrotain@11.1.1+ which uses lodash-es@4.17.23 (patched)
 project.package.addField('resolutions', {
-  'chevrotain': '^11.1.1',
+  chevrotain: '^11.1.1',
 });
 
 project.addGitIgnore('target');
