@@ -40,6 +40,12 @@ describe('getManifest', () => {
     expect(manifest.workspace?.members).toEqual(['binary1', 'binary2']);
   });
 
+  it('reads TOML 1.1 multi-line inline tables', () => {
+    const fixture = join(__dirname, 'fixtures/toml-1-1/Cargo.toml');
+    const manifest = getManifest(fixture);
+    expect(manifest.package?.name).toEqual('toml-1-1');
+  });
+
   it('reads binary sections', () => {
     const fixture = join(__dirname, 'fixtures/cargo-workspace/binary1/Cargo.toml');
     const manifest = getManifest(fixture);
