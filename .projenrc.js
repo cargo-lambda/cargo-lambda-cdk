@@ -43,14 +43,7 @@ project.addDevDeps('typescript@5.x');
 project.addDevDeps('@types/node@^18');
 project.addDevDeps('jest@^29');
 project.addDevDeps('ts-jest@^29');
-project.addBundledDeps('js-toml@^1.0.2');
-
-// Fix for GHSA-xxjr-mmjv-4gpg: lodash-es prototype pollution vulnerability
-// js-toml -> chevrotain -> lodash-es@4.17.21 is vulnerable
-// Force chevrotain@11.1.1+ which uses lodash-es@4.17.23 (patched)
-project.package.addField('resolutions', {
-  chevrotain: '^11.1.1',
-});
+project.addBundledDeps('js-toml@^2.0.1');
 
 project.addGitIgnore('target');
 project.gitignore.removePatterns('*.tgz');
